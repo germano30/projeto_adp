@@ -1,0 +1,772 @@
+{
+  "chunk-48a3b46bb59662d3ef7bf40171cbc9f5": {
+    "tokens": 43,
+    "content": "For the state of the Alabama the laws of mimum wage is: No state minimum wage law. Employers subject to the Fair Labor Standards Act must pay the current Federal minimum wage of $7.25 per hour.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-48a3b46bb59662d3ef7bf40171cbc9f5",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:5213ffcb16b5a24c92fde0faa4e2714a",
+      "default:extract:ed0c84e197a33ad67f929a950c7ab06e"
+    ],
+    "update_time": 1756255961,
+    "_id": "chunk-48a3b46bb59662d3ef7bf40171cbc9f5",
+    "create_time": 0
+  },
+  "chunk-27b3f23c497c2e863858beb75aecbf6b": {
+    "tokens": 136,
+    "content": "For the state of the Alaska the laws of mimum wage is: Basic Minimum Rate (per hour): $13.00 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Daily - 8, Weekly - 40 Under a voluntary flexible work hour plan approved by the Alaska Department of Labor, a 10 hour day, 40 hour workweek may be instituted with premium pay after 10 hours a day. The premium overtime pay requirement on either a daily or weekly basis is not applicable to employers of fewer than 4 employees. The minimum wage is adjusted annually based on a set formula.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-27b3f23c497c2e863858beb75aecbf6b",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:c2866394fe6a91456b12329eb37c1c33",
+      "default:extract:baac6f0fc548f2b355374cc4529d7a59"
+    ],
+    "update_time": 1756255979,
+    "_id": "chunk-27b3f23c497c2e863858beb75aecbf6b",
+    "create_time": 0
+  },
+  "chunk-6d01ffbbecd20025660c50d0491b0e6e": {
+    "tokens": 25,
+    "content": "For the state of the Arizona the laws of mimum wage is: Basic Minimum Rate (per hour): $14.70",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-6d01ffbbecd20025660c50d0491b0e6e",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:dcb8423741fe014ef2296a719e7ec617",
+      "default:extract:74054bb2b91566b656de6ba250abe3e3"
+    ],
+    "update_time": 1756255982,
+    "_id": "chunk-6d01ffbbecd20025660c50d0491b0e6e",
+    "create_time": 0
+  },
+  "chunk-d8dfef0666d1a277ee5f22a60fe814f4": {
+    "tokens": 65,
+    "content": "For the state of the Arkansas the laws of mimum wage is: Applicable to employers with 4 or more employees Basic Minimum Rate (per hour): $11.00 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-d8dfef0666d1a277ee5f22a60fe814f4",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:79a1cde9ab60b28d49c6efa929e9fdd3",
+      "default:extract:a50b58fc2e4dddbdc9049d4c2d0dd741"
+    ],
+    "update_time": 1756255996,
+    "_id": "chunk-d8dfef0666d1a277ee5f22a60fe814f4",
+    "create_time": 0
+  },
+  "chunk-1bbda343c448e9b4bae9de074f6d4944": {
+    "tokens": 252,
+    "content": "For the state of the California the laws of mimum wage is: Basic Minimum Rate (per hour): $16.50 Any work in excess of eight hours in one workday, in excess of 40 hours in one workweek, or in the first eight hours worked on the seventh day of work in any one workweek shall be at the rate of one and one-half times the regular rate of pay. Any work in excess of 12 hours in one day or in excess of eight hours on any seventh day of a workweek shall be paid no less than twice the regular rate of pay. California Labor Code section 510. Exceptions apply to an employee working pursuant to an alternative workweek adopted pursuant to applicable Labor Code sections and for time spent commuting. (See Labor Code section 510 for exceptions). The minimum wage will be adjusted annually based upon a set formula. Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Daily - 8 (time and half), and 12 (double time), Weekly - 40; on 7th day: First 8 hours (time and half) Over 8 hours on 7th day (double time)",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-1bbda343c448e9b4bae9de074f6d4944",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:eccb985cda89703b66d3ecbb66bf997e",
+      "default:extract:ed409602e68bf3b633ee7feb256799b1"
+    ],
+    "update_time": 1756256000,
+    "_id": "chunk-1bbda343c448e9b4bae9de074f6d4944",
+    "create_time": 0
+  },
+  "chunk-d44776b3c4f342cae18d18ab210ef564": {
+    "tokens": 87,
+    "content": "For the state of the Colorado the laws of mimum wage is: Basic Minimum Rate (per hour): $14.81 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Daily - 12, Weekly - 40 Minimum wage rate and overtime provisions applicable to retail and service, commercial support service, food and beverage, and health and medical industries.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-d44776b3c4f342cae18d18ab210ef564",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:f5c75b55d6615451055e2422ed8cbbb4",
+      "default:extract:adf7e2abc21b4837afc189b75352105c"
+    ],
+    "update_time": 1756256019,
+    "_id": "chunk-d44776b3c4f342cae18d18ab210ef564",
+    "create_time": 0
+  },
+  "chunk-dde6435472530a5dc1897d986288fe44": {
+    "tokens": 85,
+    "content": "For the state of the Connecticut the laws of mimum wage is: Basic Minimum Rate (per hour): $16.35 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 In restaurants and hotel restaurants, for the 7th consecutive day of work, premium pay is required at time and one half the minimum rate.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-dde6435472530a5dc1897d986288fe44",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:308eceeeca8f1b732f413426d902f209",
+      "default:extract:efaed3524a0e73a82dad03d3d6d7c100"
+    ],
+    "update_time": 1756256018,
+    "_id": "chunk-dde6435472530a5dc1897d986288fe44",
+    "create_time": 0
+  },
+  "chunk-c3ec79634c6ff2fe8270e832dd64ed08": {
+    "tokens": 46,
+    "content": "For the state of the Delaware the laws of mimum wage is: Basic Minimum Rate (per hour): $15.00 The State adopts the federal minimum wage rate by reference if the federal rate is greater than the State rate.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-c3ec79634c6ff2fe8270e832dd64ed08",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:2097760ea4d5b9c5b0118ecf0ff1d212",
+      "default:extract:6280d726b522b93d0e3f370e22cc9705"
+    ],
+    "update_time": 1756256034,
+    "_id": "chunk-c3ec79634c6ff2fe8270e832dd64ed08",
+    "create_time": 0
+  },
+  "chunk-20cbc05e4be232cdcb221efacac5bcf2": {
+    "tokens": 74,
+    "content": "For the state of the District of Columbia the laws of mimum wage is: Basic Minimum Rate (per hour): $17.95 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 The minimum wage is adjusted annually on July 1 based on a set formula.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-20cbc05e4be232cdcb221efacac5bcf2",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:03751e46d603d4b4eff878cbcf599748",
+      "default:extract:dc34fc4beffeb6014452d45d0f3ef640"
+    ],
+    "update_time": 1756256040,
+    "_id": "chunk-20cbc05e4be232cdcb221efacac5bcf2",
+    "create_time": 0
+  },
+  "chunk-caa1277238c8bb26530a79067d2309da": {
+    "tokens": 70,
+    "content": "For the state of the Florida the laws of mimum wage is: Basic Minimum Rate (per hour): $13.00 The minimum wage is adjusted annually based on a set formula. The Florida minimum wage is scheduled to increase by $1.00 every September 30th until reaching $15.00 on September 30, 2026.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-caa1277238c8bb26530a79067d2309da",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:07c05f751c11400725ae5a470a03097c",
+      "default:extract:b799dc2ca4d44462efa69c76aa1b292d"
+    ],
+    "update_time": 1756256058,
+    "_id": "chunk-caa1277238c8bb26530a79067d2309da",
+    "create_time": 0
+  },
+  "chunk-50fafe204a3141154645cd7a650a5179": {
+    "tokens": 86,
+    "content": "For the state of the Georgia the laws of mimum wage is: Applicable to employers of 6 or more employees Basic Minimum Rate (per hour): $5.15 The State law excludes from coverage any employment that is subject to the federal Fair Labor Standards Act when the federal rate is greater than the State rate. Employers subject to the Fair Labor Standards Act must pay the current Federal minimum wage of $7.25 per hour.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-50fafe204a3141154645cd7a650a5179",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:f01303a9b8b1cf4633d28cd50e5f7278",
+      "default:extract:ab462f3ee632e2320e329e6eba57f373"
+    ],
+    "update_time": 1756256063,
+    "_id": "chunk-50fafe204a3141154645cd7a650a5179",
+    "create_time": 0
+  },
+  "chunk-f7db55e51f94185c3127bdc50d856da6": {
+    "tokens": 56,
+    "content": "For the state of the Guam the laws of mimum wage is: Basic Minimum Rate (per hour): $9.25 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-f7db55e51f94185c3127bdc50d856da6",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:cd7a76cf017ccd2baee877060e122219",
+      "default:extract:36f18256f26cd207182c094bc09127f7"
+    ],
+    "update_time": 1756256082,
+    "_id": "chunk-f7db55e51f94185c3127bdc50d856da6",
+    "create_time": 0
+  },
+  "chunk-fbb950a3d04cab1a1626b7d76d9bf3f8": {
+    "tokens": 135,
+    "content": "For the state of the Hawaii the laws of mimum wage is: Basic Minimum Rate (per hour): $14.00 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 An employee earning a guaranteed monthly compensation of $4,000 or more is exempt from the State minimum wage and overtime law. Domestic service workers are subject to Hawaii's minimum wage and overtime requirements. Act 248, Regular Session 2013. The State law excludes from coverage any employment that is subject to the federal Fair Labor Standards Act unless the State wage rate is higher than the federal rate.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-fbb950a3d04cab1a1626b7d76d9bf3f8",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:94469946194da6bbd0cc6305ab4f1c01",
+      "default:extract:70d68bfd0ff2018c80d6290b910023ac"
+    ],
+    "update_time": 1756256088,
+    "_id": "chunk-fbb950a3d04cab1a1626b7d76d9bf3f8",
+    "create_time": 0
+  },
+  "chunk-1ed7531c8322bd4b598c0499e9937cb3": {
+    "tokens": 25,
+    "content": "For the state of the Idaho the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-1ed7531c8322bd4b598c0499e9937cb3",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:6107f5031e8a183a591037c1bc74694c",
+      "default:extract:4d2867c1da98a8d886e45ec6b6cec85f"
+    ],
+    "update_time": 1756256090,
+    "_id": "chunk-1ed7531c8322bd4b598c0499e9937cb3",
+    "create_time": 0
+  },
+  "chunk-4254d892e0c9dc1a937089147f6d31ac": {
+    "tokens": 69,
+    "content": "For the state of the Illinois the laws of mimum wage is: Applicable to employers of 4 or more employees, excluding family members Basic Minimum Rate (per hour): $15.00 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-4254d892e0c9dc1a937089147f6d31ac",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:9be000ddd400a544a9307d2698bd7bab",
+      "default:extract:5d688c9340200a95aafac383f1ab99a7"
+    ],
+    "update_time": 1756255969,
+    "_id": "chunk-4254d892e0c9dc1a937089147f6d31ac",
+    "create_time": 0
+  },
+  "chunk-230c9e9b864fd74e11a66339610a2269": {
+    "tokens": 65,
+    "content": "For the state of the Indiana the laws of mimum wage is: Applicable to employers of 2 or more employees Basic Minimum Rate (per hour): $7.25 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-230c9e9b864fd74e11a66339610a2269",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:d5b4bcd81d404f20d6f1e77c14d0e099",
+      "default:extract:d57ef5e5aeb168515b36cf7ab484cfbc"
+    ],
+    "update_time": 1756256114,
+    "_id": "chunk-230c9e9b864fd74e11a66339610a2269",
+    "create_time": 0
+  },
+  "chunk-6ee0b02366142d8b4c0d59b7088b3ea9": {
+    "tokens": 44,
+    "content": "For the state of the Iowa the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25 The Iowa minimum wage equals the federal minimum wage rate if it is set below the federal rate.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-6ee0b02366142d8b4c0d59b7088b3ea9",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:a4374202d12ef6bd146d1172a8f54386",
+      "default:extract:04ab563c756246fb3ff487baf97fefd5"
+    ],
+    "update_time": 1756256111,
+    "_id": "chunk-6ee0b02366142d8b4c0d59b7088b3ea9",
+    "create_time": 0
+  },
+  "chunk-27b3c9e76b3e1a39856f8047a3787078": {
+    "tokens": 44,
+    "content": "For the state of the Kansas the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25 The State law excludes from coverage any employment that is subject to the federal Fair Labor Standards Act.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-27b3c9e76b3e1a39856f8047a3787078",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:22c965a264ca1e8a497bc508b81ab8b5",
+      "default:extract:fe905b3b090082a0537a63fe8da48084"
+    ],
+    "update_time": 1756256118,
+    "_id": "chunk-27b3c9e76b3e1a39856f8047a3787078",
+    "create_time": 0
+  },
+  "chunk-782e26498cf96eb5a6a95ba7e2b1a34a": {
+    "tokens": 215,
+    "content": "For the state of the Kentucky the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40, 7th day The 7th day overtime law, which is separate from the minimum wage law, requires employers who permit covered employees to work seven days in any one workweek to pay the employee at a rate of time and one-half for hours worked on the seventh day when employees work all seven days of the workweek. The 7th day overtime law does not apply when the employee is not permitted to work over 40 hours total in the workweek. The state adopts the federal minimum wage rate by reference if the federal rate is greater than the State rate. Compensating time in lieu of overtime is allowed upon written request by an employee of any county, charter county, consolidated local government, or urban-county government, including an employee of a county-elected official.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-782e26498cf96eb5a6a95ba7e2b1a34a",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:21551ee089c861da896db3e3499021e8",
+      "default:extract:720f28c2dd15f4e52c6288e537c9e427"
+    ],
+    "update_time": 1756256139,
+    "_id": "chunk-782e26498cf96eb5a6a95ba7e2b1a34a",
+    "create_time": 0
+  },
+  "chunk-079633495b12dbb102ecc4c49f83c4f4": {
+    "tokens": 43,
+    "content": "For the state of the Louisiana the laws of mimum wage is: No state minimum wage law. Employers subject to the Fair Labor Standards Act must pay the current Federal minimum wage of $7.25 per hour.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-079633495b12dbb102ecc4c49f83c4f4",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:1f8fd9765efd05785105d1d2ae8760f3",
+      "default:extract:684c2f896f7a09dbcd364e7d64ebd7c1"
+    ],
+    "update_time": 1756256135,
+    "_id": "chunk-079633495b12dbb102ecc4c49f83c4f4",
+    "create_time": 0
+  },
+  "chunk-36cc01163b7219f7cd773b4fb410c8a2": {
+    "tokens": 112,
+    "content": "For the state of the Maine the laws of mimum wage is: Basic Minimum Rate (per hour): $14.65 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 If the highest federal minimum wage is increased in excess of the State minimum wage in effect, then the State minimum wage will increase to the same amount, effective on the same date as the increase in the federal minimum wage. The minimum wage is adjusted annually based on a set formula.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-36cc01163b7219f7cd773b4fb410c8a2",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:c4fcfbe5aa93b7f9730c50dab9ab36fc",
+      "default:extract:f723d7b01c182323492c78b8ec581e2b"
+    ],
+    "update_time": 1756256152,
+    "_id": "chunk-36cc01163b7219f7cd773b4fb410c8a2",
+    "create_time": 0
+  },
+  "chunk-45fefa9aa3a7c9b3fc3f9d3c120b8d2d": {
+    "tokens": 56,
+    "content": "For the state of the Maryland the laws of mimum wage is: Basic Minimum Rate (per hour): $15.00 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-45fefa9aa3a7c9b3fc3f9d3c120b8d2d",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:782ada7649148df57755359f9ca2878d",
+      "default:extract:f9bad7577d3d37519db5569548f325aa"
+    ],
+    "update_time": 1756256151,
+    "_id": "chunk-45fefa9aa3a7c9b3fc3f9d3c120b8d2d",
+    "create_time": 0
+  },
+  "chunk-3db7e92f1aaf071045528a2fe802c983": {
+    "tokens": 80,
+    "content": "For the state of the Massachusetts the laws of mimum wage is: Basic Minimum Rate (per hour): $15.00 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 In no case shall the Massachusetts minimum wage rate be less than $0.50 higher than the effective federal minimum rate.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-3db7e92f1aaf071045528a2fe802c983",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:694fc56850bbded86e7e54ff6206f83c",
+      "default:extract:45520d913eca5fec6e78d430606ba02a"
+    ],
+    "update_time": 1756256166,
+    "_id": "chunk-3db7e92f1aaf071045528a2fe802c983",
+    "create_time": 0
+  },
+  "chunk-a42ef242a1fe49d053bbb0051ba33ea8": {
+    "tokens": 95,
+    "content": "For the state of the Michigan the laws of mimum wage is: Applicable to employers of 2 or more employees Basic Minimum Rate (per hour): $12.48 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 The State law excludes from coverage any employment that is subject to the federal Fair Labor Standards Act unless the State wage rate is higher than the federal rate.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-a42ef242a1fe49d053bbb0051ba33ea8",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:2a1e7a5c1bac0d6550432104f4d6bdee",
+      "default:extract:f1065bcf5b9e6b7ca0a1b0ad4a9308ae"
+    ],
+    "update_time": 1756256171,
+    "_id": "chunk-a42ef242a1fe49d053bbb0051ba33ea8",
+    "create_time": 0
+  },
+  "chunk-ab74def6861ed5445c9389b24386879b": {
+    "tokens": 68,
+    "content": "For the state of the Minnesota the laws of mimum wage is: Basic Minimum Rate (per hour): $11.13 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 48 The minimum wage is adjusted annually based on a set formula.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-ab74def6861ed5445c9389b24386879b",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:d7f0228e76c87440db3b959ecae8e676",
+      "default:extract:d58026bdd1ebdb83f2de045cadf49476"
+    ],
+    "update_time": 1756256188,
+    "_id": "chunk-ab74def6861ed5445c9389b24386879b",
+    "create_time": 0
+  },
+  "chunk-03c79dfecbeed9dd762d24a0fb5f9721": {
+    "tokens": 43,
+    "content": "For the state of the Mississippi the laws of mimum wage is: No state minimum wage law. Employers subject to the Fair Labor Standards Act must pay the current Federal minimum wage of $7.25 per hour.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-03c79dfecbeed9dd762d24a0fb5f9721",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:e23efc11a9b5cd8e141503a85afa3f84",
+      "default:extract:b882249c33df682e275367efce683a3a"
+    ],
+    "update_time": 1756256188,
+    "_id": "chunk-03c79dfecbeed9dd762d24a0fb5f9721",
+    "create_time": 0
+  },
+  "chunk-87784b4d3e09ba0f11394a200abd9024": {
+    "tokens": 122,
+    "content": "For the state of the Missouri the laws of mimum wage is: Basic Minimum Rate (per hour): $13.75 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 In addition to the exemption for federally covered employment, the law exempts, among others, employees of a retail or service business with gross annual sales or business done of less than $500,000. Premium pay required after 52 hours in seasonal amusement or recreation businesses. The minimum wage is adjusted annually based on a set formula.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-87784b4d3e09ba0f11394a200abd9024",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:ee54848441bdf50a46798e381d48a788",
+      "default:extract:5a47e06ce3ae1ca6e172d8ec3731c61f"
+    ],
+    "update_time": 1756256208,
+    "_id": "chunk-87784b4d3e09ba0f11394a200abd9024",
+    "create_time": 0
+  },
+  "chunk-b1300329d65fbe2fb43da531763d0cc8": {
+    "tokens": 216,
+    "content": "For the state of the Montana the laws of mimum wage is: Businesses with gross annual sales of more than $110,000 Basic Minimum Rate (per hour): $10.55 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 Businesses not covered by the Fair Labor Standards Act with gross annual sales of $110,000 or less Basic Minimum Rate (per hour): $4.00 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 A business not covered by the federal Fair Labor Standards Act whose gross annual sales are $110,000 or less may pay $4.00 per hour. However, if an individual employee is producing or moving goods between states or otherwise covered by the federal Fair Labor Standards Act, that employee must be paid the greater of either the federal minimum wage or Montana's minimum wage. The minimum wage is adjusted annually based on a set formula.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-b1300329d65fbe2fb43da531763d0cc8",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:c9be233be5ea0f903d3cd93f56a9da05",
+      "default:extract:07990fe45e0fac6aebb0ae622a2c3031"
+    ],
+    "update_time": 1756256220,
+    "_id": "chunk-b1300329d65fbe2fb43da531763d0cc8",
+    "create_time": 0
+  },
+  "chunk-7e07e1eadee799e6ba392f8de44e9ad2": {
+    "tokens": 34,
+    "content": "For the state of the Nebraska the laws of mimum wage is: Applicable to employers of 4 or more employees Basic Minimum Rate (per hour): $13.50",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-7e07e1eadee799e6ba392f8de44e9ad2",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:9c01e14f6663a24dbab709d2bbfc58c7",
+      "default:extract:26eac14fa6be1e736c33fff5616a1b57"
+    ],
+    "update_time": 1756256224,
+    "_id": "chunk-7e07e1eadee799e6ba392f8de44e9ad2",
+    "create_time": 0
+  },
+  "chunk-fd2e015e59c7056941e4026e397a8c0d": {
+    "tokens": 101,
+    "content": "For the state of the Nevada the laws of mimum wage is: Basic Minimum Rate (per hour): $12.00 Premium Pay After Designated Hours: Employees earning less than 1.5 times the state minimum wage are entitled to premium pay for hours worked in excess of 8 in a single day or 40 in a single week. Employees earning at least 1.5 times the state minimum wage are entitled to premium pay for hours worked in excess of 40 in a single week.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-fd2e015e59c7056941e4026e397a8c0d",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:26ca4b8387a7bea720b0777021bc2216",
+      "default:extract:ea73e586633bf0fd517bfd911ca281b9"
+    ],
+    "update_time": 1756256238,
+    "_id": "chunk-fd2e015e59c7056941e4026e397a8c0d",
+    "create_time": 0
+  },
+  "chunk-9983b5091ebcf0344e4ab128ec1bb438": {
+    "tokens": 74,
+    "content": "For the state of the New Hampshire the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 The New Hampshire minimum wage equals the federal minimum wage when set below the federal rate.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-9983b5091ebcf0344e4ab128ec1bb438",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:51a17d90da06341e6b4d54ca15ca4482",
+      "default:extract:2a2bf5811030b4c285af3b9051c23537"
+    ],
+    "update_time": 1756256240,
+    "_id": "chunk-9983b5091ebcf0344e4ab128ec1bb438",
+    "create_time": 0
+  },
+  "chunk-8a56389bdf90d42378c06ddf3c793f82": {
+    "tokens": 97,
+    "content": "For the state of the New Jersey the laws of mimum wage is: Basic Minimum Rate (per hour): $15.49 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 The minimum wage is adjusted annually based on a set formula. There is a minimum wage of $14.53 per hour for employers who employ fewer than 6 people and employees engaged in seasonal employment.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-8a56389bdf90d42378c06ddf3c793f82",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:f51ac5eff0a4d80573afb7a587de772e",
+      "default:extract:3cce2238a94a85322c90008225d7d5e6"
+    ],
+    "update_time": 1756256257,
+    "_id": "chunk-8a56389bdf90d42378c06ddf3c793f82",
+    "create_time": 0
+  },
+  "chunk-905d0145a399df203e5564558b568aee": {
+    "tokens": 57,
+    "content": "For the state of the New Mexico the laws of mimum wage is: Basic Minimum Rate (per hour): $12.00 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-905d0145a399df203e5564558b568aee",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:6e0731007ab4eef4f45eddb27834f6b2",
+      "default:extract:2c8a99786b7cd9ec6281b4b5774b6a9c"
+    ],
+    "update_time": 1756256253,
+    "_id": "chunk-905d0145a399df203e5564558b568aee",
+    "create_time": 0
+  },
+  "chunk-e8710a352f8f5c434690eff9fb558165": {
+    "tokens": 235,
+    "content": "For the state of the New York the laws of mimum wage is: Basic Minimum Rate (per hour): $16.50 (New York City, Nassau County, Suffolk County, & Westchester County); $15.50 (remainder of the state) Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 The New York minimum wage equals the federal minimum wage when set below the federal rate. Residential workers (\"live-in workers\") receive premium pay for hours worked over 44 in a payroll week. Employers operating a factory, mercantile establishment, hotel, restaurant, freight/passenger elevator, or theater; or a building employing security guards, janitors, superintendents, managers, engineers, or firemen must provide 24 hours of consecutive rest each week. Domestic workers are entitled to 24 hours of consecutive rest each week, and receive premium pay if they work during such period. Employees receive 1 hour of pay at minimum wage rate in addition to owed wages when spread of hours exceeds 10 hours, there is a split shift, or both.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-e8710a352f8f5c434690eff9fb558165",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:b8394ffbc1192d87cda53b45d1ad7b9b",
+      "default:extract:7fe1a1e1a34b8fe54ee2483176f8bead"
+    ],
+    "update_time": 1756256285,
+    "_id": "chunk-e8710a352f8f5c434690eff9fb558165",
+    "create_time": 0
+  },
+  "chunk-d5cc463ee46811e5136fdc7f4e377c8c": {
+    "tokens": 75,
+    "content": "For the state of the North Carolina the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 Premium pay is required after 45 hours a week in seasonal amusements or recreational establishments.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-d5cc463ee46811e5136fdc7f4e377c8c",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:377d217613a57874d3dab103fd7ec611",
+      "default:extract:155358a37f8b917d291a873da55c86c3"
+    ],
+    "update_time": 1756256276,
+    "_id": "chunk-d5cc463ee46811e5136fdc7f4e377c8c",
+    "create_time": 0
+  },
+  "chunk-f66ea9a4985ab6362091786ba86062f5": {
+    "tokens": 57,
+    "content": "For the state of the North Dakota the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-f66ea9a4985ab6362091786ba86062f5",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:33c3daea9224dbeea8ef680dc38c52d1",
+      "default:extract:7bdb7f5bbe53fe4efa63b3bd03975958"
+    ],
+    "update_time": 1756256292,
+    "_id": "chunk-f66ea9a4985ab6362091786ba86062f5",
+    "create_time": 0
+  },
+  "chunk-d5b4545a7715a790456121567a3d3d30": {
+    "tokens": 27,
+    "content": "For the state of the Northern Mariana Islands the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-d5b4545a7715a790456121567a3d3d30",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:fe9159876744461634e2bbd99aa714c4",
+      "default:extract:b7e1456f6930a1db84b9c12f11e39363"
+    ],
+    "update_time": 1756256297,
+    "_id": "chunk-d5b4545a7715a790456121567a3d3d30",
+    "create_time": 0
+  },
+  "chunk-7c8c56529e8f2d2beb766c2f9b384038": {
+    "tokens": 131,
+    "content": "For the state of the Ohio the laws of mimum wage is: Employers with annual gross receipts of $394,000 or more Basic Minimum Rate (per hour): $10.70 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 Employers with annual gross receipts under $194,000 Basic Minimum Rate (per hour): $7.25 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 The minimum wage is adjusted annually based on a set formula",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-7c8c56529e8f2d2beb766c2f9b384038",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:aa174f5ec07668fb1779a7cda631f02f",
+      "default:extract:f95e0fdf6fd557a9ef6eb63e4647e0d4"
+    ],
+    "update_time": 1756256313,
+    "_id": "chunk-7c8c56529e8f2d2beb766c2f9b384038",
+    "create_time": 0
+  },
+  "chunk-fa8c5e81ed9bbdefcc12f25206f7d08d": {
+    "tokens": 115,
+    "content": "For the state of the Oklahoma the laws of mimum wage is: Employers with ten or more full time employees at any one location or employers with annual gross sales over $100,000 irrespective of number of full time employees. Basic Minimum Rate (per hour): $7.25 All other employers Basic Minimum Rate (per hour): $2.00 The Oklahoma state minimum wage law does not contain current dollar minimums. Instead the state adopts the federal minimum wage rate by reference. The State law excludes from coverage any employment that is subject to the federal Fair Labor Standards Act.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-fa8c5e81ed9bbdefcc12f25206f7d08d",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:c77a644eb4fc6ee07b83ff7033f9b573",
+      "default:extract:ae77075f129474c3f028ec3dc8d0bd4f"
+    ],
+    "update_time": 1756256314,
+    "_id": "chunk-fa8c5e81ed9bbdefcc12f25206f7d08d",
+    "create_time": 0
+  },
+  "chunk-b5db799124519a5d7584e18e90c16bf8": {
+    "tokens": 172,
+    "content": "For the state of the Oregon the laws of mimum wage is: Basic Minimum Rate (per hour): $15.05 (standard state rate); $16.30 (Portland Metro Area); $14.05 (Non-Urban counties) Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 Premium pay required after 10 hours a day in nonfarm canneries, driers, or packing plants and in mills, factories or manufacturing establishments (excluding sawmills, planning mills, shingle mills, and logging camps). The Oregon minimum wage is adjusted annually on July 1 based on a set formula. There is a higher minimum wage in the Portland metro area and a lower minimum wage in non-urban counties. See Minimum wage increase schedule .",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-b5db799124519a5d7584e18e90c16bf8",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:f315226785008cbb2c0980152635fc5a",
+      "default:extract:6e8aa5da66bc180d765492536ae91d9a"
+    ],
+    "update_time": 1756256338,
+    "_id": "chunk-b5db799124519a5d7584e18e90c16bf8",
+    "create_time": 0
+  },
+  "chunk-d05095c1e04fa196b830199c8b513d06": {
+    "tokens": 56,
+    "content": "For the state of the Pennsylvania the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-d05095c1e04fa196b830199c8b513d06",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:7a4d593e72e9713a5696226759039499",
+      "default:extract:ec761452c4b392aa33964fda9514c1ca"
+    ],
+    "update_time": 1756256331,
+    "_id": "chunk-d05095c1e04fa196b830199c8b513d06",
+    "create_time": 0
+  },
+  "chunk-84479e8543b54f261ceb70ff69268a35": {
+    "tokens": 147,
+    "content": "For the state of the Puerto Rico the laws of mimum wage is: Applicable to all employees covered by the federal Fair Labor Standards Act (FLSA) except for agricultural employees and employees of municipalities and the Commonwealth of Puerto Rico. Basic Minimum Rate (per hour): $10.50 Premium Pay After Designated Hours: Daily - 8, Weekly – 40, and on statutory rest day (time-and-a-half). Employees entitled to greater rights or benefits who were hired prior to January 26, 2017 shall maintain said rights or benefits. Employers covered by the FLSA but who are not subject to the Puerto Rico Minimum Wage Act must pay at least the federal minimum wage of $7.25 per hour.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-84479e8543b54f261ceb70ff69268a35",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:2af1f04468f353df8466d545a8013f3a",
+      "default:extract:8df3faa521a91ab47658f785ea0dd8dd"
+    ],
+    "update_time": 1756256350,
+    "_id": "chunk-84479e8543b54f261ceb70ff69268a35",
+    "create_time": 0
+  },
+  "chunk-cebdd66ed1ddd58eb1e0bbbe4c4188d1": {
+    "tokens": 89,
+    "content": "For the state of the Rhode Island the laws of mimum wage is: Basic Minimum Rate (per hour): $15.00 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 Time and one-half premium pay for work on Sundays and holidays in retail and certain other businesses is required under two laws that are separate from the minimum wage law.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-cebdd66ed1ddd58eb1e0bbbe4c4188d1",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:0c2ced85f956f67d9319f68b1b43415b",
+      "default:extract:9f1544b80c85e90c1239b18129740302"
+    ],
+    "update_time": 1756256349,
+    "_id": "chunk-cebdd66ed1ddd58eb1e0bbbe4c4188d1",
+    "create_time": 0
+  },
+  "chunk-ed8c65b154b00a80b622a2c57c81e5dc": {
+    "tokens": 44,
+    "content": "For the state of the South Carolina the laws of mimum wage is: No state minimum wage law. Employers subject to the Fair Labor Standards Act must pay the current federal minimum wage of $7.25 per hour.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-ed8c65b154b00a80b622a2c57c81e5dc",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:36a2e08fae3403095526f9dad5030f66",
+      "default:extract:6f18d50d29117ea5bf8ec4f8b9ef3839"
+    ],
+    "update_time": 1756256362,
+    "_id": "chunk-ed8c65b154b00a80b622a2c57c81e5dc",
+    "create_time": 0
+  },
+  "chunk-c6a741d4db26be8a11c9212bed671d84": {
+    "tokens": 38,
+    "content": "For the state of the South Dakota the laws of mimum wage is: Basic Minimum Rate (per hour): $11.50 The minimum wage is adjusted annually based on a set formula.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-c6a741d4db26be8a11c9212bed671d84",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:f8531ce65654344200e4b189669184df",
+      "default:extract:29b36a5d729bebbd198fab3ae00322b0"
+    ],
+    "update_time": 1756256360,
+    "_id": "chunk-c6a741d4db26be8a11c9212bed671d84",
+    "create_time": 0
+  },
+  "chunk-b0f69a75edc58567e3f22ce351eb3066": {
+    "tokens": 43,
+    "content": "For the state of the Tennessee the laws of mimum wage is: No state minimum wage law. Employers subject to the Fair Labor Standards Act must pay the current Federal minimum wage of $7.25 per hour.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-b0f69a75edc58567e3f22ce351eb3066",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:4b892fc49f9a5996c2b4f505fe6d4a7e",
+      "default:extract:f48ec47661529101071cebc268c0466f"
+    ],
+    "update_time": 1756256374,
+    "_id": "chunk-b0f69a75edc58567e3f22ce351eb3066",
+    "create_time": 0
+  },
+  "chunk-d51cc8b2f47d0de8b8bb81bc7ec85c9b": {
+    "tokens": 70,
+    "content": "For the state of the Texas the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25 The State law excludes from coverage any employment that is subject to the federal Fair Labor Standards Act. The Texas State minimum wage law does not contain current dollar minimums. Instead the State adopts the federal minimum wage rate by reference.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-d51cc8b2f47d0de8b8bb81bc7ec85c9b",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:29b66cff211aeb1a29b401a99e7f4fd5",
+      "default:extract:64573a1c885703fc3b2c238eba90177c"
+    ],
+    "update_time": 1756256375,
+    "_id": "chunk-d51cc8b2f47d0de8b8bb81bc7ec85c9b",
+    "create_time": 0
+  },
+  "chunk-6660a56e0ad04ac6d695c630ca14e823": {
+    "tokens": 44,
+    "content": "For the state of the Utah the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25 The State law excludes from coverage any employment that is subject to the federal Fair Labor Standards Act.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-6660a56e0ad04ac6d695c630ca14e823",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:0a0c330c45fe8b050b5e5aae8343ef2c",
+      "default:extract:7cf3bf9c8f95683ed75074939b637020"
+    ],
+    "update_time": 1756256381,
+    "_id": "chunk-6660a56e0ad04ac6d695c630ca14e823",
+    "create_time": 0
+  },
+  "chunk-c8ed727a4801f1ec5a4ce90cd25c544f": {
+    "tokens": 99,
+    "content": "For the state of the Vermont the laws of mimum wage is: Applicable to employers of two or more employees Basic Minimum Rate (per hour): $14.01 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 The Vermont minimum wage is adjusted annually based on a set formula. The State minimum wage is automatically replaced with the federal minimum wage rate if it is higher than the State minimum.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-c8ed727a4801f1ec5a4ce90cd25c544f",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:7a74428c9dc3771c271dfafc7347cda9",
+      "default:extract:f55dad3950f3aaa45bf4fc2a0a343675"
+    ],
+    "update_time": 1756256388,
+    "_id": "chunk-c8ed727a4801f1ec5a4ce90cd25c544f",
+    "create_time": 0
+  },
+  "chunk-5058b86a2ddf47a8f035f37d56f7f1ae": {
+    "tokens": 61,
+    "content": "For the state of the Virgin Islands the laws of mimum wage is: Basic Minimum Rate (per hour): $10.50 Premium Pay After Designated Hours 1 : Daily 8; Weekly – 40; Any hours worked on the 6th or 7th consecutive day of work.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-5058b86a2ddf47a8f035f37d56f7f1ae",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:bc69bfbb276596d9c4644f57feff5106",
+      "default:extract:e63901cdeab99985d81ce26b5a9d0e56"
+    ],
+    "update_time": 1756256394,
+    "_id": "chunk-5058b86a2ddf47a8f035f37d56f7f1ae",
+    "create_time": 0
+  },
+  "chunk-81b711215cadcfb759d79f1465ea6878": {
+    "tokens": 38,
+    "content": "For the state of the Virginia the laws of mimum wage is: Basic Minimum Rate (per hour): $12.41 The Virginia minimum wage is adjusted annually based on a set formula.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-81b711215cadcfb759d79f1465ea6878",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:fc4de27e2528c6868a27a053f5640fb3",
+      "default:extract:b66d5d841661f1a2c5a9ef8f6030a097"
+    ],
+    "update_time": 1756256400,
+    "_id": "chunk-81b711215cadcfb759d79f1465ea6878",
+    "create_time": 0
+  },
+  "chunk-2eb6a6381ce000eada41422438432af7": {
+    "tokens": 86,
+    "content": "For the state of the Washington the laws of mimum wage is: Basic Minimum Rate (per hour): $16.66 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40 Premium pay not applicable to employees who request compensating time off in lieu of premium pay. The minimum wage is adjusted annually based on a set formula.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-2eb6a6381ce000eada41422438432af7",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:b1c3738e76e62fe31c2db14c4e14dbcc",
+      "default:extract:b4884111e6d7cc7d1a38107cd2e45b04"
+    ],
+    "update_time": 1756256411,
+    "_id": "chunk-2eb6a6381ce000eada41422438432af7",
+    "create_time": 0
+  },
+  "chunk-3c4565aee6050a8974bdb895bb58151e": {
+    "tokens": 69,
+    "content": "For the state of the West Virginia the laws of mimum wage is: Applicable to employers of 6 or more employees at one location Basic Minimum Rate (per hour): $8.75 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-3c4565aee6050a8974bdb895bb58151e",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:226835d3d84e0e203009af0e4e0ac61b",
+      "default:extract:7ae2eda8b95bfaafb5e1c421a491df9c"
+    ],
+    "update_time": 1756256417,
+    "_id": "chunk-3c4565aee6050a8974bdb895bb58151e",
+    "create_time": 0
+  },
+  "chunk-4ab1eab13f0d6cf90465dccbe6ddaa3e": {
+    "tokens": 56,
+    "content": "For the state of the Wisconsin the laws of mimum wage is: Basic Minimum Rate (per hour): $7.25 Premium Pay After Designated Hours The overtime premium rate is one and one-half times the employee's regular rate, unless otherwise specified. : Weekly - 40",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-4ab1eab13f0d6cf90465dccbe6ddaa3e",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:1dc0bfbd9b34a0927beb4f4f6bd8c03e",
+      "default:extract:48c9db62122e1cceb543d396b6248c56"
+    ],
+    "update_time": 1756256427,
+    "_id": "chunk-4ab1eab13f0d6cf90465dccbe6ddaa3e",
+    "create_time": 0
+  },
+  "chunk-fc80e07f683bf9a6b3eebaa0ea870552": {
+    "tokens": 48,
+    "content": "For the state of the Wyoming the laws of mimum wage is: Basic Minimum Rate (per hour): $5.15 Employers subject to the Fair Labor Standards Act must pay the current Federal minimum wage of $7.25 per hour.",
+    "chunk_order_index": 0,
+    "full_doc_id": "doc-fc80e07f683bf9a6b3eebaa0ea870552",
+    "file_path": "unknown_source",
+    "llm_cache_list": [
+      "default:extract:7800d9131551a44811cbed9824604c12",
+      "default:extract:83b89b6843c8e575141b5a83f3d4eea2"
+    ],
+    "update_time": 1756256434,
+    "_id": "chunk-fc80e07f683bf9a6b3eebaa0ea870552",
+    "create_time": 0
+  }
+}
