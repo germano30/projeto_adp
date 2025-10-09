@@ -1,0 +1,59 @@
+state_name|category_name|base_wage_per_hour|maximum_tip_credit|combined_minimum_wage|effective_date|footnote_marker|footnote_text|source_url|last_updated|notes
+FEDERAL|Tipped|2.13|5.12|7.25||FLSA||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Alaska|Tipped|13.00||||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+California|Tipped|16.50||||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Guam|Tipped|9.25||||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Minnesota|Tipped|11.13||||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Montana|Tipped|10.55||||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|Business with gross annual sales over $110,000
+Montana|Tipped|4.00||||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|Business not covered by the Fair Labor Standards Act with gross annual sales of $110,000 or less
+Nevada|Tipped|12.00||||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Oregon|Tipped|15.05||||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|Oregon The Oregon minimum wage varies by region.
+Washington|Tipped|16.66||||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Arizona|Tipped|11.70|3.00|14.70||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Arkansas|Tipped|2.63|8.37|11.00||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Colorado|Tipped|11.79|3.02|14.81||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Connecticut|Tipped|6.38|9.97|16.35||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|Hotel, restaurant
+Connecticut|Tipped|8.23|8.12|16.35||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|Bartenders who customarily receive tips
+Delaware|Tipped|2.23|12.77|15.00||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+District of Columbia|Tipped|10.00|7.95|17.95||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Florida|Tipped|9.98|3.02|13.00||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Hawaii|Tipped|12.75|1.25|14.00||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Idaho|Tipped|3.35|3.90|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Illinois|Tipped|9.00|6.00|15.00||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Iowa|Tipped|4.35|2.90|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Maine|Tipped|7.33|7.32|14.65||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Maryland|Tipped|3.63|11.37|15.00||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Massachusetts|Tipped|6.75|8.25|15.00||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Michigan|Tipped|4.74|7.74|12.48||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Missouri|Tipped|6.88|6.87|13.75||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+New Hampshire|Tipped|3.27|3.98|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+New Jersey|Tipped|5.62|9.87|15.49||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+New Mexico|Tipped|3.00|9.00|12.00||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+North Dakota|Tipped|4.86|2.39|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Ohio|Tipped|5.35|5.35|10.70||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|Ohio 7 Employers with annual gross receipts of $394,000 or more
+Oklahoma|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Pennsylvania|Tipped|2.83|4.42|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Rhode Island|Tipped|3.89|11.11|15.00||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+South Dakota|Tipped|5.75|5.75|11.50||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Vermont|Tipped|7.01|7.00|14.01||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Virgin Islands|Tipped|4.20|6.30|10.50||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Wisconsin|Tipped|2.33|4.92|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+West Virginia|Tipped|2.62|6.13|8.75||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Alabama|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+American Samoa|Tipped|2.13||||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Georgia|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Indiana|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Kansas|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Kentucky|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Louisiana|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Mississippi|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Nebraska|Tipped|2.13|9.87|12.00||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+North Carolina|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Commonwealth of the Northern Mariana Islands|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Puerto Rico|Tipped|2.13|8.37|10.50||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+South Carolina|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Tennessee|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Texas|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Utah|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Virginia|Tipped|2.13|10.28|12.41||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
+Wyoming|Tipped|2.13|5.12|7.25||||https://www.dol.gov/agencies/whd/state/minimum-wage/tipped|2025-10-09|
