@@ -1,0 +1,61 @@
+state_id,state_name,is_territory
+1,Federal (FLSA),False
+2,Alabama,False
+3,Alaska,False
+4,Arizona,False
+5,Arkansas,False
+6,California,False
+7,Colorado,False
+8,Connecticut,False
+9,Delaware,False
+10,Florida,False
+11,Georgia,False
+12,Hawaii,False
+13,Idaho,False
+14,Illinois,False
+15,Indiana,False
+16,Iowa,False
+17,Kansas,False
+18,Kentucky,False
+19,Louisiana,False
+20,Maine,False
+21,Maryland,False
+22,Massachusetts,False
+23,Michigan,False
+24,Minnesota,False
+25,Mississippi,False
+26,Missouri,False
+27,Montana,False
+28,Nebraska,False
+29,Nevada,False
+30,New Hampshire,False
+31,New Jersey,False
+32,New Mexico,False
+33,New York,False
+34,North Carolina,False
+35,North Dakota,False
+36,Ohio,False
+37,Oklahoma,False
+38,Oregon,False
+39,Pennsylvania,False
+40,Rhode Island,False
+41,South Carolina,False
+42,South Dakota,False
+43,Tennessee,False
+44,Texas,False
+45,Utah,False
+46,Vermont,False
+47,Virginia,False
+48,Washington,False
+49,West Virginia,False
+50,Wisconsin,False
+51,Wyoming,False
+52,District of Columbia,False
+53,Guam,False
+54,Puerto Rico,False
+55,U.S. Virgin Islands,False
+56,FEDERAL,False
+57,Virgin Islands,False
+58,,False
+59,American Samoa,False
+60,Commonwealth of the Northern Mariana Islands,False

@@ -1,0 +1,5 @@
+category_id,category_name,category_type
+1,Standard Minimum Wage,standard
+2,Tipped Combined Rate,tipped
+3,Tipped Credit,tipped
+4,Tipped Cash Wage,tipped

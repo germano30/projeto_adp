@@ -1,0 +1,278 @@
+footnote_id,footnote_text,footnote_hash
+1,"Or can be 1.60, this reflects rates that differ by industry, occupation or other factors",d9c0bdd5c6a97d40
+2,This state utilizes the federal minimum wage,dc2c1980e500b0b0
+3,"Or can be 26.40, this reflects rates that differ by industry, occupation or other factors",be844951fec078d5
+4,"Or can be 1.25, this reflects rates that differ by industry, occupation or other factors",52afc6fca8c23ec3
+5,"Or can be 75, this reflects rates that differ by industry, occupation or other factors",ddb80658903a5d4a
+6,"Or can be 1.15, this reflects rates that differ by industry, occupation or other factors",9438f0cc600bcc63
+7,"Or can be 1.40, this reflects rates that differ by industry, occupation or other factors",2cf66832bcd29b08
+8,"Or can be 20.00, this reflects rates that differ by industry, occupation or other factors",6d0156e7ed3fa287
+9,"Or can be 1.45, this reflects rates that differ by industry, occupation or other factors",65b874b89226ebc1
+10,"Or can be 2.00, this reflects rates that differ by industry, occupation or other factors",be799cf4cdc83053
+11,"Or can be 1.80, this reflects rates that differ by industry, occupation or other factors",33528991bc6cc212
+12,"Or can be 1.35, this reflects rates that differ by industry, occupation or other factors",3ed9b2650577ed2d
+13,"Or can be 2.25, this reflects rates that differ by industry, occupation or other factors",d7f1149f52c6fcd4
+14,"Or can be 2.30, this reflects rates that differ by industry, occupation or other factors",bc971b90e578d429
+15,"Or can be 2.31, this reflects rates that differ by industry, occupation or other factors",05414c5f19645720
+16,"Or can be 1.70, this reflects rates that differ by industry, occupation or other factors",b0ef0df8c6d5fb6c
+17,"Or can be 2.75, this reflects rates that differ by industry, occupation or other factors",9cd749e759c29779
+18,"Or can be 2.50, this reflects rates that differ by industry, occupation or other factors",43cf1a6169c10b72
+19,"Or can be 2.45, this reflects rates that differ by industry, occupation or other factors",d156f9111a6300c2
+20,"Or can be 3.00, this reflects rates that differ by industry, occupation or other factors",685954a678af18d1
+21,"Or can be 3.10, this reflects rates that differ by industry, occupation or other factors",37ffe305c6a9e09b
+22,"Or can be 2.60, this reflects rates that differ by industry, occupation or other factors",8102009380901a96
+23,"Or can be 3.50, this reflects rates that differ by industry, occupation or other factors",9159ba429ce62456
+24,"Or can be 3.75, this reflects rates that differ by industry, occupation or other factors",ea191f96c6501763
+25,"Or can be 4.85, this reflects rates that differ by industry, occupation or other factors",dd2f74847e9b2f8f
+26,"Or can be 3.35, this reflects rates that differ by industry, occupation or other factors",ea765e4316f2c378
+27,"Or can be 4.25, this reflects rates that differ by industry, occupation or other factors",81bf344940414583
+28,"Or can be 65, this reflects rates that differ by industry, occupation or other factors",cbd3da7451e73d33
+29,"Or can be 5.45, this reflects rates that differ by industry, occupation or other factors",ff5b8dd7649baafe
+30,"Or can be 4.75, this reflects rates that differ by industry, occupation or other factors",7060734ad9943a38
+31,"Or can be 5.15, this reflects rates that differ by industry, occupation or other factors",74bc567a5e9248c4
+32,"Or can be 4.65, this reflects rates that differ by industry, occupation or other factors",deef4299eab8fdf1
+33,"Or can be 6.15, this reflects rates that differ by industry, occupation or other factors",ec660f2206153ef3
+34,"Or can be 6.25, this reflects rates that differ by industry, occupation or other factors",bcdbcc72005662c4
+35,"Or can be 5.85, this reflects rates that differ by industry, occupation or other factors",3712c4ccf5b9524f
+36,"Or can be 6.90, this reflects rates that differ by industry, occupation or other factors",fe25c1d0cddb999e
+37,"Or can be 6.85, this reflects rates that differ by industry, occupation or other factors",0a0a0bab2dfe9675
+38,"Or can be 6.55, this reflects rates that differ by industry, occupation or other factors",60251aa801a6237f
+39,"Or can be 7.25, this reflects rates that differ by industry, occupation or other factors",8a7118e4ae05c978
+40,"Or can be 7.55, this reflects rates that differ by industry, occupation or other factors",1984e3df5baa236c
+41,"Or can be 7.35, this reflects rates that differ by industry, occupation or other factors",d919307bf7081438
+42,"Or can be 8.25, this reflects rates that differ by industry, occupation or other factors",559af6fd16b1d46a
+43,"Or can be 7.65, this reflects rates that differ by industry, occupation or other factors",a8d2af3b6ba1eb74
+44,"Or can be 7.80, this reflects rates that differ by industry, occupation or other factors",e3e0dde42dae8d6f
+45,"Or can be 8.00, this reflects rates that differ by industry, occupation or other factors",71fc41fb5a6ab673
+46,"Or can be 7.95, this reflects rates that differ by industry, occupation or other factors",a85534ac9a67ac4e
+47,"Or can be 9.00, this reflects rates that differ by industry, occupation or other factors",9b0462434bb52a91
+48,"Or can be 8.10, this reflects rates that differ by industry, occupation or other factors",901dc2ca11bb4a49
+49,"Or can be 9.50, this reflects rates that differ by industry, occupation or other factors",4815666c77c486ff
+50,"Or can be 9.86, this reflects rates that differ by industry, occupation or other factors",e6e75ae31e8354e6
+51,"Or can be 10.00, this reflects rates that differ by industry, occupation or other factors",85672785008e75c9
+52,"Or can be 9.75, this reflects rates that differ by industry, occupation or other factors",c5fced4ed525ceed
+53,"Or can be 10.50, this reflects rates that differ by industry, occupation or other factors",6eb0cb038ac94aec
+54,"Or can be 11.25, this reflects rates that differ by industry, occupation or other factors",7c1fb41d94be4407
+55,More than $30,0a0d6a57fcebf5d1
+56,"Alaska . Beginning January 1, 2004, and annually thereafter, the rate will be adjusted for inflation using either the Consumer Price Index for all urban consumers for Anchorage, Alaska, or $1 more than the Federal minimum wage, whichever is greater.",6f88ac3a89aa0626
+57,"Minnesota . A large employer is an enterprise with annual receipts of $500,000 or more",54bcbe90e7f0fe6c
+58,Large employer,86fd6c151986a2a1
+59,Small employer,fea4423c07b04eeb
+60,"Business with gross annual sales over $110,000",b77f6850596a3d1f
+61,"Business with gross annual sales of $110,000 or less",656cafae56ecaf27
+62,"Oregon . Beginning January 1, 2004, and annually thereafter, the rate will be adjusted for inflation by a calculation using the U.S. City Average Consumer Price Index for All Urban Consumers for All Items. The wage amount established will be rounded to the nearest five cents.",802a19d6ff8ca8cc
+63,"Washington . Beginning January 1, 2001, and annually thereafter, the rate will be adjusted for inflation by a calculation using the Consumer Price Index for urban wage earners and clerical workers for the prior year.",49d738550928c24d
+64,New Mexico . The minimum rate for non-tipped employees is $5.15 per hour.,4f5994b832ce5e6b
+65,Original value: 50%,30ea22d3d9beab0c
+66,Not specified,dd3195ced9c18103
+67,Alternative rate(s): $7.10,28c94e8da266e3c3
+68,At least $10 weekly for full-time employees or $2.00 daily for part-time in hotels and restaurants. Not specified for other industries.,60b14adb4387b66a
+69,none none,33e214a1f9d50a9e
+70,Beauty shop,5a273846aa2a64e0
+71,Alternative rate(s): $5.02,6925238a56e00233
+72,Original value: 29.3%,06b6b89e9ae2ed93
+73,Alternative rate(s): $6.52,e636fd6ddee9f73f
+74,Original value: 8.2%,3450b402fd82cbab
+75,Alternative rate(s): $6.75,364d61fb84c536fc
+76,Original value: 55%,26ad4dbfbaaabca0
+77,More than $20,fd7f10ad7ddd66b9
+78,Original value: 35%,374a207aacff3a59
+79,$20,3c6713ed0b513644
+80,Original value: 40%,506021abdb217523
+81,Original value: Up to 50%,af78a728c66febdd
+82,"In New Jersey , Oklahoma , and South Dakota , the listed maximum credit is the total amount allowable for tips, food and lodging combined, not for tips alone as in other states.",05db17e87256a066
+83,"Puerto Rico . Rates are established by industry wage orders (mandatory decrees) and vary by industry, occupation or other factors. However, for employers not covered by the FLSA, a new minimum rate equivalent to 70% of the Federal minimum wage ($3.61 of $5.15 per hour) supersedes all mandatory decree rates below that level, with the mandatory decree program being eventually phased out. A tip credit allowance is permitted in, 1) the restaurant, bar and soda fountain industry, which has a $3.70 minimum wage for all employees, and 2) the guest house industry, with a minimum of $2.75, but only for those employees who were hired after July 27, 1998. In addition, a lower rate is established for tipped occupations than for non-tipped in the hotel industry. For hotel waiters and bellboys, the minimum wage is $2.50 or $2.25, depending on whether annual gross income is $362,500 for more or less than this amount.",23218c2f514878a8
+84,Original value: 11%,8a65fdba0f700626
+85,Original value: 16%,774fa6a7850690e6
+86,Original value: 20%,08167eda84474bc1
+87,Original value: 25%,046d914d2430edbf
+88,None,6adf97f83acf6453
+89,Building service,11f43953c630eb9a
+90,Food service workers,cef330dc0dc1b717
+91,Employees averaging between $1.15 and $1.64 per hour in tips.,0ee5fa3fa292f136
+92,Employees averaging $1.65 per hour or more in tips.,8f17e21d72bdda01
+93,Employees averaging between $1.15 and $1.64 per hour in tips,fb68b8844164a561
+94,Employees averaging $1.65 per hour or more in tips,8d87283e082a6d8f
+95,All other workers (Resort Hotels only),7db7f7e96d2c8d26
+96,Employees averaging $0.80 and $1.64 per hour in tips,3f8560067c5e9775
+97,Miscellaneous Industries,5cf9cc5f0f59ec62
+98,(profit making establishments only),2cffa1b6940f89d2
+99,"North Carolina . Tip credit is not permitted unless the employer obtains from each employee, monthly or for each pay period, a signed certification of the amount of tips received.",b0bb5c57b9ce597c
+100,Original value: 33%,020fdb082d6ffd73
+101,"Ohio . The minimum cash wage for tipped employees of employers with gross annual sales of $500,000 or less is $2.01 per hour. For non-tipped employees of such employers, the minimum rates are $3.35 for employers with sales from $150,000 to $500,000 and $2.80 with sales under $150.000.",c96858c7adfde13d
+102,"Oklahoma . For employers with fewer than 10 full-time employees at any one location who have gross annual sales of $100,000 or less, the basic minimum rate is $2.00 per hour, with a 50% maximum tip credit.",3c9083dec6d74aa6
+103,More than $35,22a1ce1ac961c3ac
+104,Original value: 45%,5a2338f964bb9f53
+105,All other employees,ec07516781a14101
+106,Actual amount received,896de543637fe048
+107,All other industries,32457b5f3edb4a13
+108,Wisconsin . $2.13 per hour may be paid to employees who are not yet 20 years old and who have been in employment status with a particular employer for 90 or fewer consecutive calendar days from the date of initial employment.,c6146615d2440585
+109,none,334c4a4c42fdb79d
+110,Alternative rate(s): $6.50,93917fd2c5b5b634
+111,Alternative rate(s): $2.60,2ec8cfc741f02502
+112,$20 $20,0089cb1ffe06de20
+113,Alternative rate(s): $7.00,209089b6e47a6814
+114,Alternative rate(s): $3.35,2c6614274ab22c69
+115,Alternative rate(s): $3.65,d8135f5c729eae8f
+116,More than $30 More than $30,6ac792a016f0cb8c
+117,Employees averaging $1.64 per hour or more in tips,9df43058332a8613
+118,Alternative rate(s): $7.65,c03ec29e43ceabe8
+119,$.060,d37f828291d736a0
+120,Alternative rate(s): $7.25,ac93dbf58ca9594a
+121,Alternative rate(s): $7.15,8c2bba4a82d93b08
+122,Employees averaging between $1.50 and $2.15 per hour in tips.,6febca857be5ccd3
+123,Employees averaging $2.15 per hour or more in tips.,0f39f84292d37e89
+124,Employees averaging between $1.50 and $2.15 per hour in tips,cf8f630f431e4429
+125,Employees averaging $2.15 per hour or more in tips,a387d56c5eccb6aa
+126,All other workers averaging more than $3.80 per hour in tips,dfff188e78fc18e7
+127,Chambermaids averaging between $1.05 and $3.80 per hour in tips,5491293e67b1e651
+128,Employees averaging $3.80 per hour or more in tips,52cc1a616d7c9725
+129,Without a qualified health plan,fe7e66d31f533399
+130,With a qualified health plan provided,3e49f01f30022fe4
+131,"Washington . Beginning January 1, 2001, and annually thereafter, the rate will be adjusted for inflation by a calculation using the consumer price index for urban wage earners and clerical workers for the prior year.",429cae69ffed19ce
+132,Original value: 58%,0175ea19928ad3ef
+133,Original value: 42%,1a16885e20aa8916
+134,Employees averaging between $1.60 and $2.30 per hour in tips.,0e2bce3f869d3822
+135,Employees averaging $2.30 per hour or more in tips.,36252ebeb7c92ce4
+136,Employees averaging between $1.60 and $2.30 per hour in tips,04bd074a47b61576
+137,Employees averaging $2.30 per hour or more in tips,45cba0db4074256a
+138,All other workers averaging more than $4.05 per hour in tips,79235617f4d9e220
+139,Chambermaids averaging between $1.10 and $4.05 per hour in tips,4058ae188dbc3552
+140,Employees averaging $4.05 per hour or more in tips,7808cb219524ce10
+141,Employees averaging between $1.10 and $4.05 per hour in tips,da6f1540069db3f6
+142,Employees averaging more than $1.75 per hour in tips,e1a773c13e14a20e
+143,West Virginia . For employers with six or more employees and for state agencies.,37fbb2b81d45ef1d
+144,"Minnesota. A large employer is an enterprise with annual receipts of $625,000 or more",f03a6d3bff755b46
+145,"Oregon. Beginning January 1, 2004, and annually thereafter, the rate will be adjusted for inflation by a calculation using the U.S. City Average Consumer Price Index for All Urban Consumers for All Items. The wage amount established will be rounded to the nearest five cents.",33dd572dcb200d11
+146,Original value: up to 50%,f562971d47d32018
+147,"North Carolina . tip credit is not permitted unless the employer obtains from each employee, monthly or for each pay period, a signed certification of the amount of tips received.",87773113cbcc4030
+148,"Ohio . The minimum cash wage for tipped employees of employers with gross annual sales in excess of $255,000 is $3.50 per hour (plus tips). For tipped employees of employers with gross annual sales of less than $255,000, the tipped employee hourly rate is $2.93 per hour (plus tips).",311cb1a7d4ec57a5
+149,More than $120,2fca1ab714d93311
+150,$0.00 if tips equal MW,db686b7f47007e3a
+151,Original value: Up to 100% of MW,8984735531e238de
+152,Alternative rate(s): $6.55,6e186c3a61e95600
+153,With no health insurance benefits provided by employer and received by employee With health insurance benefits provided by employer and received by employee,221273be384721bd
+154,Original value: 31.0%,73e8c007564de399
+155,under review,e549ffd00d30a666
+156,Employees averaging between $1.60 and $2.35 per hour in tips.,da72b7846908d3b5
+157,Employees averaging $2.35 per hour or more in tips.,505135207ce4a2b9
+158,Employees averaging between $1.60 and $2.35 per hour in tips,485021d48a994a0f
+159,Employees averaging $2.35 per hour or more in tips,ee28a00ce0d0c21b
+160,All other workers averaging more than $4.10 per hour in tips,83663dfbc65a5e9c
+161,Chambermaids averaging between $1.10 and $4.10 per hour in tips,2134ed80fd53e6fa
+162,Employees averaging $4.10 per hour or more in tips,b675c45ee6f93d66
+163,Employees averaging between $1.10 and $1.75 per hour in tips,1802946e7c4bde28
+164,Service Employees in All Establishments,0e4500c01cd5a926
+165,Service Employees in Resort Hotels if tips at least $4.10 per hour,23867c50e75b69d7
+166,Chambermaids averaging $4.10 per hour or more in tips,ef0bad5a6c727041
+167,"In New Jersey , and South Dakota , the listed maximum credit is the total amount allowable for tips, food and lodging combined, not for tips alone as in other states.",487b565884d98c2d
+168,"Oklahoma . For employers with fewer than 10 full-time employees at any one location who have gross annual sales of $100,000 or less, the basic minimum rate is $2.00 per hour.",71cbb24fcb7241fb
+169,Alternative rate(s): $3.01,457424702b26a66b
+170,"Hotel, restaurant",fe7139afcc9c4d6b
+171,Alternative rate(s): $1.36,0401a240452cc145
+172,Bartenders who customarily receive tips,b5b05a0d87441dbd
+173,"$7.75, effective June 1, 2014",d8018256c65b9799
+174,"$9.50, effective July 1, 2014",d629b4d460dc2478
+175,$4.95,86246e4db568b5fb
+176,"$8.15, effective September 1, 2014",a9aee12e0f829384
+177,Service Employees,6201bc3deb0b1fb3
+178,Service Employees in Resort Hotels if tips average at least $4.50 per hour,605e6d0af59e990b
+179,"Ohio . For employees of employers with gross annual sales of less than $292,000, the state minimum wage is $7.25 per hour. For these employees, the state wage is tied to the federal minimum wage of $7.25 per hour which requires an act of Congress and the President’s signature to change.",343e7e8baed36d30
+180,"The following states do not have State minimum wage laws: Alabama, Louisiana, Mississippi, South Carolina, and Tennessee. Georgia exempts tipped employees under the law.",c444b29f48991b9e
+181,"In New Jersey and South Dakota , the listed maximum credit is the total amount allowable for tips, food and lodging combined, not for tips alone as in other states.",2e24eefa191ad60a
+182,Alternative rate(s): $3.37,60543b74120d3ebe
+183,Alternative rate(s): $1.69,701f48589766785e
+184,Original value: 50% ($3.825),b07c55aa29a7c778
+185,Service Employees in Resort Hotels if tips average at least $4.90 per hour,b15aad7b65171075
+186,"Ohio . For employees of employers with gross annual sales of less than $297,000, the state minimum wage is $7.25 per hour. For these employees, the state wage is tied to the federal minimum wage of $7.25 per hour which requires an act of Congress and the President’s signature to change.",f33fd443a21a7795
+187,Original value: 50% ($4.25),bcb29e6bea77df57
+188,Original value: 50% ($4.575),5aa427e4a139396f
+189,Original value: 70% ($5.60),2c00b042e5c4c940
+190,"The following states do not have state minimum wage laws: Alabama, Louisiana, Mississippi, South Carolina, and Tennessee. Georgia exempts tipped employees under the law.",8fbe4da26b14ce4e
+191,Alternative rate(s): $3.53,a35e4fea6ed67e68
+192,Alternative rate(s): $1.78,eb8ef615bde38d30
+193,"$11.50, effective 07/01/2016",d6428ce38b631f4c
+194,"$8.75, effective 07/01/2016",b3e5648166574c26
+195,Service Employees in Resort Hotels if tips average at least $5.05 per hour,a12e893c1be80757
+196,Original value: 50% ($4.80),f3b0befb204788f3
+197,Original value: 70% ($6.13),a4399e4723888a45
+198,Alternative rate(s): $3.72,c78aaac701471d35
+199,Alternative rate(s): $1.87,8cc7d0b4aad98a18
+200,Original value: 40% of the applicable minimum wage,b01dc53bed267f38
+201,$30 or more,5da6058effe1b72a
+202,"$9.00, effective 01/07/2017",12fbc98056d6d837
+203,Original value: 50% ($3.85),d6f621a28f948368
+204,Original value: 55% of the applicable minimum wage,1cefc6e4c4ff42f0
+205,Original value: 45% of the applicable minimum wage,0ef9df1d6ffa2e78
+206,Original value: 33% of the applicable minimum wage,764c8353725855aa
+207,"Ohio . For employees of employers with gross annual sales of less than $299,000, the state minimum wage is $7.25 per hour. For these employees, the state wage is tied to the federal minimum wage of $7.25 per hour which requires an act of Congress and the President's signature to change.",c9e7d92944c349b6
+208,"$3.89, effective 01/01/17",0ca9482396f4fed0
+209,Original value: 50% ($4.325),8e81bfe8f91ed1fc
+210,Original value: 40% ($3.34),bdde1e2e01d640f1
+211,West Virginia . The state minimum wage law applies only to employers with six or more employees and to state agencies.,861ef524c80f947a
+212,"The following states do not have state minimum wage laws: Alabama, Louisiana, Mississippi, South Carolina, and Tennessee. Georgia has a state minimum wage law, but it does not apply to tipped employees.",7139646bd14e94b4
+213,"North Carolina . Tip credit is not permitted unless the employer obtains from each employee, either monthly or each pay period, a signed certification of the amount of tips received.",1c1da553bf4bdfc9
+214,Original value: 40% of the applicable minimum wage ($3.30),7aad34702cb9ad0e
+215,Original value: 50% ($3.92),91efd6835d7514eb
+216,Original value: 55% of the applicable minimum wage ($3.99),04fdd5d7d24a373d
+217,Original value: 45% of the applicable minimum wage ($3.26),2f4d09bc5d1fe0ad
+218,Original value: 33% of the applicable minimum wage ($2.39),8f203ad3d8df910b
+219,"Ohio . For employees of employers with gross annual sales of less than $305,000, the state minimum wage is $7.25 per hour. For these employees, the state wage is tied to the federal minimum wage of $7.25 per hour which requires an act of Congress and the President's signature to change.",b1c0b2982fdc0b2d
+220,"In New Jersey , in specific situations where the employer can prove to the satisfaction of the Department of Labor and Workforce Development that the tips actually received exceed the creditable amount, a higher tip credit may be taken.",89a097d54759203b
+221,Original value: 50% ($4.425),f711190fd29eef59
+222,Original value: 40% ($3.80),c93f6326e148616e
+223,Original value: 50% ($4.30),8f83320eae8f8fa3
+224,Original value: 50% ($4.55),10923b49bc9e9ac8
+225,"US Virgin Islands. After December 31, 2018, and each year thereafter, the Virgin Islands Wage Board may increase the territory’s minimum wage to a rate equal to not more than 50 percent of the average private, nonsupervisory, nonagricultural hourly wage",dbfccdd3191bf45b
+226,Original value: 40% ($4.20),830e06cd49824cdc
+227,Original value: 40% of the applicable minimum wage ($4.00),63c0d4150ac73517
+228,$6.00,6c962fc0148c6126
+229,Original value: 50% ($4.72),7210033777b2c4b5
+230,Original value: 50% ($4.65),5570273575ff4d22
+231,Original value: 40% of the applicable minimum wage ($4.40),1f59121ad9bb685f
+232,$6.60,49971b493e51491c
+233,Original value: 50% ($5.15),3905889ba17dd067
+234,Original value: 50% ($4.725),4c06a134521ed749
+235,Original value: 40% of the applicable minimum wage ($4.80),4c4c5e9ee6089115
+236,$7.20,4798e08ff0f1c47a
+237,Original value: 50% ($5.57),0fbbe1ec03c36834
+238,"Tipped workers' minimum wage rates vary by region. For rates in NYC, Long Island, and Westchster, see .",768df119233e966c
+239,"Ohio . For employees of employers with gross annual sales of less than $342,000, the state minimum wage is $7.25 per hour. For these employees, the state wage is tied to the federal minimum wage of $7.25 per hour which requires an act of Congress and the President's signature to change.",3c2c3e789ccc45ac
+240,Original value: 50% ($4.975),4f7e56e5daf328b7
+241,"District of Columbia. Pursuant to a ballot initiative, the minimum cash wage for tipped workers in the District of Columbia increased to $8.00 per hour on July 1, 2023 and it is scheduled to gradually increase annually until it reaches the full minimum wage. Additionally, the District of Columbia minimum wage is adjusted annually on July 1 based on a set formula.",334d8fc53b5a9ebe
+242,"Florida. The Florida minimum wage is scheduled to increase by $1.00 every year on September 30th until reaching $15.00 on September 30, 2026.",a06ea4682566d619
+243,Original value: 40% of the applicable minimum wage ($5.20),2b53706700ba9d11
+244,$7.80,fbb7a192a7d4eae5
+245,Original value: 40% of the applicable minimum wage ($2.90),78be649bea160fb7
+246,Original value: 50% of the applicable minimum wage ($6.90),d6645fc95c3b81a8
+247,More than $175,994b2067b329ed08
+248,"Maryland. Effective January 1, 2024, the Maryland minimum wage rate will increase to $15.00 for all employers, regardless of size.",da6eada5f4c673a9
+249,Original value: 38% of the applicable minimum wage ($3.84),c6be79d631a6d6cf
+250,Original value: 50% of the applicable minimum wage ($6.00),ba43375684c30d7f
+251,New Jersey. An employer is eligible to apply a tip credit against the full state minimum hourly wage only if the tipped employees have been informed in advance of the amount of the cash wage that is to be paid,a0a402ed47cf6787
+252,"Tipped workers' minimum wage rates vary by region. For rates in NYC, Long Island, and Westchester, see .",8cf06d4163a114a3
+253,"Ohio. For employees of employers with gross annual sales of less than $372,000, the state minimum wage is $7.25 per hour.",cb2371ef93d8696f
+254,"Oklahoma. For employers with fewer than 10 full-time employees at any one location who have gross annual sales of $100,000 or less, the basic minimum rate is $2.00 per hour. The State law also excludes from coverage any employment that is subject to the federal Fair Labor Standards Act.",78e7a39e3d42b996
+255,$135 per month,ab5c0523ea5b7919
+256,Original value: 50% of the applicable minimum wage ($5.40),8661bc21e7bf8322
+257,Original value: 40% of the applicable minimum wage ($4.20),1b7482392626db0c
+258,"Wisconsin. $5.90 per hour may be paid to ""opportunity employees"" -- employees who are not yet 20 years old and who have been in employment status with a particular employer for 90 or fewer consecutive calendar days from the date of initial employment. Additionally, a cash wage of $2.13 per hour may be paid to an opportunity employee who is a tipped employee.",44b5352c41715383
+259,West Virginia. The state minimum wage law applies only to employers with six or more employees and to state agencies.,0fe636a1e4f19ba8
+260,Original value: 70% of the applicable minimum wage ($6.13),e67e65fccd137377
+261,"The following states do not have state minimum wage laws: Alabama, Louisiana, Mississippi, South Carolina, and Tennessee. Georgia has a state minimum wage law, but it does not apply to tipped employees. Employers in these states must pay employees covered by the Federal Fair Labor Standards Act at least the federal minimum wage.",303aa5906db2b9ad
+262,"The minimum wage laws in Kansas, Oklahoma (see note 6), Texas, and Utah exclude from coverage any employment that is subject to the federal Fair Labor Standards Act.",0a33f8c8b763346a
+263,"North Carolina. Tip credit is not permitted unless the employer obtains from each employee, either monthly or each pay period, a signed certification of the amount of tips received. Employers must notify employees in advance of the amount of cash wages they will be paid and the amount that wages will be increased using the tip credit.",b8c0177ca08feff3
+264,"Puerto Rico. The Puerto Rico minimum wage increased to $9.50 per hour on July 1, 2023.",3e9fadd9ba1047b2
+265,Wyoming. The Wyoming minimum wage is $5.15 per hour. Employers must pay employees covered by the federal Fair Labor Standards Act at least the federal minimum wage.,a68a1276dac14044
+266,"District of Columbia. The minimum cash wage for tipped workers in the District of Columbia increased to $10.00 per hour on July 1, 2024, and it is scheduled to gradually increase annually until it reaches the full minimum wage. Additionally, the District of Columbia minimum wage is adjusted annually on July 1 based on a set formula.",3140aa6004255556
+267,Original value: 40% of the applicable minimum wage ($5.60),ef4254a4838b5241
+268,$8.40,619f00fcf43282e7
+269,Original value: 50% of the applicable minimum wage ($7.07),2d217f118de85a96
+270,Original value: 38% of the applicable minimum wage ($3.93),7712376c682e28dc
+271,Original value: 50% of the applicable minimum wage ($6.15),e283ddf80d4fc66d
+272,Alternative rate(s): $15.00,87ee5aa84a9351db
+273,Tipped workers' minimum wage rates vary by region and type of employer. See .,a64c0ba13f9f6f74
+274,"Ohio. For employees of employers with gross annual sales of less than $385,000, the state minimum wage is $7.25 per hour.",8205a59a00a7a142
+275,"Oklahoma. For employers with fewer than 10 full-time employees at any one location who have gross annual sales of $100,000 or less, the basic minimum rate is $2.00 per hour. Employers with ten or more full time employees at any one location or annual gross sales over $100,000 that are not covered by the FLSA can take a tip credit of no more than 50 percent ($3.62) of the applicable minimum wage of $7.25. The State law excludes from coverage any employment that is subject to the federal Fair Labor Standards Act.",246c23d8e69b5bf6
+276,Original value: 50% of the applicable minimum wage ($5.60),1292389a527b06ec
+277,"Puerto Rico. The minimum wage increased to $10.50 per hour on July 1, 2024.",509a0e417519666f
