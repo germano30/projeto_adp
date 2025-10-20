@@ -142,7 +142,7 @@ class MinimumWagePipeline:
                         """, (
                             row['wage_id'], row['state_id'], row['category_id'], row['year'], row.get('effective_date', None),
                             row.get('base_wage_per_hour', None), row.get('minimum_cash_wage', None), row.get('maximum_tip_credit', None),
-                            1, row.get('source_url', None), row.get('notes', None)
+                            row['frequency'], row.get('source_url', None), row.get('notes', None)
                         ))
 
                 elif table_name.lower() == "bridge":
@@ -171,9 +171,7 @@ class MinimumWagePipeline:
     
     def run(self):
         """Executa o pipeline completo"""
-        print("\n" + "🚀" * 40)
         print("INICIANDO PIPELINE DE DADOS DE SALÁRIO MÍNIMO")
-        print("🚀" * 40)
         
         start_time = datetime.now()
         

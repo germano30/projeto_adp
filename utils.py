@@ -5,7 +5,9 @@ import re
 import hashlib
 import pandas as pd
 from typing import Optional, List, Tuple
-
+import psycopg2
+from config import DATABASE_CONFIG, SQL_SCRIPTS
+import os
 
 def consolidate_notes_simple(notes: str, definition: str) -> Optional[str]:
     """
@@ -129,3 +131,34 @@ def create_directory_structure(base_path: str = '.'):
         os.makedirs(directory, exist_ok=True)
     
     print("✅ Estrutura de diretórios criada com sucesso!")
+
+def config_database(sql_dir="database/sql"):
+    """Executa os scripts SQL para configurar o banco."""
+    try:
+        conn = psycopg2.connect(**DATABASE_CONFIG)
+        conn.autocommit = True
+        cur = conn.cursor()
+
+        cur.execute("SET search_path TO public;")
+
+        for script_name in SQL_SCRIPTS:
+            script_path = os.path.join(sql_dir, script_name)
+            print(f"Executando {script_path} ...")
+            with open(script_path, "r", encoding="utf-8") as f:
+                sql_code = f.read()
+                commands = sql_code.split(";")
+                for command in commands:
+                    command = command.strip()
+                    if command:
+                        cur.execute(command)
+
+        print("Banco de dados configurado com sucesso!")
+
+    except Exception as e:
+        print("Erro ao configurar banco de dados:", e)
+
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'conn' in locals():
+            conn.close()

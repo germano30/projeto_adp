@@ -35,6 +35,15 @@ DATABASE_CONFIG = {
     'dbname': 'chat'
 }
 
+SQL_SCRIPTS = [
+    "DimCategory.sql",
+    "DimState.sql",
+    "DimFootnotes.sql",
+    "DimFrequency.sql",
+    "FactMinimumWage.sql",
+    "BridgeFactMinimumWageFootnote.sql"
+]
+
 # Caminhos de saída
 OUTPUT_DIR = 'output'
 DATA_DIR = 'data'
