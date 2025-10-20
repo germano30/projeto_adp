@@ -1,5 +1,0 @@
-CREATE DATABASE Dim_State(
-    StateID INT PRIMARY KEY,
-    StateName VARCHAR(100) NOT NULL,
-    IsTerritory BOOLEAN DEFAULT FALSE
-)

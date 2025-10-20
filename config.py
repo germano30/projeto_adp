@@ -27,10 +27,12 @@ TEXT_PATTERNS = {
     }
 }
 
-# Configurações de banco de dados (se for usar)
 DATABASE_CONFIG = {
-    'db_name': 'minimum_wage_db',
-    'schema': 'public'
+    'user': 'agermano',
+    'password': 'devpass',
+    'host': 'localhost',
+    'port': 5432,
+    'dbname': 'chat'
 }
 
 # Caminhos de saída

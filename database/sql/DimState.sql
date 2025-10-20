@@ -1,0 +1,5 @@
+CREATE TABLE DimState(
+    ID INT PRIMARY KEY,
+    StateName VARCHAR(100) NOT NULL,
+    IsTerritory BOOLEAN DEFAULT FALSE
+);

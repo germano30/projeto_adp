@@ -1,0 +1,16 @@
+CREATE TABLE FactMinimumWage(
+    ID INT PRIMARY KEY,
+    StateID INT NOT NULL, 
+    CategoryID INT NOT NULL,
+    Year INT NOT NULL,
+    EffectiveDate TIMESTAMP WITH TIME ZONE NULL,
+    BaseWagePerHour FLOAT DEFAULT NULL,
+    MinimumCashWage FLOAT DEFAULT NULL,
+    MaximumTipCredit FLOAT DEFAULT NULL,
+    FrequencyID INT DEFAULT 1,
+    SourceURL TEXT DEFAULT NULL,
+    Notes TEXT DEFAULT NULL,
+    CONSTRAINT FK_DimState FOREIGN KEY (StateID) REFERENCES DimState (ID),
+    CONSTRAINT FK_DimCategory FOREIGN KEY (CategoryID) REFERENCES DimCategory (ID),
+    CONSTRAINT FK_DimFrequency FOREIGN KEY (FrequencyID) REFERENCES DimFrequency (ID)
+)

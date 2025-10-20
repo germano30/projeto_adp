@@ -7,14 +7,14 @@ import pandas as pd
 import os
 from datetime import datetime
 import sys
-
+import psycopg2
 # Imports dos módulos do projeto
 from src.scrapers.scrapper_minimum_wage import MinimumWageScraper
 from src.scrapers.scrapper_tipped_wage import TippedWageScraper
 from src.processors.processor_standard_wage import StandardWageProcessor
 from src.processors.processor_tipped_wage import TippedWageProcessor
 from src.transformers.transformer_unified import DataTransformer
-from config import OUTPUT_DIR, TIPPED_WAGE_START_YEAR, TIPPED_WAGE_END_YEAR
+from config import OUTPUT_DIR, TIPPED_WAGE_START_YEAR, TIPPED_WAGE_END_YEAR, DATABASE_CONFIG
 
 
 class MinimumWagePipeline:
@@ -82,34 +82,92 @@ class MinimumWagePipeline:
         return tables
     
     def save_outputs(self, tables: dict):
-        """Fase 4: Salvar outputs"""
-        print("\n" + "=" * 80)
-        print("FASE 4: SALVANDO OUTPUTS")
-        print("=" * 80)
-        
-        output_files = {}
-        
-        for table_name, df in tables.items():
-            filename = f"{table_name}_{self.timestamp}.xlsx"
-            filepath = os.path.join(self.output_dir, filename)
+        try:
+            conn = psycopg2.connect(**DATABASE_CONFIG)
+            cur = conn.cursor()
             
-            df.to_csv(filepath, index=False, encoding='utf-8')
-            output_files[table_name] = filepath
-            
-            print(f"✅ {table_name}: {filepath}")
-            print(f"   Registros: {len(df)}")
-        
-        # Salvar também em Excel (todas as tabelas em uma workbook)
-        excel_filename = f"minimum_wage_data_{self.timestamp}.csv"
-        excel_path = os.path.join(self.output_dir, excel_filename)
-        
-        with pd.ExcelWriter(excel_path, engine='openpyxl') as writer:
             for table_name, df in tables.items():
-                df.to_excel(writer, sheet_name=table_name, index=False)
-        
-        print(f"\n📊 Excel consolidado: {excel_path}")
-        
-        return output_files
+                print(f"\n🔹 Inserindo {table_name} ({len(df)} registros)...")
+                
+                if table_name.lower() == "dim_category":
+                    for _, row in df.iterrows():
+                        cur.execute("""
+                            INSERT INTO DimCategory (ID, CategoryName, CategoryType)
+                            VALUES (%s, %s, %s)
+                            ON CONFLICT (ID) DO UPDATE
+                            SET CategoryName = EXCLUDED.CategoryName,
+                                CategoryType = EXCLUDED.CategoryType;
+                        """, (row['category_id'], row['category_name'], row.get('category_type', None)))
+                
+                elif table_name.lower() == "dim_state":
+                    for _, row in df.iterrows():
+                        cur.execute("""
+                            INSERT INTO DimState (ID, StateName, IsTerritory)
+                            VALUES (%s, %s, %s)
+                            ON CONFLICT (ID) DO UPDATE
+                            SET StateName = EXCLUDED.StateName,
+                                IsTerritory = EXCLUDED.IsTerritory;
+                        """, (row['state_id'], row['state_name'], row.get('is_territory', False)))
+                
+                elif table_name.lower() == "dim_footnotes":
+                    for _, row in df.iterrows():
+                        cur.execute("""
+                            INSERT INTO DimFootnote (ID, FootnoteText, FootnoteHash)
+                            VALUES (%s, %s, %s)
+                            ON CONFLICT (ID) DO UPDATE
+                            SET FootnoteText = EXCLUDED.FootnoteText,
+                                FootnoteHash = EXCLUDED.FootnoteHash;
+                        """, (row['footnote_id'], row['footnote_text'], row['footnote_hash']))
+                
+                elif table_name.lower() == "fact":
+                    for _, row in df.iterrows():
+                        cur.execute("""
+                            INSERT INTO FactMinimumWage (
+                                ID, StateID, CategoryID, Year, EffectiveDate,
+                                BaseWagePerHour, MinimumCashWage, MaximumTipCredit,
+                                FrequencyID, SourceURL, Notes
+                            )
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            ON CONFLICT (ID) DO UPDATE
+                            SET StateID = EXCLUDED.StateID,
+                                CategoryID = EXCLUDED.CategoryID,
+                                Year = EXCLUDED.Year,
+                                EffectiveDate = EXCLUDED.EffectiveDate,
+                                BaseWagePerHour = EXCLUDED.BaseWagePerHour,
+                                MinimumCashWage = EXCLUDED.MinimumCashWage,
+                                MaximumTipCredit = EXCLUDED.MaximumTipCredit,
+                                FrequencyID = EXCLUDED.FrequencyID,
+                                SourceURL = EXCLUDED.SourceURL,
+                                Notes = EXCLUDED.Notes;
+                        """, (
+                            row['wage_id'], row['state_id'], row['category_id'], row['year'], row.get('effective_date', None),
+                            row.get('base_wage_per_hour', None), row.get('minimum_cash_wage', None), row.get('maximum_tip_credit', None),
+                            1, row.get('source_url', None), row.get('notes', None)
+                        ))
+
+                elif table_name.lower() == "bridge":
+                    for _, row in df.iterrows():
+                        cur.execute("""
+                            INSERT INTO BridgeFactMinimumWageFootnote (WageID, FootnoteID, Context)
+                            VALUES (%s, %s, %s)
+                            ON CONFLICT (WageID, FootnoteID) DO UPDATE
+                            SET Context = EXCLUDED.Context;
+                        """, (row['wage_id'], row['footnote_id'], row.get('column_reference', None)))
+
+                conn.commit()
+                print("\n✅ Todos os dados inseridos/upserted com sucesso!")
+
+        except Exception as e:
+            print("❌ Erro ao inserir dados:", e)
+            if conn:
+                conn.rollback()
+        finally:
+            if 'cur' in locals():
+                cur.close()
+            if 'conn' in locals():
+                conn.close()
+
+
     
     def run(self):
         """Executa o pipeline completo"""

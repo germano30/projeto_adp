@@ -1,8 +1,15 @@
-beautifulsoup4==4.13.4
-certifi==2025.8.3
-charset-normalizer==3.4.3
-idna==3.10
-requests==2.32.4
-soupsieve==2.7
-typing_extensions==4.14.1
-urllib3==2.5.0
+# Dependências do projeto
+requests
+beautifulsoup4
+pandas
+openpyxl
+lxml
+
+# Opcional - para análise de dados
+numpy
+matplotlib
+seaborn
+
+# Opcional - para testes
+pytest
+pytest-cov
