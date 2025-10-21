@@ -103,7 +103,7 @@ class StandardWageProcessor:
         df = df.apply(self.process_multiple_rates, axis=1)
         
         # 5. Converter para numérico
-  
+
         df['minimal_wage'] = df['minimal_wage'].astype(str).str.extract(r'([\d.]+)', expand=False)
         df['minimal_wage'] = pd.to_numeric(df['minimal_wage'], errors='coerce')
         
