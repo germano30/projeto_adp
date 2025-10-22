@@ -7,7 +7,7 @@ import sys
 sys.path.append('..')
 from utils import add_leading_zero, extract_multiple_values, append_note
 from typing import Dict, Tuple
-from scrapers.scrapper_minimum_wage import MinimumWageScraper
+
 
 class StandardWageProcessor:
     """Classe para processar dados de salário mínimo padrão"""
@@ -17,10 +17,10 @@ class StandardWageProcessor:
         self.df = df.copy()
         self.footnotes_dict = footnotes_dict or {}
         self.footnote_year_bridge = footnote_year_bridge or {}
-        self.footnote_wage_bridge = {key:[] for key in self.footnotes_dict.keys()}
     
     def add_footnote_references(self, df: pd.DataFrame) -> pd.DataFrame:
         """Adiciona coluna footnotes com referências baseadas no ano"""
+
         
         def get_footnote_ref(row):
             year_str = str(row['year'])
@@ -34,9 +34,13 @@ class StandardWageProcessor:
     
     def add_footnote_texts(self, df: pd.DataFrame) -> pd.DataFrame:
         """Adiciona coluna footnote_text com texto completo dos footnotes"""
-        for key, value in self.footnotes_dict.items():
-            print(f"Footnote key: {key}, value: {value}")  # Debug line to check footnotes_dict content
-        print(df)
+ 
+        
+        def get_footnote_text(row):
+            footnote_ref = row.get('footnotes')
+            if footnote_ref and footnote_ref in self.footnotes_dict:
+                return f"[{footnote_ref}] {self.footnotes_dict[footnote_ref]}"
+            return None
         
         df['footnote_text'] = df.apply(get_footnote_text, axis=1)
         
@@ -44,6 +48,7 @@ class StandardWageProcessor:
     
     def melt_dataframe(self) -> pd.DataFrame:
         """Transforma de wide para long format"""
+
         
         df_melted = self.df.melt(
             id_vars=['state'], 
@@ -57,13 +62,12 @@ class StandardWageProcessor:
     
     def clean_wage_values(self, df: pd.DataFrame) -> pd.DataFrame:
         """Limpa valores de salário"""
+
         
         # Remover $ e outros caracteres
         df['minimal_wage'] = df['minimal_wage'].str.replace('$', '', regex=False)
+        
         # Remover referências a footnotes [1], (a), etc
-        df['footnote_wage'] = df['minimal_wage'].apply(
-            lambda x: re.findall(r'[\[\(](.*?)[\]\)]', x) if pd.notna(x) else []
-        )
         df['minimal_wage'] = df['minimal_wage'].str.replace(r'[\[\(].*?[\]\)]', '', regex=True)
         
         # Substituir valores especiais por NA
@@ -115,26 +119,15 @@ class StandardWageProcessor:
             return "This state utilizes the federal minimum wage"
         return row.get('notes')
     
-    def create_footnote_wage_bridge(self, df):
-        """Cria mapeamento de footnotes para valores de salário"""
-        for key in self.footnotes_dict.keys():
-            for idx, row in df.iterrows():
-                footnotes = row['footnote_wage']
-                if not footnotes:
-                    continue  # pula listas vazias
-            # percorre cada referência da lista ['a', 'b', ...]
-                for ref in footnotes:
-                    ref_str = str(ref).strip()
-                # se a referência aparece no nome da footnote
-                    if ref_str in key:
-                        self.footnote_wage_bridge[key].append(row['id'])
-
     def process(self) -> pd.DataFrame:
         """Executa o pipeline completo de processamento"""
-                # 1. Melt
+
+        # 1. Melt
         df = self.melt_dataframe()
+        
         # 2. Limpar valores
         df = self.clean_wage_values(df)
+        
         # 3. Inicializar colunas
         if 'notes' not in df.columns:
             df['notes'] = pd.NA
@@ -142,18 +135,21 @@ class StandardWageProcessor:
             df['frequency'] = pd.NA
         
         # 4. Processar múltiplas taxas
+
         df = df.apply(self.process_multiple_rates, axis=1)
+        
         # 5. Converter para numérico
+
         df['minimal_wage'] = df['minimal_wage'].astype(str).str.extract(r'([\d.]+)', expand=False)
         df['minimal_wage'] = pd.to_numeric(df['minimal_wage'], errors='coerce')
         
         # 6. Adicionar notas padrão
         df['notes'] = df.apply(self.add_default_notes, axis=1)
-        df['id'] = range(1, len(df) + 1)
-
+        
         # 7. Adicionar footnotes (se disponível)
-        if self.footnotes_dict:
-            self.create_footnote_wage_bridge(df)
+        if self.footnote_year_bridge:
+            df = self.add_footnote_references(df)
+            df = self.add_footnote_texts(df)
         else:
             df['footnotes'] = None
             df['footnote_text'] = None
@@ -162,10 +158,11 @@ class StandardWageProcessor:
         df['frequency'] = df['frequency'].fillna(1)
         
         # 9. Adicionar ID
+        df['id'] = range(1, len(df) + 1)
         
         # 10. Reorganizar colunas
-        df = df[['id', 'state', 'year', 'minimal_wage', 'frequency', 'notes']]
-        
+        df = df[['id', 'state', 'year', 'minimal_wage', 'frequency', 'notes', 'footnotes', 'footnote_text']]
+
         
         return df
 
@@ -173,9 +170,15 @@ class StandardWageProcessor:
 def main():
     """Função principal para teste"""
     # Criar dados de exemplo
-    data = MinimumWageScraper()
-    df = data.scrape()
-    processor = StandardWageProcessor(df, data.footnotes_dict)
+    data = {
+        'state': ['California', 'Texas', 'New York'],
+        '2020': ['$13.00', '7.25', '11.80/day'],
+        '2021': ['$14.00', '7.25', '12.50'],
+        '2022': ['$15.00', 'NA', '13.20']
+    }
+    df = pd.DataFrame(data)
+    
+    processor = StandardWageProcessor(df)
     df_processed = processor.process()
     
     print("\n📋 Preview dos dados processados:")

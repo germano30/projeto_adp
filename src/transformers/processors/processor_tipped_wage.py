@@ -6,7 +6,7 @@ import re
 import sys
 sys.path.append('..')
 from utils import is_monetary_value, is_percentage, extract_multiple_values, append_note, consolidate_notes_simple 
-from scrapers.scrapper_tipped_wage import TippedWageScraper
+from scrapers.
 
 class TippedWageProcessor:
     """Classe para processar dados de tipped minimum wage"""
@@ -128,10 +128,17 @@ class TippedWageProcessor:
 def main():
     """Função principal para teste"""
     # Criar dados de exemplo
-    objects = TippedWageScraper() 
-    df = objects.scrape()
+    data = {
+        'jurisdiction': ['California', 'Texas', 'New York', 'Florida'],
+        'combinedrate': ['$15.00', '7.25', 'Not specified', '12.00'],
+        'tipcredit': ['$0.00', '50%', 'Up to 30%', '3.02'],
+        'cashwage': ['$15.00', '2.13', 'More than $5', '8.98'],
+        'definition': ['Full service employee', 'Tipped employee receives tips', None, 'Service worker in food industry'],
+        'notes': [None, 'Some existing note', 'Rate varies by region', None],
+        'year': [2023, 2023, 2023, 2023]
+    }
+    df = pd.DataFrame(data)
 
-    print(df)
     
     processor = TippedWageProcessor(df)
     df_processed = processor.process()

@@ -113,6 +113,7 @@ class MinimumWageScraper:
         
         # Processar footnotes
         df, footnote_bridge = self.process_footnote_columns(df)
+        print(footnote_bridge)
         
         print(f"✅ Scraping concluído: {len(df)} registros")
         return df

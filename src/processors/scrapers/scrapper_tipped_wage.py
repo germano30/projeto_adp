@@ -113,8 +113,7 @@ class TippedWageScraper:
         soup = BeautifulSoup(response.content, 'html.parser')
         
         # Extrair footnotes
-        footnotes = self.extract_footnotes(soup)
-        self.footnote_dict = {year: footnotes for year, footnotes in footnotes.items()}
+        self.footnote_dict = self.extract_footnotes(soup)
         # Processar tabela
         tip_table = soup.find('table')
         if not tip_table:
@@ -221,6 +220,7 @@ def main():
     scraper = TippedWageScraper()
     df = scraper.scrape(start_year=2003, end_year=2003)  # Teste com poucos anos
     print("\n📋 Preview dos dados:")
+
     return df
 
 
