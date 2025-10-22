@@ -60,3 +60,8 @@ WAGE_CATEGORIES = {
     'tipped_credit': 'Tipped Credit',
     'tipped_cash': 'Tipped Cash Wage'
 }
+
+TIPPED_WAGE_TYPE = {
+    'exact': 1,
+    'percentage': 2
+}

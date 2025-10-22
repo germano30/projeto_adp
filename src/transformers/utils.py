@@ -5,7 +5,7 @@ import re
 import hashlib
 import pandas as pd
 from typing import Optional, List, Tuple
-import psycopg2
+# import psycopg2
 from config import DATABASE_CONFIG, SQL_SCRIPTS
 import os
 

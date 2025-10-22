@@ -89,10 +89,7 @@ class TippedWageScraper:
         # Remover <strong> e <a> completamente para isolar o texto explicativo
         for tag in soup_copy.find_all(['strong', 'a']):
             tag.decompose()
-        if nome_limpo == 'Ohio':
-            print(f"Jurisdiction raw: {td_element}")
-            print(f"Jurisdiction processed: {soup_copy}")
-            print(f"Other text: {' '.join(soup_copy.get_text(strip=True).split())}")
+
         # Agora pegar só o texto restante
         other_extra_text = ' '.join(soup_copy.get_text(strip=True).split())
 
@@ -114,7 +111,7 @@ class TippedWageScraper:
         
         # Extrair footnotes
         footnotes = self.extract_footnotes(soup)
-        self.footnote_dict = {year: footnotes for year, footnotes in footnotes.items()}
+        self.footnotes_dict[year] = footnotes
         # Processar tabela
         tip_table = soup.find('table')
         if not tip_table:
@@ -143,18 +140,11 @@ class TippedWageScraper:
             
             if td_jurisdiction and td_jurisdiction.find('strong'):
                 jurisdiction_limpa, footnote_refs, note_text = self.processar_jurisdiction(
-                    td_jurisdiction, self.footnote_dict
+                    td_jurisdiction, self.footnotes_dict
                 )
-                if jurisdiction_limpa == 'Ohio':
-                    print(f"Jurisdiction raw: {td_jurisdiction}")
-                    print(f"Jurisdiction processed: {jurisdiction_limpa}")
-                    print(f"Footnote refs: {footnote_refs}")
-                    print(f"Note text: {note_text}")
                 ultima_jurisdiction = jurisdiction_limpa
                 ultima_footnote_refs = footnote_refs
                 if note_text:
-                    if jurisdiction_limpa == 'Ohio':
-                        print(f"Note text for Ohio: {note_text}")
                     row_data['notes'] = note_text
                 row_data['jurisdiction'] = jurisdiction_limpa
                 
@@ -171,10 +161,10 @@ class TippedWageScraper:
                 header_name = td.get('headers')[0] if td.get('headers') else None
                 if not header_name:
                     header_name = self.header_order[i]
-  
+
                 
                 valor_limpo, footnote_refs = self.processar_celula_valor(
-                    td, header_name, self.footnote_dict
+                    td, header_name, self.footnotes_dict
                 )
                 if valor_limpo:
                     if header_name != 'jurisdiction':
@@ -195,7 +185,7 @@ class TippedWageScraper:
         return pd.DataFrame(dados_tabela)
     
     def scrape(self, start_year: int = TIPPED_WAGE_START_YEAR, 
-               end_year: int = TIPPED_WAGE_END_YEAR) -> pd.DataFrame:
+            end_year: int = TIPPED_WAGE_END_YEAR) -> pd.DataFrame:
         """Executa o scraping para todos os anos"""
         
         dfs = []

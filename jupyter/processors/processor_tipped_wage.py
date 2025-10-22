@@ -4,16 +4,18 @@ Processador de dados de tipped minimum wage
 import pandas as pd
 import re
 import sys
+import ast
 sys.path.append('..')
 from utils import is_monetary_value, is_percentage, extract_multiple_values, append_note, consolidate_notes_simple 
-from scrapers.
+from scrapers.scrapper_tipped_wage import TippedWageScraper
 
 class TippedWageProcessor:
     """Classe para processar dados de tipped minimum wage"""
     
-    def __init__(self, df: pd.DataFrame):
+    def __init__(self, df: pd.DataFrame, footnotes_dict = {}):
         self.df = df.copy()
-    
+        self.footnotes_dict = footnotes_dict
+
     def move_text_to_notes(self, column_name: str, value, row):
         """Move texto descritivo para notes"""
         if pd.isna(value) or not isinstance(value, str):
@@ -26,7 +28,7 @@ class TippedWageProcessor:
             return None, row
         
         return value, row
-    
+                        
     def process_tip_wages(self, row):
         """Processa valores de salário tipped"""
         for col in ['combinedrate', 'tipcredit', 'cashwage']:
@@ -122,27 +124,19 @@ class TippedWageProcessor:
                 df[col] = df[col].apply(lambda x: x.str.replace('$', '', regex=False) if hasattr(x, 'str') else x)
         df = df.apply(self.process_with_types, axis=1)
         df['notes'] = df.apply(lambda row: consolidate_notes_simple(row['notes'], row['definition']), axis=1)
+        df['id']=range(1, len(df) + 1)
         return df
 
 
 def main():
     """Função principal para teste"""
     # Criar dados de exemplo
-    data = {
-        'jurisdiction': ['California', 'Texas', 'New York', 'Florida'],
-        'combinedrate': ['$15.00', '7.25', 'Not specified', '12.00'],
-        'tipcredit': ['$0.00', '50%', 'Up to 30%', '3.02'],
-        'cashwage': ['$15.00', '2.13', 'More than $5', '8.98'],
-        'definition': ['Full service employee', 'Tipped employee receives tips', None, 'Service worker in food industry'],
-        'notes': [None, 'Some existing note', 'Rate varies by region', None],
-        'year': [2023, 2023, 2023, 2023]
-    }
-    df = pd.DataFrame(data)
+    objects = TippedWageScraper() 
+    df = objects.scrape()
 
-    
-    processor = TippedWageProcessor(df)
+    processor = TippedWageProcessor(df, footnote_dict=objects.footnotes_dict)
     df_processed = processor.process()
-    print(df_processed)
+
     return df_processed
 
 

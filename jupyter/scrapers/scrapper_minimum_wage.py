@@ -96,14 +96,9 @@ class MinimumWageScraper:
         
         if not self.fetch_page():
             return pd.DataFrame()
-        
-        print("📝 Extraindo footnotes...")
+
         self.extract_footnotes()
-        print(f"   ✓ {len(self.footnotes_dict)} footnotes encontrados")
-        
-        print("📊 Extraindo tabelas...")
         df_list = self.extract_tables()
-        print(f"   ✓ {len(df_list)} tabelas encontradas")
         
         if not df_list:
             return pd.DataFrame()
@@ -111,8 +106,6 @@ class MinimumWageScraper:
         # Concatenar todas as tabelas
         df = pd.concat(df_list, ignore_index=True)
         
-        # Processar footnotes
-        df, footnote_bridge = self.process_footnote_columns(df)
         
         print(f"✅ Scraping concluído: {len(df)} registros")
         return df
@@ -123,7 +116,9 @@ def main():
     scraper = MinimumWageScraper()
     df = scraper.scrape()
     print("\n📋 Preview dos dados:")
-    print(df.head())
+    print(df)
+    print()
+    print(scraper.footnotes_dict)
     return df
 
 

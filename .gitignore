@@ -2,3 +2,4 @@ __pycache__
 .pj_mwgt/
 .env
 .proj_cdia/
+.vscode/
