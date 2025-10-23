@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re
 from typing import Dict, List, Tuple, Optional
-
+import warnings
+warnings.filterwarnings('ignore')
 
 class YouthEmploymentScraperImproved:
     """Scraper melhorado para Age Certificates"""

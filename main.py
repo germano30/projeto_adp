@@ -3,11 +3,14 @@
 Pipeline principal para extração, processamento e transformação
 dos dados de salário mínimo
 """
-import pandas as pd
+import numpy as np
 import os
 from datetime import datetime
 import sys
 import psycopg2
+from psycopg2.extensions import register_adapter, AsIs
+register_adapter(np.int64, AsIs)
+
 # Imports dos módulos do projeto
 from src.scrapers.scrapper_minimum_wage import MinimumWageScraper
 from src.scrapers.scrapper_tipped_wage import TippedWageScraper
@@ -15,7 +18,9 @@ from src.processors.processor_standard_wage import StandardWageProcessor
 from src.processors.processor_tipped_wage import TippedWageProcessor
 from src.transformers.transformer_unified import DataTransformer
 from config import OUTPUT_DIR, TIPPED_WAGE_START_YEAR, TIPPED_WAGE_END_YEAR, DATABASE_CONFIG
-
+from utils import config_database
+import warnings
+warnings.filterwarnings('ignore')
 
 class MinimumWagePipeline:
     """Classe principal do pipeline"""
@@ -80,15 +85,17 @@ class MinimumWagePipeline:
         
         return tables
     
-    def save_outputs(self, tables: dict):
+    def construct_database(self, tables: dict):
+        # try:
+        #     config_database()
+        # except:
+        #     pass
         try:
             conn = psycopg2.connect(**DATABASE_CONFIG)
             cur = conn.cursor()
-            
             for table_name, df in tables.items():
                 print(f"\n🔹 Inserindo {table_name} ({len(df)} registros)...")
-                
-                if table_name.lower() == "dim_category":
+                if table_name.lower() == "dim_categories":
                     for _, row in df.iterrows():
                         cur.execute("""
                             INSERT INTO DimCategory (ID, CategoryName, CategoryType)
@@ -98,7 +105,7 @@ class MinimumWagePipeline:
                                 CategoryType = EXCLUDED.CategoryType;
                         """, (row['category_id'], row['category_name'], row.get('category_type', None)))
                 
-                elif table_name.lower() == "dim_state":
+                elif table_name.lower() == "dim_states":
                     for _, row in df.iterrows():
                         cur.execute("""
                             INSERT INTO DimState (ID, StateName, IsTerritory)
@@ -111,12 +118,12 @@ class MinimumWagePipeline:
                 elif table_name.lower() == "dim_footnotes":
                     for _, row in df.iterrows():
                         cur.execute("""
-                            INSERT INTO DimFootnote (ID, FootnoteText, FootnoteHash)
-                            VALUES (%s, %s, %s)
+                            INSERT INTO DimFootnote (ID,  FootnoteKey, FootnoteText, Year, CategoryID)
+                            VALUES (%s, %s, %s, %s, %s)
                             ON CONFLICT (ID) DO UPDATE
                             SET FootnoteText = EXCLUDED.FootnoteText,
-                                FootnoteHash = EXCLUDED.FootnoteHash;
-                        """, (row['footnote_id'], row['footnote_text'], row['footnote_hash']))
+                                FootnoteKey = EXCLUDED.FootnoteKey;
+                        """, (row['footnote_id'], row['footnote_key'], row['footnote_text'], row['footnote_year'],row['category_id']))
                 
                 elif table_name.lower() == "fact":
                     for _, row in df.iterrows():
@@ -189,7 +196,7 @@ class MinimumWagePipeline:
             )
             
             # Fase 4: Salvar
-            output_files = self.save_outputs(tables)
+            output_files = self.construct_database(tables)
             
             # Resumo final
             end_time = datetime.now()
@@ -217,14 +224,6 @@ def main():
     """Função principal"""
     pipeline = MinimumWagePipeline()
     tables, output_files = pipeline.run()
-    
-    # Opcional: Mostrar preview das tabelas
-    # print("\n📋 PREVIEW DAS TABELAS:")
-    # print("=" * 80)
-    
-    # for name, df in tables.items():
-    #     print(f"\n{name.upper()} (primeiras 3 linhas):")
-    #     print(df.head(3).to_string())
     
     return tables, output_files
 

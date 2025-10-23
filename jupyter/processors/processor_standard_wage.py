@@ -59,7 +59,7 @@ class StandardWageProcessor:
         # Substituir valores especiais por NA
         df['minimal_wage'] = df['minimal_wage'].mask(
             df['minimal_wage'].isin(['...', 'NA', '']), 
-            pd.NA
+            None
         )
         
         return df
@@ -113,9 +113,9 @@ class StandardWageProcessor:
         df = self.clean_wage_values(df)
         # 3. Inicializar colunas
         if 'notes' not in df.columns:
-            df['notes'] = pd.NA
+            df['notes'] = None
         if 'frequency' not in df.columns:
-            df['frequency'] = pd.NA
+            df['frequency'] = None
         
         # 4. Processar múltiplas taxas
         df = df.apply(self.process_multiple_rates, axis=1)

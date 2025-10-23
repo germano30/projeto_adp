@@ -9,7 +9,8 @@ from typing import Dict, List, Tuple
 import sys
 sys.path.append('..')
 from config import BASE_URL_MINIMUM_WAGE, REQUEST_TIMEOUT
-
+import warnings
+warnings.filterwarnings('ignore')
 
 class MinimumWageScraper:
     """Classe para extrair dados de salário mínimo padrão"""

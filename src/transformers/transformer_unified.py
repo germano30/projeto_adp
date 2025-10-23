@@ -8,7 +8,8 @@ sys.path.append('..')
 from utils import generate_hash
 from config import WAGE_CATEGORIES, TIPPED_WAGE_TYPE
 import re
-
+import warnings
+warnings.filterwarnings('ignore')
 class DataTransformer:
     """Classe para transformar e unificar os datasets"""
     
@@ -22,6 +23,20 @@ class DataTransformer:
         self.dim_footnotes = None
         self.fact_minimum_wage = None
         self.bridge_wage_footnote = None
+
+
+    def normalize_text(self,text: str) -> str:
+        """Normaliza o texto para evitar duplicatas falsas."""
+        if not text:
+            return ""
+        text = text.strip()                 # remove espaços no início/fim
+        text = re.sub(r'\s+', ' ', text)   # substitui múltiplos espaços por 1
+        text = text.replace('\n', ' ')     # remove quebras de linha
+        text = text.lower()                 # deixa tudo minúsculo
+        text = re.sub(r'\s*\.\s*', '. ', text)  # padroniza pontos
+        text = re.sub(r'\s*,\s*', ', ', text)   # padroniza vírgulas
+        text = re.sub(r'\s*;\s*', '; ', text)   # padroniza ponto e vírgula
+        return text.strip()
 
     
     def create_dim_footnotes_unified(self, all_footnotes_dict: dict) -> pd.DataFrame:
@@ -38,16 +53,17 @@ class DataTransformer:
         footnotes_data = []
         for key, text in all_footnotes_dict.items():
             for foot_key, foot_text in text.items():
+                clean_text = self.normalize_text(foot_text)
                 footnotes_data.append({
                     'footnote_key': foot_key,
-                    'footnote_text': foot_text,
-                    'footnote_year': int(key) if key != 1 else None,
+                    'footnote_text': clean_text,
+                    'footnote_year': int(key) if key != 1 else 1900,
                     'category_id': 1 if key == 1 else 2,
-                    'footnote_hash': generate_hash(foot_text)
+                    'footnote_hash': generate_hash(clean_text)
                 })
         
         df_footnotes = pd.DataFrame(footnotes_data)
-        df_footnotes = df_footnotes.drop_duplicates(subset=['footnote_key','footnote_hash'])
+        # df_footnotes = df_footnotes.drop_duplicates(subset=['footnote_key','footnote_hash'])
         
         df_footnotes['footnote_id'] = range(1, len(df_footnotes) + 1)
         
@@ -59,8 +75,6 @@ class DataTransformer:
         """Transforma dataset padrão para formato compatível"""        
         df = self.df_standard.copy()
         df = df.rename(columns={'state': 'jurisdiction', 'minimal_wage': 'base_wage_per_hour'})
-        print('standart df')
-        print(df)
         df['category_name'] = WAGE_CATEGORIES['standard']
         df['category_type'] = 'standard'
         df['minimum_cash_wage'] = None
@@ -142,7 +156,6 @@ class DataTransformer:
         return self.dim_categories
     
     def create_fact_table(self, df_unified: pd.DataFrame):
-        print(df_unified.columns)
         # Merge com dimensões
         df = df_unified.merge(
             self.dim_states.rename(columns={'state_name': 'jurisdiction'}),
@@ -157,7 +170,7 @@ class DataTransformer:
         )
 
         # Guardar footnotes para criar bridge depois
-        self.footnote_refs_by_wage = df[['footnote_wage','year']].copy()
+        self.footnote_refs_by_wage = df[['footnote_wage','year', 'category_id']].copy()
         self.footnote_refs_by_wage.index = range(1, len(self.footnote_refs_by_wage) + 1)
         self.footnote_refs_by_wage['wage_id'] = self.footnote_refs_by_wage.index
         fact_columns = [
@@ -181,25 +194,32 @@ class DataTransformer:
         """Cria tabela bridge entre wage e footnotes"""
         
         bridge_data = []
-        print(self.footnote_refs_by_wage)
         for _, row in self.footnote_refs_by_wage.iterrows():
             wage_id = row['wage_id']
             footnote_refs = row.get('footnote_wage')
-            
-            if pd.isna(footnote_refs):
-                continue
-            
-            # footnote_refs pode ser lista ou string
+            if wage_id == 3102 or wage_id == 3103:
+                print(row)
             if isinstance(footnote_refs, str):
                 footnote_refs = [footnote_refs]
             elif not isinstance(footnote_refs, list):
                 continue
-            
+            if len(footnote_refs)==0:
+                continue
+            if wage_id == 3102 or wage_id == 3103:
+                print(footnote_refs)
             for ref in footnote_refs:
-                print(ref)
                 # Buscar footnote_id correspondente no Dim_Footnotes
-                footnote_row = self.dim_footnotes[self.dim_footnotes['footnote_key'] == ref]
+                category_filter = 1 if row['category_id'] == 1 else 2
+                dim_footnotes = self.dim_footnotes.loc[self.dim_footnotes['category_id'] == category_filter]
                 
+                dim_footnotes['footnote_key_clean'] = dim_footnotes['footnote_key'].apply(
+                    lambda x: re.sub(r'[\(\)\[\]\{\}]', '', str(x))
+                )
+                ref_clean = re.sub(r'[\(\)\[\]\{\}]', '', str(ref))
+
+                footnote_row = dim_footnotes[dim_footnotes['footnote_key_clean'] == ref_clean]
+                footnote_row = footnote_row[footnote_row['footnote_year'] == row['year']]
+
                 if not footnote_row.empty:
                     bridge_data.append({
                         'wage_id': wage_id,
@@ -210,6 +230,7 @@ class DataTransformer:
             self.bridge_wage_footnote = pd.DataFrame(bridge_data).drop_duplicates()
         else:
             self.bridge_wage_footnote = pd.DataFrame(columns=['wage_id', 'footnote_id'])
+            self.bridge_wage_footnote[['wage_id', 'footnote_id']] = self.bridge_wage_footnote[['wage_id', 'footnote_id']].values.astype(int) 
 
         return self.bridge_wage_footnote
     
@@ -279,12 +300,11 @@ class DataTransformer:
         
         # 7. Criar bridge
         self.create_bridge_table(all_footnotes)
-        
         return {
-            'fact': self.fact_minimum_wage,
             'dim_states': self.dim_states,
             'dim_categories': self.dim_categories,
             'dim_footnotes': self.dim_footnotes,
+            'fact': self.fact_minimum_wage,
             'bridge': self.bridge_wage_footnote
         }
 
@@ -303,33 +323,21 @@ def main():
             end_year=2025
         )
     
-    print("\n📋 Preview dos dados brutos:")
-    print("\nSalário Padrão:")
-    print(df_standard_raw.head())
-    print("\nTipped Wages:")
-    print(df_tipped_raw.head())
+
 
     
         # 2. Processar tipped wages
     processor_tipped = TippedWageProcessor(df_tipped_raw, scraper_tipped.footnotes_dict)
     df_tipped_processed = processor_tipped.process()
 
-    print("\n📋 Preview dos dados processados:")
-    print("\nSalário Padrão Processado:")
-    print(df_standard_processed.head())
-    print("\nTipped Wages Processado:")
-    print(df_tipped_processed.head())
+
   
     transformer = DataTransformer(df_standard_processed, df_tipped_processed)
     result = transformer.transform(
         standard_footnotes=processor_standard.footnotes_dict,
         tipped_footnotes=processor_tipped.footnotes_dict
     )
-    
-    print("\n📋 Preview das tabelas:")
-    for name, df in result.items():
-        print(f"\n{name.upper()}:")
-        print(df.head())
+
     
     return result
 if __name__ == "__main__":
