@@ -6,7 +6,7 @@ import hashlib
 import pandas as pd
 from typing import Optional, List, Tuple
 import psycopg2
-from Extractor.config import DATABASE_CONFIG, SQL_SCRIPTS
+from config import DATABASE_CONFIG, SQL_SCRIPTS
 import os
 
 def consolidate_notes_simple(notes: str, definition: str) -> Optional[str]:

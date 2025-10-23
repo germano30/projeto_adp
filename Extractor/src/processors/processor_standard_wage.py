@@ -5,7 +5,7 @@ import pandas as pd
 import re
 import sys
 sys.path.append('..')
-from Extractor.utils import add_leading_zero, extract_multiple_values, append_note
+from utils import add_leading_zero, extract_multiple_values, append_note
 from typing import Dict, Tuple
 import warnings
 warnings.filterwarnings('ignore')

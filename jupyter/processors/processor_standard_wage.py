@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from typing import Dict, List, Tuple
 import sys
 sys.path.append('..')
-from Extractor.utils import add_leading_zero, extract_multiple_values, append_note
+from utils import add_leading_zero, extract_multiple_values, append_note
 from typing import Dict, Tuple
 from scrapers.scrapper_minimum_wage import MinimumWageScraper
 
