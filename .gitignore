@@ -1,5 +1,39 @@
-__pycache__
-.pj_mwgt/
-.env
-.proj_cdia/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+.pj_mwgy/*
+.proj_cdia/*
+
+# IDE
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Data
+data/
+output/
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
