@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from typing import Dict, List, Tuple
 import sys
 sys.path.append('..')
-from config import BASE_URL_TIPPED_WAGE, TIPPED_WAGE_START_YEAR, TIPPED_WAGE_END_YEAR, REQUEST_TIMEOUT
+from Extractor.config import BASE_URL_TIPPED_WAGE, TIPPED_WAGE_START_YEAR, TIPPED_WAGE_END_YEAR, REQUEST_TIMEOUT
 
 
 class TippedWageScraper:

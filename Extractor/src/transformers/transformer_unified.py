@@ -5,8 +5,8 @@ Cria a estrutura dimensional (Star Schema) com Dim_Footnotes normalizado
 import pandas as pd
 import sys
 sys.path.append('..')
-from utils import generate_hash
-from config import WAGE_CATEGORIES, TIPPED_WAGE_TYPE
+from Extractor.utils import generate_hash
+from Extractor.config import WAGE_CATEGORIES, TIPPED_WAGE_TYPE
 import re
 import warnings
 warnings.filterwarnings('ignore')

@@ -36,7 +36,6 @@ def setup_project():
         'src/processors',
         'src/transformers',
         'data',
-        'output',
         'logs',
         'tests',
     ]

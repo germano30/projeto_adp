@@ -10,7 +10,7 @@ ENV/
 build/
 dist/
 *.egg-info/
-.pj_mwgy/*
+.pj_mwgt/*
 .proj_cdia/*
 
 # IDE

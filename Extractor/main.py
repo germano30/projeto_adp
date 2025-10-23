@@ -17,8 +17,8 @@ from src.scrapers.scrapper_tipped_wage import TippedWageScraper
 from src.processors.processor_standard_wage import StandardWageProcessor
 from src.processors.processor_tipped_wage import TippedWageProcessor
 from src.transformers.transformer_unified import DataTransformer
-from config import OUTPUT_DIR, TIPPED_WAGE_START_YEAR, TIPPED_WAGE_END_YEAR, DATABASE_CONFIG
-from utils import config_database
+from Extractor.config import OUTPUT_DIR, TIPPED_WAGE_START_YEAR, TIPPED_WAGE_END_YEAR, DATABASE_CONFIG
+from Extractor.utils import config_database
 import warnings
 warnings.filterwarnings('ignore')
 

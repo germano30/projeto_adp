@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from typing import Dict, List, Tuple
 import sys
 sys.path.append('..')
-from config import BASE_URL_MINIMUM_WAGE, REQUEST_TIMEOUT
+from Extractor.config import BASE_URL_MINIMUM_WAGE, REQUEST_TIMEOUT
 import warnings
 warnings.filterwarnings('ignore')
 
