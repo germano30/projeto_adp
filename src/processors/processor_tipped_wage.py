@@ -7,7 +7,6 @@ import sys
 import ast
 sys.path.append('..')
 from utils import is_monetary_value, is_percentage, extract_multiple_values, append_note, consolidate_notes_simple 
-from scrapers.scrapper_tipped_wage import TippedWageScraper
 
 class TippedWageProcessor:
     """Classe para processar dados de tipped minimum wage"""

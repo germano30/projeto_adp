@@ -52,32 +52,31 @@ class MinimumWagePipeline:
         if df_tipped_raw.empty:
             raise Exception("❌ Falha ao extrair dados de tipped wages")
         
-        return df_standard_raw, df_tipped_raw
+        return df_standard_raw, df_tipped_raw, scraper_standard.footnotes_dict, scraper_tipped.footnotes_dict
     
-    def run_processing(self, df_standard_raw, df_tipped_raw):
+    def run_processing(self, df_standard_raw, df_tipped_raw, standard_footnotes, tipped_footnotes):
         """Fase 2: Processamento dos dados"""
         print("\n" + "=" * 80)
         print("FASE 2: PROCESSAMENTO DOS DADOS")
         print("=" * 80)
         
         # 1. Processar salário padrão
-        processor_standard = StandardWageProcessor(df_standard_raw)
+        processor_standard = StandardWageProcessor(df_standard_raw,footnotes_dict=standard_footnotes)
         df_standard_processed = processor_standard.process()
-        
         # 2. Processar tipped wages
-        processor_tipped = TippedWageProcessor(df_tipped_raw)
+        processor_tipped = TippedWageProcessor(df_tipped_raw, footnotes_dict=tipped_footnotes)
         df_tipped_processed = processor_tipped.process()
-        
-        return df_standard_processed, df_tipped_processed
+
+        return df_standard_processed, df_tipped_processed, processor_standard.footnotes_dict, processor_tipped.footnotes_dict
     
-    def run_transformation(self, df_standard_processed, df_tipped_processed):
+    def run_transformation(self, df_standard_processed, df_tipped_processed, standard_footnote_dict, tipped_footnote_dict):
         """Fase 3: Transformação e criação do modelo dimensional"""
         print("\n" + "=" * 80)
         print("FASE 3: TRANSFORMAÇÃO E MODELAGEM DIMENSIONAL")
         print("=" * 80)
         
         transformer = DataTransformer(df_standard_processed, df_tipped_processed)
-        tables = transformer.transform()
+        tables = transformer.transform(standard_footnotes=standard_footnote_dict, tipped_footnotes=tipped_footnote_dict)
         
         return tables
     
@@ -177,16 +176,16 @@ class MinimumWagePipeline:
         
         try:
             # Fase 1: Extração
-            df_standard_raw, df_tipped_raw = self.run_extraction()
+            df_standard_raw, df_tipped_raw, standard_footnote_dict, tipped_footnote_dict = self.run_extraction()
             
             # Fase 2: Processamento
-            df_standard_processed, df_tipped_processed = self.run_processing(
-                df_standard_raw, df_tipped_raw
+            df_standard_processed, df_tipped_processed, standard_footnote_dict, tipped_footnote_dict = self.run_processing(
+                df_standard_raw, df_tipped_raw, standard_footnote_dict, tipped_footnote_dict
             )
             
             # Fase 3: Transformação
             tables = self.run_transformation(
-                df_standard_processed, df_tipped_processed
+                df_standard_processed, df_tipped_processed, standard_footnote_dict, tipped_footnote_dict
             )
             
             # Fase 4: Salvar
@@ -196,14 +195,14 @@ class MinimumWagePipeline:
             end_time = datetime.now()
             duration = (end_time - start_time).total_seconds()
             
-            print("\n" + "=" * 80)
-            print("✅ PIPELINE CONCLUÍDO COM SUCESSO!")
-            print("=" * 80)
-            print(f"⏱️  Tempo total: {duration:.2f} segundos")
-            print(f"📊 Tabelas geradas:")
-            for name, df in tables.items():
-                print(f"   • {name}: {len(df)} registros")
-            print("=" * 80)
+            # print("\n" + "=" * 80)
+            # print("✅ PIPELINE CONCLUÍDO COM SUCESSO!")
+            # print("=" * 80)
+            # print(f"⏱️  Tempo total: {duration:.2f} segundos")
+            # print(f"📊 Tabelas geradas:")
+            # for name, df in tables.items():
+            #     print(f"   • {name}: {len(df)} registros")
+            # print("=" * 80)
             
             return tables, output_files
             
@@ -220,12 +219,12 @@ def main():
     tables, output_files = pipeline.run()
     
     # Opcional: Mostrar preview das tabelas
-    print("\n📋 PREVIEW DAS TABELAS:")
-    print("=" * 80)
+    # print("\n📋 PREVIEW DAS TABELAS:")
+    # print("=" * 80)
     
-    for name, df in tables.items():
-        print(f"\n{name.upper()} (primeiras 3 linhas):")
-        print(df.head(3).to_string())
+    # for name, df in tables.items():
+    #     print(f"\n{name.upper()} (primeiras 3 linhas):")
+    #     print(df.head(3).to_string())
     
     return tables, output_files
 

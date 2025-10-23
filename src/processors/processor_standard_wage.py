@@ -7,7 +7,6 @@ import sys
 sys.path.append('..')
 from utils import add_leading_zero, extract_multiple_values, append_note
 from typing import Dict, Tuple
-from scrapers.scrapper_minimum_wage import MinimumWageScraper
 
 class StandardWageProcessor:
     """Classe para processar dados de salário mínimo padrão"""
@@ -49,7 +48,7 @@ class StandardWageProcessor:
         df['minimal_wage'] = df['minimal_wage'].str.replace('$', '', regex=False)
         # Remover referências a footnotes [1], (a), etc
         df['footnote_wage'] = df['minimal_wage'].apply(
-            lambda x: re.findall(r'[\[\(](.*?)[\]\)]', x) if pd.notna(x) else []
+            lambda x: re.findall(r'[\[\(](.*?)[\]\)]', x) if pd.notna(x) else None
         )
         df['minimal_wage'] = df['minimal_wage'].str.replace(r'[\[\(].*?[\]\)]', '', regex=True)
         

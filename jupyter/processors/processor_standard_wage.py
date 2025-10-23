@@ -1,8 +1,11 @@
 """
-Processador de dados de salário mínimo padrão
+Scraper para dados de salário mínimo padrão
 """
+import requests
 import pandas as pd
 import re
+from bs4 import BeautifulSoup
+from typing import Dict, List, Tuple
 import sys
 sys.path.append('..')
 from utils import add_leading_zero, extract_multiple_values, append_note
@@ -137,17 +140,11 @@ class StandardWageProcessor:
 
 def main():
     """Função principal para teste"""
-    # Criar dados de exemplo
-    data = MinimumWageScraper()
-    df = data.scrape()
-    processor = StandardWageProcessor(df, data.footnotes_dict)
-    df_processed = processor.process()
-    
-    print("\n📋 Preview dos dados processados:")
-    print(df_processed)
-    
-    return df_processed
-
-
-if __name__ == "__main__":
-    main()
+    scraper = MinimumWageScraper()
+    df = scraper.scrape()
+    print("\n📋 Preview dos dados:")
+    print(df.head())
+    print(df)
+    print()
+    print(scraper.footnotes_dict)
+    return df

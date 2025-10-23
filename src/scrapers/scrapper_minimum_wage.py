@@ -64,7 +64,8 @@ class MinimumWageScraper:
             
             # Extrair cabeçalho
             header = rows[0]
-            years = [th.text for th in header.find_all('th')[1:]]
+
+            years = [re.sub(r'[a-zA-Z()\[\]]', '',th.text) for th in header.find_all('th')[1:]]
             
             # Extrair dados
             states = []
@@ -106,6 +107,7 @@ class MinimumWageScraper:
         # Concatenar todas as tabelas
         df = pd.concat(df_list, ignore_index=True)
         print(f"✅ Scraping concluído: {len(df)} registros")
+
         return df
 
 

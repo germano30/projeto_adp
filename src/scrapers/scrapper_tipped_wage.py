@@ -202,7 +202,7 @@ class TippedWageScraper:
             return pd.DataFrame()
         
         df_final = pd.concat(dfs, ignore_index=True)
-        
+
         return df_final
 
 

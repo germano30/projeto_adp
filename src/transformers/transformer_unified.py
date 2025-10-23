@@ -8,10 +8,6 @@ sys.path.append('..')
 from utils import generate_hash
 from config import WAGE_CATEGORIES, TIPPED_WAGE_TYPE
 import re
-from scrapers.scrapper_minimum_wage import MinimumWageScraper
-from scrapers.scrapper_tipped_wage import TippedWageScraper
-from processors.processor_standard_wage import StandardWageProcessor
-from processors.processor_tipped_wage import TippedWageProcessor
 
 class DataTransformer:
     """Classe para transformar e unificar os datasets"""
@@ -63,7 +59,8 @@ class DataTransformer:
         """Transforma dataset padrão para formato compatível"""        
         df = self.df_standard.copy()
         df = df.rename(columns={'state': 'jurisdiction', 'minimal_wage': 'base_wage_per_hour'})
-        
+        print('standart df')
+        print(df)
         df['category_name'] = WAGE_CATEGORIES['standard']
         df['category_type'] = 'standard'
         df['minimum_cash_wage'] = None
@@ -75,7 +72,6 @@ class DataTransformer:
     def transform_tipped_to_long(self) -> pd.DataFrame:
         """Transforma dataset tipped para formato long"""        
         df_long = []
-        
         for _, row in self.df_tipped.iterrows():
             # Notes e footnotes já vêm separados do scraper
             notes_clean = row.get('notes')    
@@ -85,7 +81,8 @@ class DataTransformer:
                 'year': row['year'],
                 'frequency': 1,
                 'source_url': f"https://www.dol.gov/agencies/whd/state/minimum-wage/tipped/{row['year']}",
-                'notes': notes_clean
+                'notes': notes_clean,
+                'footnote_wage': row.get('footnotes')
             }
             
             # Combined Rate
@@ -145,26 +142,24 @@ class DataTransformer:
         return self.dim_categories
     
     def create_fact_table(self, df_unified: pd.DataFrame):
-        
+        print(df_unified.columns)
         # Merge com dimensões
         df = df_unified.merge(
             self.dim_states.rename(columns={'state_name': 'jurisdiction'}),
             on='jurisdiction',
             how='left'
         )
-        
+
         df = df.merge(
             self.dim_categories[['category_id', 'category_name']],
             on='category_name',
             how='left'
         )
-        
+
         # Guardar footnotes para criar bridge depois
-        self.footnote_refs_by_wage = df[['footnotes']].copy()
+        self.footnote_refs_by_wage = df[['footnote_wage','year']].copy()
         self.footnote_refs_by_wage.index = range(1, len(self.footnote_refs_by_wage) + 1)
         self.footnote_refs_by_wage['wage_id'] = self.footnote_refs_by_wage.index
-        
-        # Selecionar colunas da fato (SEM footnotes)
         fact_columns = [
             'state_id', 'category_id', 'year', 'base_wage_per_hour',
             'minimum_cash_wage', 'maximum_tip_credit', 'frequency', 'source_url', 'notes'
@@ -174,7 +169,6 @@ class DataTransformer:
         fact['wage_id'] = range(1, len(fact) + 1)
         fact['effective_date'] = None
         
-        # Reordenar (notes fica, footnotes NÃO)
         self.fact_minimum_wage = fact[[
             'wage_id', 'state_id', 'category_id', 'year', 'effective_date',
             'base_wage_per_hour', 'minimum_cash_wage', 'maximum_tip_credit',
@@ -187,10 +181,10 @@ class DataTransformer:
         """Cria tabela bridge entre wage e footnotes"""
         
         bridge_data = []
-        
+        print(self.footnote_refs_by_wage)
         for _, row in self.footnote_refs_by_wage.iterrows():
             wage_id = row['wage_id']
-            footnote_refs = row.get('footnotes')
+            footnote_refs = row.get('footnote_wage')
             
             if pd.isna(footnote_refs):
                 continue
@@ -202,6 +196,7 @@ class DataTransformer:
                 continue
             
             for ref in footnote_refs:
+                print(ref)
                 # Buscar footnote_id correspondente no Dim_Footnotes
                 footnote_row = self.dim_footnotes[self.dim_footnotes['footnote_key'] == ref]
                 
@@ -215,13 +210,16 @@ class DataTransformer:
             self.bridge_wage_footnote = pd.DataFrame(bridge_data).drop_duplicates()
         else:
             self.bridge_wage_footnote = pd.DataFrame(columns=['wage_id', 'footnote_id'])
-        
+
         return self.bridge_wage_footnote
     
     def default_state_name(self, df_unified):
-        print(df_unified['state'].unique())    
-        
-        
+        df_unified['jurisdiction'] = df_unified['jurisdiction'].str.replace('\t','')
+        df_unified['jurisdiction'] = df_unified['jurisdiction'].str.replace('\n',' ')
+        df_unified['jurisdiction'] = df_unified['jurisdiction'].apply(lambda x: ' '.join(x.split()))
+        df_unified['jurisdiction'] = df_unified['jurisdiction'].apply(lambda x: re.sub(r'[^a-zA-Z\s]', '',x))
+        df_unified.loc[df_unified['jurisdiction'].isin(['Federal FLSA', 'FEDERAL']), 'jurisdiction'] = 'Federal' 
+        return df_unified    
         
     def collect_all_footnotes(self, df_standard, df_tipped) -> dict:
         """Coleta todos os footnotes de todos os datasets"""
@@ -246,16 +244,14 @@ class DataTransformer:
         # Guardar footnotes para usar depois
         self.standard_footnotes = standard_footnotes or {}
         self.tipped_footnotes = tipped_footnotes or {}
-        
         # 1. Transformar datasets
         df_standard_transformed = self.transform_standard_to_long()
         df_tipped_transformed = self.transform_tipped_to_long()
-        
         # 2. Garantir colunas comuns
         common_columns = [
             'jurisdiction', 'year', 'category_name', 'category_type',
             'base_wage_per_hour', 'minimum_cash_wage', 'maximum_tip_credit',
-            'frequency', 'notes', 'source_url', 'footnotes' 
+            'frequency', 'notes', 'source_url', 'footnote_wage' 
         ]
         
         for col in common_columns:
@@ -268,11 +264,9 @@ class DataTransformer:
             df_standard_transformed[common_columns],
             df_tipped_transformed[common_columns]
         ], ignore_index=True)
-
-        
         # 4. Criar Dim_Footnotes (antes de criar fato)
         all_footnotes = self.collect_all_footnotes(df_standard_transformed, df_tipped_transformed)
-        print(all_footnotes)
+        df_unified = self.default_state_name(df_unified=df_unified)
         self.create_dim_footnotes_unified(all_footnotes)
         
         # 5. Criar dimensões
