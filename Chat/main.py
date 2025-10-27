@@ -1,118 +1,224 @@
-from huggingface_hub import InferenceClient
+"""Aplicação principal para consulta de salários mínimos"""
 
-client = InferenceClient(token="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")
+import logging
+import sys
+from typing import Optional
 
-database_schema = """
-DATABASE SCHEMA:
+from pipeline import create_pipeline
+from utils import format_query_results
 
-Table: factminimumwage
-- id (int)
-- stateid (int, FK to dimstate.id)
-- year (int, example: 2024)
-- categoryid (int, FK to dimcategory.id)
-- basewageperhour (decimal)
-- maximumtipcredit (decimal)
-- minimumcashwage (decimal)
-- notes (text)
-- sourceurl (text)
-
-Table: dimstate
-- id (int)
-- statename (varchar, example: 'California', 'Texas', 'District of Columbia')
-
-Table: dimcategory
-- id (int)
-- categoryname (varchar)
-- categorytype (varchar, values: 'tipped' or 'standard')
-
-Table: dimfootnote
-- id (int)
-- footnotetext (text)
-
-Table: bridgefactminimumwagefootnote
-- wageid (int, FK to factminimumwage.id)
-- footnoteid (int, FK to dimfootnote.id)
-"""
-
-base_query = """
-SELECT
-    dimstate.statename,
-    factminimumwage.year,
-    dimcategory.categoryname,
-    factminimumwage.basewageperhour,
-    factminimumwage.maximumtipcredit,
-    factminimumwage.minimumcashwage,
-    factminimumwage.notes,
-    dimfootnote.footnotetext,
-    factminimumwage.sourceurl
-FROM factminimumwage
-INNER JOIN dimstate ON factminimumwage.stateid = dimstate.id
-LEFT JOIN bridgefactminimumwagefootnote ON factminimumwage.id = bridgefactminimumwagefootnote.wageid
-LEFT JOIN dimfootnote ON bridgefactminimumwagefootnote.footnoteid = dimfootnote.id
-INNER JOIN dimcategory ON factminimumwage.categoryid = dimcategory.id
-WHERE 1=1
-"""
-
-# Use few-shot examples para treinar o modelo
-examples = """
-EXAMPLES:
-
-User: "What is the minimum wage in California?"
-Output:
-{
-  "states": ["California"],
-  "years": [2024],
-  "category_type": "standard",
-  "sql_where": "AND dimstate.statename IN ('California') AND factminimumwage.year = 2024 AND dimcategory.categorytype = 'standard'"
-}
-
-User: "Show me tipped wages for Texas and Florida in 2023"
-Output:
-{
-  "states": ["Texas", "Florida"],
-  "years": [2023],
-  "category_type": "tipped",
-  "sql_where": "AND dimstate.statename IN ('Texas', 'Florida') AND factminimumwage.year = 2023 AND dimcategory.categorytype = 'tipped'"
-}
-
-User: "What were the wages in New York from 2020 to 2022?"
-Output:
-{
-  "states": ["New York"],
-  "years": [2020, 2021, 2022],
-  "category_type": "standard",
-  "sql_where": "AND dimstate.statename = 'New York' AND factminimumwage.year IN (2020, 2021, 2022) AND dimcategory.categorytype = 'standard'"
-}
-"""
-
-system_prompt = f"""You are a SQL query assistant specialized in minimum wage data.
-
-{database_schema}
-
-BASE QUERY:
-{base_query}
-
-RULES:
-1. Default year is 2024 if not specified
-2. Default category is 'standard' if not specified
-3. State names must be capitalized (e.g., 'California', 'New York')
-4. Category types are either 'tipped' or 'standard'
-5. Output ONLY valid JSON with: states (array), years (array), category_type (string), sql_where (string)
-
-{examples}
-
-IMPORTANT: Return ONLY the JSON object, no other text or explanation."""
-
-user_prompt = "What is the minimal wage for california?"
-
-response = client.chat_completion(
-    messages=[
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_prompt}
-    ],
-    model="mistralai/Mistral-7B-Instruct-v0.2",
-    max_tokens=300,
-    temperature=0.1  # Baixa temperatura para respostas mais determinísticas
+# Configurar logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('minimum_wage_assistant.log'),
+        logging.StreamHandler(sys.stdout)
+    ]
 )
+logger = logging.getLogger(__name__)
 
-print(response.choices[0].message.content)
+
+def print_banner():
+    """Imprime o banner da aplicação"""
+    banner = """
+    ╔══════════════════════════════════════════════════════════════╗
+    ║        ASSISTENTE DE CONSULTA DE SALÁRIOS MÍNIMOS           ║
+    ║                  Powered by LLM + PostgreSQL                 ║
+    ╚══════════════════════════════════════════════════════════════╝
+    """
+    print(banner)
+
+
+def print_result(result: dict, show_details: bool = False):
+    """
+    Imprime o resultado de forma formatada
+    
+    Args:
+        result: Dict com o resultado do pipeline
+        show_details: Se True, mostra detalhes técnicos
+    """
+    print("\n" + "="*80)
+    
+    if result['success']:
+        # Mostra badge da rota usada
+        route_badge = {
+            'sql': '🔍 SQL',
+            'lightrag': '📚 LightRAG',
+            'hybrid': '🔗 Híbrido (SQL + LightRAG)'
+        }.get(result.get('route', 'unknown'), '❓ Desconhecido')
+        
+        print(f"✓ RESPOSTA [{route_badge}]:")
+        print("="*80)
+        print(result['response'])
+        
+        if show_details:
+            print("\n" + "-"*80)
+            print("DETALHES TÉCNICOS:")
+            print("-"*80)
+            print(f"Rota utilizada: {result.get('route', 'N/A')}")
+            
+            if 'sql_query' in result:
+                print(f"Query SQL: {result['sql_query']}")
+            if 'results_count' in result:
+                print(f"Resultados encontrados: {result['results_count']}")
+            if 'conditions' in result:
+                print(f"Condições extraídas: {result['conditions']}")
+            if 'topic' in result and result['topic']:
+                print(f"Tópico LightRAG: {result['topic']}")
+            if 'sources' in result and result['sources']:
+                print(f"Fontes: {', '.join(result['sources'][:3])}")
+    else:
+        print("✗ ERRO:")
+        print("="*80)
+        print(result['response'])
+        if 'error' in result:
+            print(f"\nDetalhes técnicos: {result['error']}")
+    
+    print("="*80 + "\n")
+
+
+def interactive_mode(pipeline):
+    """
+    Modo interativo para fazer múltiplas perguntas
+    
+    Args:
+        pipeline: Instância do MinimumWagePipeline
+    """
+    print("\nModo Interativo - Digite 'sair' para encerrar")
+    print("Digite 'detalhes' para ativar/desativar detalhes técnicos")
+    print("-"*80 + "\n")
+    
+    show_details = False
+    
+    while True:
+        try:
+            user_input = input("Sua pergunta: ").strip()
+            
+            if not user_input:
+                continue
+            
+            if user_input.lower() in ['sair', 'exit', 'quit']:
+                print("\nEncerrando... Até logo!")
+                break
+            
+            if user_input.lower() == 'detalhes':
+                show_details = not show_details
+                status = "ativados" if show_details else "desativados"
+                print(f"\nDetalhes técnicos {status}\n")
+                continue
+            
+            # Processa a pergunta
+            result = pipeline.process_question(user_input)
+            print_result(result, show_details)
+            
+        except KeyboardInterrupt:
+            print("\n\nEncerrando... Até logo!")
+            break
+        except Exception as e:
+            logger.error(f"Erro inesperado: {e}")
+            print(f"\n✗ Erro inesperado: {e}\n")
+
+
+def single_query_mode(pipeline, question: str, show_details: bool = False):
+    """
+    Modo de consulta única
+    
+    Args:
+        pipeline: Instância do MinimumWagePipeline
+        question: Pergunta a processar
+        show_details: Se True, mostra detalhes técnicos
+    """
+    print(f"\nProcessando: '{question}'\n")
+    result = pipeline.process_question(question)
+    print_result(result, show_details)
+
+
+def test_mode(pipeline):
+    """
+    Testa todos os componentes do sistema
+    
+    Args:
+        pipeline: Instância do MinimumWagePipeline
+    """
+    print("\nTestando componentes do sistema...")
+    print("-"*80)
+    
+    test_results = pipeline.test_components()
+    
+    for component, status in test_results.items():
+        status_str = "✓ OK" if status else "✗ FALHOU"
+        print(f"{component.upper():.<40} {status_str}")
+    
+    print("-"*80)
+    
+    all_ok = all(test_results.values())
+    if all_ok:
+        print("\n✓ Todos os componentes estão funcionando!\n")
+    else:
+        print("\n✗ Alguns componentes falharam. Verifique as configurações.\n")
+    
+    return all_ok
+
+
+def main():
+    """Função principal da aplicação"""
+    print_banner()
+    
+    # Cria o pipeline
+    try:
+        pipeline = create_pipeline()
+        logger.info("Pipeline criado com sucesso")
+    except Exception as e:
+        logger.error(f"Erro ao criar pipeline: {e}")
+        print(f"\n✗ Erro ao inicializar o sistema: {e}\n")
+        sys.exit(1)
+    
+    # Parseia argumentos da linha de comando
+    if len(sys.argv) > 1:
+        command = sys.argv[1].lower()
+        
+        if command in ['test', '-t', '--test']:
+            # Modo de teste
+            test_mode(pipeline)
+        
+        elif command in ['help', '-h', '--help']:
+            # Ajuda
+            print("""
+Uso: python main.py [comando] [opções]
+
+Comandos:
+    (nenhum)        Inicia o modo interativo
+    test            Testa todos os componentes do sistema
+    -q "pergunta"   Faz uma única consulta
+    help            Mostra esta mensagem
+
+Exemplos:
+    python main.py
+    python main.py test
+    python main.py -q "What is the minimum wage in California?"
+    python main.py -q "Show me tipped wages for Texas in 2023" --details
+            """)
+        
+        elif command in ['-q', '--query']:
+            # Modo de consulta única
+            if len(sys.argv) < 3:
+                print("\n✗ Erro: Pergunta não fornecida\n")
+                print("Uso: python main.py -q \"sua pergunta aqui\"")
+                sys.exit(1)
+            
+            question = sys.argv[2]
+            show_details = '--details' in sys.argv or '-d' in sys.argv
+            single_query_mode(pipeline, question, show_details)
+        
+        else:
+            print(f"\n✗ Comando desconhecido: {command}")
+            print("Use 'python main.py help' para ver os comandos disponíveis\n")
+    
+    else:
+        # Modo interativo (padrão)
+        interactive_mode(pipeline)
+
+
+if __name__ == "__main__":
+    main()

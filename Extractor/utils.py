@@ -132,7 +132,7 @@ def create_directory_structure(base_path: str = '.'):
     
     print("✅ Estrutura de diretórios criada com sucesso!")
 
-def config_database(sql_dir="database/sql"):
+def config_database(sql_dir="Extractor/database/sql"):
     """Executa os scripts SQL para configurar o banco."""
     try:
         conn = psycopg2.connect(**DATABASE_CONFIG)
