@@ -11,7 +11,7 @@ build/
 dist/
 *.egg-info/
 .pj_mwgt/*
-.proj_cdia/*
+.proj_cdia/
 
 # IDE
 .vscode/

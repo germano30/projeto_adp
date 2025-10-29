@@ -3,8 +3,10 @@
 
 import logging
 from typing import Optional, List, Dict
-import psycopg2
-from psycopg2 import Error
+from lightrag import LightRAG, QueryParam
+from lightrag.llm.openai import gpt_4o_mini_complete, openai_embed
+import asyncio
+
 
 from config import DATABASE_CONFIG
 
@@ -12,94 +14,42 @@ logger = logging.getLogger(__name__)
 
 
 class LightRAGClient:
-    """Cliente para consultar dados do LightRAG no PostgreSQL"""
     
-    def __init__(self, config: dict = None):
-        """
-        Inicializa o cliente LightRAG
-        
-        Args:
-            config: Configurações de conexão com o banco
-        """
-        self.config = config or DATABASE_CONFIG
-        logger.info("LightRAGClient inicializado")
+    def __init__(self, working_dir: str = "./lightrag_storage"):
+        self.working_dir = working_dir
+        self.rag = LightRAG(
+            working_dir=working_dir,
+            llm_model_func=gpt_4o_mini_complete,
+            embedding_func=openai_embed
+        )
+        # Inicializa storages
+        asyncio.run(self.rag.initialize_storages())
+
     
-    def query_topic(self, topic: str, user_question: str, state: Optional[str] = None) -> Optional[Dict]:
+    async def query_topic(self, topic: str, state: str = None):
         """
-        Consulta o LightRAG sobre um tópico específico
-        
-        Args:
-            topic: Tópico a consultar (ex: 'Agricultural Employment')
-            user_question: Pergunta original do usuário
-            state: Estado específico (opcional)
-            
-        Returns:
-            Dict com:
-                - content: Texto com a informação do LightRAG
-                - sources: Lista de fontes/referências
-                - metadata: Metadados adicionais
+        Faz uma consulta assíncrona ao LightRAG usando aquery(),
+        gerando resposta e referências automaticamente.
         """
-        try:
-            logger.info(f"Consultando LightRAG - Tópico: {topic}, Estado: {state}")
-            
-            # Aqui você implementaria a consulta real ao LightRAG
-            # Por enquanto, vou criar uma estrutura de exemplo
-            
-            # Exemplo de query que você adaptaria para seu schema do LightRAG
-            query = """
-            SELECT 
-                document_content,
-                source_url,
-                metadata,
-                state_name
-            FROM lightrag_documents
-            WHERE topic = %s
-            """
-            
-            params = [topic]
-            
-            if state:
-                query += " AND (state_name = %s OR state_name IS NULL)"
-                params.append(state)
-            
-            query += " ORDER BY relevance_score DESC LIMIT 5"
-            
-            with psycopg2.connect(**self.config) as conn:
-                with conn.cursor() as cur:
-                    cur.execute(query, params)
-                    results = cur.fetchall()
-                    
-                    if not results:
-                        logger.warning(f"Nenhum resultado encontrado para tópico: {topic}")
-                        return None
-                    
-                    # Agrega os resultados
-                    content_parts = []
-                    sources = []
-                    
-                    for row in results:
-                        content, source, metadata, state_name = row
-                        if content:
-                            content_parts.append(content)
-                        if source:
-                            sources.append(source)
-                    
-                    return {
-                        'content': '\n\n'.join(content_parts),
-                        'sources': list(set(sources)),  # Remove duplicatas
-                        'metadata': {
-                            'topic': topic,
-                            'state': state,
-                            'num_sources': len(results)
-                        }
-                    }
-        
-        except Error as e:
-            logger.error(f"Erro ao consultar LightRAG: {e}")
-            return None
-        except Exception as e:
-            logger.error(f"Erro inesperado no LightRAG: {e}")
-            return None
+        query = f"Explique as leis relacionadas a {topic}"
+        if state:
+            query += f" no estado de {state}"
+
+        print(f"🔎 Rodando consulta: {query}")
+
+        # Chamada assíncrona ao LLM + RAG interno
+        result = await self.rag.aquery(query)
+
+        # O `result` geralmente é um dict contendo: {"answer": "...", "references": [...]}
+        if isinstance(result, dict):
+            return {
+                "answer": result.get("answer", "⚠️ Nenhuma resposta retornada."),
+                "references": result.get("references", [])
+            }
+
+        # Se aquery retornar apenas string (versões antigas)
+        return {"answer": str(result), "references": []}
+
     
     def search_similar(self, query_text: str, top_k: int = 5) -> Optional[List[Dict]]:
         """
@@ -139,26 +89,6 @@ class LightRAGClient:
         except Exception as e:
             logger.error(f"Erro ao buscar documentos similares: {e}")
             return None
-    
-    def get_available_topics(self) -> List[str]:
-        """
-        Retorna lista de tópicos disponíveis no LightRAG
-        
-        Returns:
-            Lista de tópicos
-        """
-        try:
-            query = "SELECT DISTINCT topic FROM lightrag_documents ORDER BY topic"
-            
-            with psycopg2.connect(**self.config) as conn:
-                with conn.cursor() as cur:
-                    cur.execute(query)
-                    results = cur.fetchall()
-                    return [row[0] for row in results]
-        
-        except Error as e:
-            logger.error(f"Erro ao buscar tópicos disponíveis: {e}")
-            return []
     
     def test_connection(self) -> bool:
         """
@@ -257,7 +187,7 @@ class MockLightRAGClient:
 # Factory function
 _lightrag_client = None
 
-def get_lightrag_client(use_mock: bool = True) -> LightRAGClient:
+def get_lightrag_client(use_mock: bool = False) -> LightRAGClient:
     """
     Retorna uma instância singleton do LightRAGClient
     

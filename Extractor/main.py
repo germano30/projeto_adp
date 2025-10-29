@@ -202,15 +202,6 @@ class MinimumWagePipeline:
             end_time = datetime.now()
             duration = (end_time - start_time).total_seconds()
             
-            # print("\n" + "=" * 80)
-            # print("✅ PIPELINE CONCLUÍDO COM SUCESSO!")
-            # print("=" * 80)
-            # print(f"⏱️  Tempo total: {duration:.2f} segundos")
-            # print(f"📊 Tabelas geradas:")
-            # for name, df in tables.items():
-            #     print(f"   • {name}: {len(df)} registros")
-            # print("=" * 80)
-            
             return tables, output_files
             
         except Exception as e:

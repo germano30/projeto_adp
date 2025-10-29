@@ -3,6 +3,8 @@
 
 import logging
 from typing import Optional, Dict, Tuple, List
+import asyncio
+import inspect
 
 from config import BASE_QUERY
 from prompts import (
@@ -31,7 +33,7 @@ logger = logging.getLogger(__name__)
 class MinimumWagePipeline:
     """Pipeline completo para responder perguntas sobre salários mínimos"""
     
-    def __init__(self, use_mock_lightrag: bool = True):
+    def __init__(self, use_mock_lightrag: bool = False):
         """
         Inicializa o pipeline com os componentes necessários
         
@@ -44,6 +46,46 @@ class MinimumWagePipeline:
         self.lightrag_client = get_lightrag_client(use_mock=use_mock_lightrag)
         logger.info("Pipeline inicializado")
     
+    # -----------------------
+    # Helper para LightRAG
+    # -----------------------
+    def _call_lightrag_query(self, topic: str, user_prompt: str, state: Optional[str] = None):
+        """
+        Chama query_topic do cliente LightRAG, suportando tanto implementations async quanto sync (mock).
+        - Se query_topic for coroutine function -> usa asyncio.run(...)
+        - Caso contrário, chama diretamente e tenta adaptar argumentos.
+        """
+        fn = getattr(self.lightrag_client, "query_topic", None)
+        if fn is None:
+            logger.error("LightRAG client não possui método query_topic")
+            return None
+
+        # Se for função assíncrona definida com async def
+        if inspect.iscoroutinefunction(fn):
+            try:
+                return asyncio.run(fn(topic, state))
+            except Exception as e:
+                logger.error(f"Erro ao executar query_topic (async): {e}")
+                return None
+
+        # Função síncrona (mock)
+        try:
+            # Tenta chamar com assinatura (topic, user_prompt, state)
+            return fn(topic, user_prompt, state)
+        except TypeError:
+            # Tenta fallback (topic, user_prompt)
+            try:
+                return fn(topic, user_prompt)
+            except Exception as e:
+                logger.error(f"Erro ao executar query_topic (sync fallback): {e}")
+                return None
+        except Exception as e:
+            logger.error(f"Erro inesperado ao chamar query_topic: {e}")
+            return None
+
+    # -----------------------
+    # Main pipeline entry
+    # -----------------------
     def process_question(self, user_question: str) -> Dict:
         """
         Processa uma pergunta do usuário do início ao fim
@@ -68,7 +110,7 @@ class MinimumWagePipeline:
         # Passo 1: Roteamento - decidir qual sistema usar
         routing_decision = self.router.route_question(clean_question)
         logger.info(f"Decisão de roteamento: {routing_decision['route'].value} (confiança: {routing_decision['confidence']:.2f})")
-        logger.info(f"Razão: {routing_decision['reason']}")
+        logger.info(f"Razão: {routing_decision.get('reason','-')}")
         
         # Processa baseado na rota
         if routing_decision['route'] == QueryRoute.SQL:
@@ -89,6 +131,9 @@ class MinimumWagePipeline:
                 'error': 'Unknown routing decision'
             }
     
+    # -----------------------
+    # SQL route
+    # -----------------------
     def _process_sql_route(self, user_question: str, routing_decision: Dict) -> Dict:
         """Processa pergunta usando rota SQL"""
         logger.info("Processando via rota SQL")
@@ -148,21 +193,20 @@ class MinimumWagePipeline:
             'conditions': sql_conditions
         }
     
+    # -----------------------
+    # LightRAG route
+    # -----------------------
     def _process_lightrag_route(self, user_question: str, routing_decision: Dict) -> Dict:
         """Processa pergunta usando rota LightRAG"""
         logger.info("Processando via rota LightRAG")
         
-        topic = routing_decision.get('topic')
-        if not topic:
-            logger.warning("Tópico não especificado para rota LightRAG")
-            # Tenta inferir estado da pergunta para contexto
-            state = self._extract_state_from_question(user_question)
-        else:
-            state = self._extract_state_from_question(user_question)
+        # topic pode vir do roteador; se não vier, usa a própria pergunta como fallback
+        topic = routing_decision.get('topic') or user_question
+        state = self._extract_state_from_question(user_question)
         
-        # Consulta LightRAG
-        lightrag_result = self.lightrag_client.query_topic(topic, user_question, state)
-        
+        # Consulta LightRAG via helper que lida com async/sync
+        lightrag_result = self._call_lightrag_query(topic, user_question, state)
+
         if lightrag_result is None:
             return {
                 'success': False,
@@ -172,10 +216,40 @@ class MinimumWagePipeline:
                 'error': 'No LightRAG data found'
             }
         
+        # O resultado pode ter várias formas dependendo da implementação do client:
+        # - { "answer": "...", "references": [...] }
+        # - { "content": "...", "sources": [...], "metadata": {...} }
+        # - { "content": "...", ... } = nossa convenção anterior
+        # Normalizamos para extrair texto e fontes.
+        content = None
+        sources = []
+        metadata = {}
+
+        if isinstance(lightrag_result, dict):
+            # Suporte para chaves comuns
+            content = lightrag_result.get('content') or lightrag_result.get('answer') or lightrag_result.get('text')
+            sources = lightrag_result.get('sources') or lightrag_result.get('references') or []
+            metadata = lightrag_result.get('metadata') or {}
+        else:
+            # Se veio uma string, usa diretamente
+            content = str(lightrag_result)
+            sources = []
+            metadata = {}
+
+        if not content:
+            logger.warning("LightRAG retornou conteúdo vazio")
+            return {
+                'success': False,
+                'response': create_error_response('no_data', user_question),
+                'route': 'lightrag',
+                'topic': topic,
+                'error': 'LightRAG returned empty content'
+            }
+        
         # Gerar resposta usando conteúdo do LightRAG
         natural_response = self._generate_lightrag_response(
             user_question, 
-            lightrag_result['content']
+            content
         )
         
         if natural_response is None:
@@ -192,15 +266,18 @@ class MinimumWagePipeline:
             'response': natural_response,
             'route': 'lightrag',
             'topic': topic,
-            'sources': lightrag_result.get('sources', []),
-            'metadata': lightrag_result.get('metadata', {})
+            'sources': sources,
+            'metadata': metadata
         }
     
+    # -----------------------
+    # Hybrid route
+    # -----------------------
     def _process_hybrid_route(self, user_question: str, routing_decision: Dict) -> Dict:
         """Processa pergunta usando ambas as rotas (SQL + LightRAG)"""
         logger.info("Processando via rota HÍBRIDA (SQL + LightRAG)")
         
-        # Parte 1: Executar query SQL
+        # Parte 1: Executar query SQL (se aplicável)
         sql_conditions = self._generate_sql_conditions(user_question)
         sql_results = None
         sql_query = None
@@ -210,10 +287,10 @@ class MinimumWagePipeline:
             sql_results = self._execute_query(sql_query)
         
         # Parte 2: Consultar LightRAG
-        topic = routing_decision.get('topic')
+        topic = routing_decision.get('topic') or user_question
         state = self._extract_state_from_question(user_question)
-        lightrag_result = self.lightrag_client.query_topic(topic, user_question, state)
-        
+        lightrag_result = self._call_lightrag_query(topic, user_question, state)
+
         # Verificar se temos pelo menos um dos dois
         if (sql_results is None or len(sql_results) == 0) and lightrag_result is None:
             return {
@@ -223,11 +300,18 @@ class MinimumWagePipeline:
                 'error': 'No data found in either SQL or LightRAG'
             }
         
+        # Normaliza conteúdo do LightRAG (mesma lógica usada antes)
+        lightrag_content = ""
+        if isinstance(lightrag_result, dict):
+            lightrag_content = lightrag_result.get('content') or lightrag_result.get('answer') or ""
+        else:
+            lightrag_content = str(lightrag_result) if lightrag_result else ""
+
         # Gerar resposta combinada
         natural_response = self._generate_hybrid_response(
             user_question,
             sql_results or [],
-            lightrag_result['content'] if lightrag_result else ""
+            lightrag_content
         )
         
         if natural_response is None:
@@ -245,9 +329,12 @@ class MinimumWagePipeline:
             'sql_query': sql_query,
             'results_count': len(sql_results) if sql_results else 0,
             'topic': topic,
-            'sources': lightrag_result.get('sources', []) if lightrag_result else []
+            'sources': (lightrag_result.get('sources') if isinstance(lightrag_result, dict) else []) or []
         }
     
+    # -----------------------
+    # Auxiliares (SQL / LLM)
+    # -----------------------
     def _generate_sql_conditions(self, user_question: str) -> Optional[Dict]:
         """Gera as condições SQL a partir da pergunta"""
         try:
@@ -339,6 +426,9 @@ class MinimumWagePipeline:
                 return state
         return None
     
+    # -----------------------
+    # Test components
+    # -----------------------
     def test_components(self) -> Dict[str, bool]:
         """Testa todos os componentes do pipeline"""
         logger.info("Testando componentes do pipeline...")
@@ -362,11 +452,18 @@ class MinimumWagePipeline:
         except Exception as e:
             logger.error(f"Erro ao testar LLM: {e}")
         
-        # Testa LightRAG
+        # Testa LightRAG (suporta async ou sync)
         try:
-            results['lightrag'] = self.lightrag_client.test_connection()
+            fn = getattr(self.lightrag_client, "test_connection", None)
+            if fn is None:
+                results['lightrag'] = False
+            elif inspect.iscoroutinefunction(fn):
+                results['lightrag'] = asyncio.run(fn())
+            else:
+                results['lightrag'] = fn()
         except Exception as e:
             logger.error(f"Erro ao testar LightRAG: {e}")
+            results['lightrag'] = False
         
         logger.info(f"Resultados dos testes: {results}")
         return results
