@@ -8,7 +8,7 @@ DATABASE_CONFIG = {
 
 HUGGINGFACE_TOKEN = "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"
 
-MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"
+MODEL_NAME = "deepseek-ai/DeepSeek-R1"
 
 DATABASE_SCHEMA = """
 DATABASE SCHEMA:

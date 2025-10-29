@@ -225,53 +225,52 @@ Generate a clear, informative response now:"""
 
 
 def format_results_for_prompt(results):
-    """Formata os resultados do banco para incluir no prompt"""
-    if not results:
-        return "No data found for the given criteria."
-    
-    formatted = []
-    for idx, row in enumerate(results, 1):
-        # Ajustado para o schema real com 12 colunas
-        state, year, category_name, category_type, base_wage, tip_credit, min_cash, effective_date, frequency, notes, footnote, source = row
-        
-        result_str = f"""
+   """Formata os resultados do banco para incluir no prompt"""
+   if not results:
+      return "No data found for the given criteria."
+
+   formatted = []
+   for idx, row in enumerate(results, 1):
+      state, year, category_name, category_type, base_wage, tip_credit, min_cash, effective_date, frequency, notes, footnote, source = row
+
+      result_str = f"""
 Result {idx}:
 - State: {state}
 - Year: {year}
 - Category: {category_name} ({category_type})
 - Frequency: {frequency}"""
-        
-        if base_wage:
-            result_str += f"\n- Base Wage Per Hour: ${base_wage:.2f}"
-        if tip_credit:
-            result_str += f"\n- Maximum Tip Credit: ${tip_credit:.2f}"
-        if min_cash:
-            result_str += f"\n- Minimum Cash Wage: ${min_cash:.2f}"
-        if effective_date:
-            result_str += f"\n- Effective Date: {effective_date}"
-        if notes:
-            result_str += f"\n- Notes: {notes[:150]}..." if len(notes) > 150 else f"\n- Notes: {notes}"
-        if footnote:
-            result_str += f"\n- Footnote: {footnote[:150]}..." if len(footnote) > 150 else f"\n- Footnote: {footnote}"
-        
-        formatted.append(result_str.strip())
+      
+      if base_wage:
+         result_str += f"\n- Base Wage Per Hour: ${base_wage:.2f}"
+      if tip_credit:
+         result_str += f"\n- Maximum Tip Credit: ${tip_credit:.2f}"
+      if min_cash:
+         result_str += f"\n- Minimum Cash Wage: ${min_cash:.2f}"
+      if effective_date:
+         result_str += f"\n- Effective Date: {effective_date}"
+      if notes:
+         result_str += f"\n- Notes: {notes[:150]}..." if len(notes) > 150 else f"\n- Notes: {notes}"
+      if footnote:
+         result_str += f"\n- Footnote: {footnote[:150]}..." if len(footnote) > 150 else f"\n- Footnote: {footnote}"
+      
+      formatted.append(result_str.strip())
     
-    return "\n\n".join(formatted)
+   return "\n\n".join(formatted)
 
 
 def get_hybrid_response_prompt(user_question: str, sql_results, lightrag_content: str):
-    """
-    Prompt para respostas híbridas que combinam SQL e LightRAG
-    
-    Args:
-        user_question: Pergunta original
-        sql_results: Resultados da query SQL
-        lightrag_content: Conteúdo do LightRAG
-    """
-    
-    formatted_sql = format_results_for_prompt(sql_results)
-    
-    return f"""You are a comprehensive labor law and wage information assistant.
+   """
+      Prompt para respostas híbridas que combinam SQL e LightRAG
+   
+      Args:
+         user_question: Pergunta original
+         sql_results: Resultados da query SQL
+         lightrag_content: Conteúdo do LightRAG
+   """
+   
+   formatted_sql = format_results_for_prompt(sql_results)
+   
+   return f"""You are a comprehensive labor law and wage information assistant.
 
 USER QUESTION: {user_question}
 

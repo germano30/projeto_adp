@@ -40,7 +40,6 @@ class QueryRouter:
                 - topic: Tópico específico do LightRAG (se aplicável)
                 - confidence: Confiança na decisão (0-1)
         """
-        # Primeiro, faz análise rápida por keywords
         keyword_analysis = self._analyze_keywords(user_question)
         
         # Se não detectou keywords do LightRAG, provavelmente é SQL
@@ -149,14 +148,12 @@ class QueryRouter:
             result_text = response.choices[0].message.content
             logger.debug(f"LLM routing response: {result_text}")
             
-            # Parse JSON response
             routing_data = extract_json_from_response(result_text)
             
             if not routing_data or 'route' not in routing_data:
                 logger.error("Invalid routing response from LLM")
                 return None
             
-            # Converte string para enum
             route_str = routing_data['route'].lower()
             if route_str == 'sql':
                 route = QueryRoute.SQL

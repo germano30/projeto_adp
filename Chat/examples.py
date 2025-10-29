@@ -7,14 +7,8 @@ from pipeline import create_pipeline
 def run_examples():
     """Executa exemplos de diferentes tipos de consultas"""
     
-    # Criar pipeline (usando mock do LightRAG para desenvolvimento)
     pipeline = create_pipeline(use_mock_lightrag=True)
     
-    print("\n" + "="*80)
-    print("EXEMPLOS DE USO DO SISTEMA")
-    print("="*80 + "\n")
-    
-    # Exemplos de queries SQL
     sql_examples = [
         "What is the minimum wage in California?",
         "Show me tipped wages for Texas in 2023",

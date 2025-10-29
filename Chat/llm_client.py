@@ -50,6 +50,7 @@ class LLMClient:
             )
             
             result = response.choices[0].message.content
+            print(result)
             logger.info("Condições SQL geradas com sucesso")
             logger.debug(f"Resposta do modelo: {result}")
             

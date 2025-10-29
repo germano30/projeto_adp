@@ -138,7 +138,6 @@ def sanitize_user_input(user_input: str) -> str:
     Returns:
         Input sanitizado
     """
-    # Remove caracteres perigosos
     dangerous_chars = [';', '--', '/*', '*/', 'xp_', 'sp_']
     cleaned = user_input
     
