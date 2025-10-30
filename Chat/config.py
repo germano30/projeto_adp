@@ -9,6 +9,7 @@ DATABASE_CONFIG = {
 HUGGINGFACE_TOKEN = "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"
 
 MODEL_NAME = "deepseek-ai/DeepSeek-R1"
+MODEL_EXTRACTOR = "microsoft/Phi-3-mini-4k-instruct"
 
 DATABASE_SCHEMA = """
 DATABASE SCHEMA:

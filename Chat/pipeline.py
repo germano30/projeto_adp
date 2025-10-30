@@ -317,7 +317,7 @@ class MinimumWagePipeline:
         """Gera as condições SQL a partir da pergunta"""
         try:
             system_prompt = get_sql_generation_prompt()
-            response_text = self.llm_client.generate_sql_conditions(
+            response_text = self.llm_client.generate_sql_conditions_smollm(
                 user_question, 
                 system_prompt
             )
@@ -358,6 +358,7 @@ class MinimumWagePipeline:
         """Gera uma resposta em linguagem natural para resultados SQL"""
         try:
             system_prompt = get_response_generation_prompt(user_question, query_results)
+            print(system_prompt)
             response = self.llm_client.generate_natural_response(
                 user_question,
                 system_prompt
