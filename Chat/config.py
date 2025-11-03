@@ -7,9 +7,10 @@ DATABASE_CONFIG = {
 }
 
 HUGGINGFACE_TOKEN = "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"
+GOOGLE_API_KEY = 'AIzaSyAa9ecjyhyN6wmDa2k8GZxSiauyxky46Q8'
 
 MODEL_NAME = "deepseek-ai/DeepSeek-R1"
-MODEL_EXTRACTOR = "microsoft/Phi-3-mini-4k-instruct"
+MODEL_EXTRACTOR = "HuggingFaceTB/SmolLM-1.7B-Instruct"
 
 DATABASE_SCHEMA = """
 DATABASE SCHEMA:

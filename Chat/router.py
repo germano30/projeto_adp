@@ -4,10 +4,10 @@
 import logging
 from typing import Dict, Optional
 from enum import Enum
+import json
 
-from config import LIGHTRAG_KEYWORDS, LIGHTRAG_TOPICS, ROUTING_EXAMPLES, MODEL_NAME
+from config import LIGHTRAG_KEYWORDS, LIGHTRAG_TOPICS, ROUTING_EXAMPLES
 from llm_client import get_llm_client
-from utils import extract_json_from_response
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,6 @@ class QueryRouter:
         """
         keyword_analysis = self._analyze_keywords(user_question)
         
-        # Se não detectou keywords do LightRAG, provavelmente é SQL
         if not keyword_analysis['has_lightrag_keywords']:
             logger.info("Roteamento rápido: SQL (sem keywords do LightRAG)")
             return {
@@ -124,36 +123,38 @@ class QueryRouter:
     
     def _llm_route_decision(self, user_question: str) -> Optional[Dict]:
         """
-        Usa LLM para decidir a rota de forma mais inteligente
-        
+        Usa LLM (Gemini) para decidir a rota de forma mais inteligente
+
         Args:
             user_question: Pergunta do usuário
-            
+
         Returns:
             Dict com decisão de roteamento ou None se falhar
         """
         try:
             system_prompt = self._get_routing_prompt()
-            
-            response = self.llm_client.client.chat_completion(
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_question}
-                ],
-                model=MODEL_NAME,
-                max_tokens=200,
-                temperature=0.1
+
+            # --- MUDANÇA PRINCIPAL AQUI ---
+            # Chamamos nosso novo método que GARANTE JSON
+            result_json_string = self.llm_client.generate_sql_conditions(
+                user_question=user_question,
+                system_prompt=system_prompt
             )
-            
-            result_text = response.choices[0].message.content
-            logger.debug(f"LLM routing response: {result_text}")
-            
-            routing_data = extract_json_from_response(result_text)
-            
+
+            if not result_json_string:
+                logger.error("LLM routing falhou (resposta vazia do cliente)")
+                return None
+
+            logger.debug(f"LLM routing response: {result_json_string}")
+
+            # Agora apenas carregamos o JSON, sem precisar "extrair"
+            routing_data = json.loads(result_json_string)
+            # --- FIM DA MUDANÇA ---
+
             if not routing_data or 'route' not in routing_data:
                 logger.error("Invalid routing response from LLM")
                 return None
-            
+
             route_str = routing_data['route'].lower()
             if route_str == 'sql':
                 route = QueryRoute.SQL
@@ -164,14 +165,17 @@ class QueryRouter:
             else:
                 logger.error(f"Unknown route type: {route_str}")
                 return None
-            
+
             return {
                 'route': route,
                 'reason': routing_data.get('reason', 'LLM decision'),
                 'topic': routing_data.get('topic'),
                 'confidence': 0.85
             }
-            
+
+        except json.JSONDecodeError as e:
+            logger.error(f"Erro ao decodificar JSON do LLM: {e}")
+            return None
         except Exception as e:
             logger.error(f"Erro no LLM routing: {e}")
             return None
