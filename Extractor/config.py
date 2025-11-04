@@ -57,6 +57,7 @@ DATABASE_CONFIG = {
 }
 
 SQL_SCRIPTS = [
+    "DimYouthRules.sql",
     "DimCategory.sql",
     "DimState.sql",
     "DimFootnotes.sql",

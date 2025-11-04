@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore')
 class DataTransformer:
     """Classe para transformar e unificar os datasets"""
     
-    def __init__(self, df_standard: pd.DataFrame, df_tipped: pd.DataFrame):
+    def __init__(self, df_standard: pd.DataFrame, df_tipped: pd.DataFrame, youth_rules: pd.DataFrame):
         self.df_standard = df_standard
         self.df_tipped = df_tipped
         
@@ -23,6 +23,7 @@ class DataTransformer:
         self.dim_footnotes = None
         self.fact_minimum_wage = None
         self.bridge_wage_footnote = None
+        self.dim_youth_rules = youth_rules
 
 
     def normalize_text(self,text: str) -> str:
@@ -259,6 +260,23 @@ class DataTransformer:
         
         return all_footnotes
     
+    def create_dim_youth_rules(self):
+        self.dim_youth_rules['year'] = self.dim_youth_rules['year'].apply(lambda x: int(x) if pd.notna(x) else None)
+        self.dim_youth_rules['is_issued_by_labor'] = self.dim_youth_rules['is_issued_by_labor'].apply(lambda x: int(x) if pd.notna(x) else None)
+        self.dim_youth_rules['is_issued_by_school'] = self.dim_youth_rules['is_issued_by_school'].apply(lambda x: int(x) if pd.notna(x) else None)
+        self.dim_youth_rules['age_min'] = self.dim_youth_rules['age_min'].apply(lambda x: int(x) if pd.notna(x) else None)
+        self.dim_youth_rules['age_max'] = self.dim_youth_rules['age_max'].apply(lambda x: int(x) if pd.notna(x) else None)
+        def normalize_footnote(x):
+            if isinstance(x, list):
+                return ','.join(map(str, x))
+            elif pd.isna(x):
+                return None
+            else:
+                return str(x)
+
+        self.dim_youth_rules['footnotes'] = self.dim_youth_rules['footnotes'].apply(normalize_footnote) 
+        print(self.dim_youth_rules.info())
+    
     def transform(self, standard_footnotes: dict = None, tipped_footnotes: dict = None):
         """Executa o pipeline completo de transformação"""
         
@@ -300,7 +318,10 @@ class DataTransformer:
         
         # 7. Criar bridge
         self.create_bridge_table(all_footnotes)
+        
+        self.create_dim_youth_rules()
         return {
+            'dim_youth_rules': self.dim_youth_rules,
             'dim_states': self.dim_states,
             'dim_categories': self.dim_categories,
             'dim_footnotes': self.dim_footnotes,

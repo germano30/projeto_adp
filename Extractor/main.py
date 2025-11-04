@@ -4,6 +4,7 @@ Pipeline principal para extração, processamento e transformação
 dos dados de salário mínimo
 """
 import numpy as np
+import pandas as pd
 import os
 from datetime import datetime
 import sys
@@ -14,6 +15,7 @@ register_adapter(np.int64, AsIs)
 # Imports dos módulos do projeto
 from src.scrapers.scrapper_minimum_wage import MinimumWageScraper
 from src.scrapers.scrapper_tipped_wage import TippedWageScraper
+from src.scrapers.scrapper_youth_rules import YouthEmploymentScraperImproved
 from src.processors.processor_standard_wage import StandardWageProcessor
 from src.processors.processor_tipped_wage import TippedWageProcessor
 from src.transformers.transformer_unified import DataTransformer
@@ -53,11 +55,15 @@ class MinimumWagePipeline:
             start_year=TIPPED_WAGE_START_YEAR,
             end_year=TIPPED_WAGE_END_YEAR
         )
-        
         if df_tipped_raw.empty:
             raise Exception("❌ Falha ao extrair dados de tipped wages")
+        print('\n Extraindo youth rules')
+        youth_rules = YouthEmploymentScraperImproved()
+        df_youth_rules = youth_rules.scrape()
+        if df_youth_rules.empty:
+            raise Exception("❌ Falha ao extrair dados de youth rules")
         
-        return df_standard_raw, df_tipped_raw, scraper_standard.footnotes_dict, scraper_tipped.footnotes_dict
+        return df_standard_raw, df_tipped_raw, scraper_standard.footnotes_dict, scraper_tipped.footnotes_dict, df_youth_rules
     
     def run_processing(self, df_standard_raw, df_tipped_raw, standard_footnotes, tipped_footnotes):
         """Fase 2: Processamento dos dados"""
@@ -74,17 +80,17 @@ class MinimumWagePipeline:
 
         return df_standard_processed, df_tipped_processed, processor_standard.footnotes_dict, processor_tipped.footnotes_dict
     
-    def run_transformation(self, df_standard_processed, df_tipped_processed, standard_footnote_dict, tipped_footnote_dict):
+    def run_transformation(self, df_standard_processed, df_tipped_processed, standard_footnote_dict, tipped_footnote_dict, youth_rules):
         """Fase 3: Transformação e criação do modelo dimensional"""
         print("\n" + "=" * 80)
         print("FASE 3: TRANSFORMAÇÃO E MODELAGEM DIMENSIONAL")
         print("=" * 80)
         
-        transformer = DataTransformer(df_standard_processed, df_tipped_processed)
+        transformer = DataTransformer(df_standard_processed, df_tipped_processed, youth_rules)
         tables = transformer.transform(standard_footnotes=standard_footnote_dict, tipped_footnotes=tipped_footnote_dict)
         
         return tables
-    
+        
     def construct_database(self, tables: dict):
         try:
             config_database()
@@ -95,6 +101,29 @@ class MinimumWagePipeline:
             cur = conn.cursor()
             for table_name, df in tables.items():
                 print(f"\n🔹 Inserindo {table_name} ({len(df)} registros)...")
+                if table_name.lower() == "dim_youth_rules":         
+                    for _, row in df.iterrows():
+                        cur.execute("""
+                            INSERT INTO DimYouthRules (
+                                StateName, Year, CertificateType, RuleDescription, IsLabor,
+                                IsSchool, RequirementLevel, AgeMin, AgeMax, Notes, Footnote, FootnoteText
+                            )
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        """, (
+                            row['state'], 
+                            row['year'], 
+                            row.get('certificate_type', None), 
+                            row.get('rule_description', None), 
+                            row.get('is_issued_by_labor', None),
+                            row.get('is_issued_by_school', None), 
+                            row.get('requirement_level', None), 
+                            row.get('age_min', None),
+                            row.get('age_max', None),
+                            row.get('notes', None), 
+                            row.get('footnotes', None), 
+                            row.get('footnote_text', None)
+                        ))
+                
                 if table_name.lower() == "dim_categories":
                     for _, row in df.iterrows():
                         cur.execute("""
@@ -183,7 +212,7 @@ class MinimumWagePipeline:
         
         try:
             # Fase 1: Extração
-            df_standard_raw, df_tipped_raw, standard_footnote_dict, tipped_footnote_dict = self.run_extraction()
+            df_standard_raw, df_tipped_raw, standard_footnote_dict, tipped_footnote_dict, youth_rules = self.run_extraction()
             
             # Fase 2: Processamento
             df_standard_processed, df_tipped_processed, standard_footnote_dict, tipped_footnote_dict = self.run_processing(
@@ -192,7 +221,7 @@ class MinimumWagePipeline:
             
             # Fase 3: Transformação
             tables = self.run_transformation(
-                df_standard_processed, df_tipped_processed, standard_footnote_dict, tipped_footnote_dict
+                df_standard_processed, df_tipped_processed, standard_footnote_dict, tipped_footnote_dict, youth_rules
             )
             
             # Fase 4: Salvar
