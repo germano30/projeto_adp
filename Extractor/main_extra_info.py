@@ -65,7 +65,7 @@ class ExtraInfoPipeline:
         print("FASE 2: PROCESSAMENTO COM LIGHTRAG")
         print("=" * 80)
         
-        processor = await ExtraInfoProcessor.create(working_dir=self.rag_dir)
+        processor = await ExtraInfoProcessor.create()
         stats = await processor.process(scraped_data)
         
         return stats

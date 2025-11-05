@@ -3,7 +3,7 @@
 
 import logging
 from typing import Optional, List, Dict
-from lightrag import LightRAG, QueryParam
+from lightrag import LightRAG
 from lightrag.llm.openai import gpt_4o_mini_complete, openai_embed
 import asyncio
 
