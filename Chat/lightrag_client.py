@@ -1,17 +1,21 @@
-"""Cliente para interação com LightRAG armazenado em PostgreSQL"""
+"""LightRAG PostgreSQL client for enhanced query processing"""
+import asyncio
 import dotenv
-dotenv.load_dotenv()
-from sentence_transformers import SentenceTransformer
+import functools
+import logging
 import os
+from typing import Dict, List, Optional
+
+import numpy as np
+import psycopg2
 from google import genai
 from google.genai import types
-import logging
-from lightrag.utils import EmbeddingFunc
-import functools 
-import numpy as np
-from typing import Optional, List, Dict
 from lightrag import LightRAG
-import asyncio
+from lightrag.utils import EmbeddingFunc
+from psycopg2 import Error
+from sentence_transformers import SentenceTransformer
+
+dotenv.load_dotenv()
 
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 
@@ -81,19 +85,15 @@ class LightRAGClient:
         if state:
             query += f" no estado de {state}"
 
-        print(f"🔎 Rodando consulta: {query}")
-
-        # Chamada assíncrona ao LLM + RAG interno
+        logger.info(f"Executing query: {query}")
         result = await self.rag.aquery(query)
 
-        # O `result` geralmente é um dict contendo: {"answer": "...", "references": [...]}
         if isinstance(result, dict):
             return {
-                "answer": result.get("answer", "⚠️ Nenhuma resposta retornada."),
+                "answer": result.get("answer", "Error: No response generated."),
                 "references": result.get("references", [])
             }
 
-        # Se aquery retornar apenas string (versões antigas)
         return {"answer": str(result), "references": []}
 
     

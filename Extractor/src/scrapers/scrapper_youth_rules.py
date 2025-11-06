@@ -2,13 +2,22 @@
 Scraper melhorado para Youth Employment Rules
 Baseado na sua implementação, com melhorias adicionais
 """
+import logging
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
 from typing import Dict, List, Tuple, Optional
 import warnings
+
 warnings.filterwarnings('ignore')
+
+# Configure module logger
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 class YouthEmploymentScraperImproved:
     """Scraper melhorado para Age Certificates"""
@@ -25,49 +34,66 @@ class YouthEmploymentScraperImproved:
             response = requests.get(self.url, timeout=30)
             response.raise_for_status()
             self.soup = BeautifulSoup(response.text, "html.parser")
+            logger.debug("Fetched youth rules page")
             return True
         except requests.RequestException as e:
-            print(f"❌ Erro ao buscar página: {e}")
+            logger.error("Error fetching youth rules page: %s", e)
             return False
     
     def extract_year(self) -> Optional[int]:
         """Extrai o ano dos dados"""
         if not self.soup:
             return None
-        
-        text = self.soup.get_text()
-        match = re.search(r'January\s+\d+,\s+(\d{4})', text)
-        if match:
-            self.year = int(match.group(1))
-            return self.year
+
+        # Try a few patterns for a publication or revision year
+        text = self.soup.get_text(separator=' ')
+        patterns = [r'January\s+\d+,\s+(\d{4})', r'Updated:\s*(\d{4})', r'Revised:\s*(\d{4})', r'©\s*(\d{4})']
+        for pat in patterns:
+            match = re.search(pat, text, flags=re.IGNORECASE)
+            if match:
+                try:
+                    self.year = int(match.group(1))
+                    logger.debug("Detected year: %s", self.year)
+                    return self.year
+                except Exception:
+                    continue
+
         return None
     
     def extract_footnotes(self) -> Dict[str, str]:
         """Extrai footnotes completos da página"""
         if not self.soup:
             return {}
-        
-        text = self.soup.get_text()
-        
+
+        # Prefer extracting footnotes from a dedicated section if present
+        text = self.soup.get_text(separator=' ')
+        footnotes: Dict[str, str] = {}
+
+        # Try to find a labelled Footnotes: section first
         if 'Footnotes:' in text:
             footnote_section = text.split('Footnotes:')[1]
-            
-            # Padrão: [número] ou apenas número seguido de texto
-            # Melhorado para capturar melhor
-            pattern = r'\[?(\d+)\]?\s+([^\[]+?)(?=\[\d+\]|$)'
+            pattern = r'\[?(\d+)\]?\s+(.+?)(?=\s*\[?\d+\]?\s+|$)'
             matches = re.findall(pattern, footnote_section, re.DOTALL)
-            
             for num, text_content in matches:
-                # Limpar texto
-                clean_text = ' '.join(text_content.split())
-                clean_text = clean_text.strip()
-                
-                # Remover "Footnote X:" do início se existir
+                clean_text = ' '.join(text_content.split()).strip()
                 clean_text = re.sub(r'^Footnote\s+\d+:\s*', '', clean_text, flags=re.IGNORECASE)
-                
                 if clean_text:
-                    self.footnotes_dict[num] = clean_text
-        
+                    footnotes[num] = clean_text
+
+        # Fallback: try to extract anchors that look like footnote markers
+        if not footnotes:
+            for a in self.soup.find_all('a', attrs={'name': True}):
+                name = a.get('name')
+                if name and re.match(r'foot\d+', str(name)):
+                    parent = a.find_parent('p')
+                    if parent:
+                        txt = ' '.join(parent.get_text(separator=' ').split())
+                        # remove marker text
+                        txt = re.sub(r'^\[?\w+\]?\s*', '', txt)
+                        footnotes[name.replace('foot', '')] = txt
+
+        self.footnotes_dict = footnotes
+        logger.debug("Extracted %d youth footnotes", len(footnotes))
         return self.footnotes_dict
     
     @staticmethod
@@ -106,26 +132,22 @@ class YouthEmploymentScraperImproved:
         Returns:
             Lista de dicts com: {'href': número, 'index': posição_coluna, 'clean_td': célula_limpa}
         """
-        links = []
-        
+        links: List[Dict] = []
+
         for idx, td in enumerate(values):
             anchors = td.find_all("a", href=True)
-            
             if anchors:
-                for link in anchors:
-                    href = link.get_text(strip=True)
-                    
-                    # Verificar se é footnote (número)
-                    if re.match(r'^\d+$', href):
-                        # Remover o link do DOM
-                        link.decompose()
-                        
+                for a in anchors:
+                    href_text = a.get_text(strip=True)
+                    if re.match(r'^\d+$', href_text):
+                        # preserve a copy of the cell without the anchor
+                        a.decompose()
                         links.append({
-                            "href": href,
+                            "href": href_text,
                             "index": idx,
                             "clean_td": td
                         })
-        
+
         return links if links else None
     
     def extract_age_ranges(self, text: str) -> Tuple[Optional[int], Optional[int]]:
@@ -231,78 +253,71 @@ class YouthEmploymentScraperImproved:
             }
             
             return employment, age
-        
+
         except Exception as e:
-            print(f"⚠️ Erro ao processar linha: {e}")
+            logger.warning("Error parsing state row: %s", e)
             return None
     
     def attach_footnote_texts(self, data: List[Dict]) -> List[Dict]:
         """Anexa textos completos dos footnotes aos registros (mantém coluna separada)"""
         for record in data:
             footnote_refs = record.get('footnotes')
-            
+
             if footnote_refs:
                 footnote_texts = []
                 for ref in footnote_refs:
-                    if ref in self.footnotes_dict:
-                        footnote_texts.append(f"[{ref}] {self.footnotes_dict[ref]}")
-                
-                if footnote_texts:
-                    # Adicionar footnotes COMPLETOS em nova coluna
-                    record['footnote_text'] = ' | '.join(footnote_texts)
-                else:
-                    record['footnote_text'] = None
+                    if str(ref) in self.footnotes_dict:
+                        footnote_texts.append(f"[{ref}] {self.footnotes_dict[str(ref)]}")
+
+                record['footnote_text'] = ' | '.join(footnote_texts) if footnote_texts else None
             else:
                 record['footnote_text'] = None
-        
+
         return data
     
     def scrape(self) -> pd.DataFrame:
         """Executa o scraping completo"""
-        print("🔍 Iniciando scraping de Youth Employment Rules...")
-        
+        logger.info("Starting Youth Employment Rules scraping: %s", self.url)
+
         if not self.fetch_page():
             return pd.DataFrame()
-        
-        # Extrair ano
+
+        # Extract year (optional)
         self.extract_year()
-        print(f"   📅 Ano: {self.year}")
-        
-        # Extrair footnotes
-        print("📝 Extraindo footnotes...")
-        self.extract_footnotes()
-        print(f"   ✓ {len(self.footnotes_dict)} footnotes")
-        
-        # Encontrar tabela
+        logger.debug("Detected year: %s", self.year)
+
+        # Extract footnotes
+        logger.debug("Extracting footnotes...")
+        try:
+            self.extract_footnotes()
+            logger.debug("Found %d footnotes", len(self.footnotes_dict))
+        except Exception as e:
+            logger.warning("Footnote extraction failed: %s", e)
+
+        # Locate the main table
         table = self.soup.find("table")
-        
         if not table:
-            print("❌ Tabela não encontrada")
+            logger.warning("No table found on youth rules page")
             return pd.DataFrame()
-        
-        # Processar linhas (pular cabeçalho - primeiras 4 linhas)
-        rows = table.find_all("tr")[4:]
-        
-        print(f"📊 Processando {len(rows)} estados...")
-        
-        youth_employment = []
-        
-        for row in rows:
+
+        # Skip header rows if present (robustly find data rows)
+        all_rows = table.find_all("tr")
+        data_rows = all_rows[4:] if len(all_rows) > 6 else all_rows[1:]
+        logger.info("Processing %d state rows", len(data_rows))
+
+        youth_employment: List[Dict] = []
+        for row in data_rows:
             parsed = self.parse_state_row(row)
             if parsed:
                 youth_employment.extend(parsed)
-        
-        print(f"   ✓ {len(youth_employment)} registros extraídos")
-        
-        # Anexar textos dos footnotes
-        print("🔗 Vinculando footnotes...")
+
+        logger.info("Extracted %d youth employment records", len(youth_employment))
+
+        # Attach footnote texts
         youth_employment = self.attach_footnote_texts(youth_employment)
-        
-        # Criar DataFrame
+
         df = pd.DataFrame(youth_employment)
-        
-        print(f"✅ Scraping concluído: {len(df)} registros")
-        
+        logger.info("Scraping completed: %d records", len(df))
         return df
 
 

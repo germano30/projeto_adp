@@ -1,29 +1,42 @@
-import dotenv
-dotenv.load_dotenv()
-
+import asyncio
+import functools
+import logging
+import os
 from typing import Dict, List, Tuple
+
+import dotenv
+import numpy as np
+from google import genai
+from google.genai import types
 from lightrag import LightRAG
 from lightrag.kg.shared_storage import initialize_pipeline_status
 from lightrag.utils import EmbeddingFunc
 from sentence_transformers import SentenceTransformer
-import os
-import numpy as np
-import asyncio
-from google import genai
-from google.genai import types
-import functools
+
+dotenv.load_dotenv()
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 
 class ExtraInfoProcessor:
-    """Processor for inserting extra labor info into LightRAG."""
+    """
+    Process and integrate supplementary labor information into LightRAG storage.
+    
+    This processor handles the transformation and insertion of additional labor-related
+    data into the LightRAG system, including document processing, embedding generation,
+    and storage management.
+    """
     
     def __init__(self):
         self.rag = None
         
-        # Fixo 1: Forçar o uso de "cpu" para evitar erros de CUDA
-        embedding_device = "cpu"
-        print(f"Inicializando o modelo de embedding no dispositivo: {embedding_device}")
+        embedding_device = "cpu"  # Use CPU for consistent behavior
+        logger.info(f"Initializing embedding model on device: {embedding_device}")
         
         self.embedding_model = SentenceTransformer(
             "BAAI/bge-large-en-v1.5", 

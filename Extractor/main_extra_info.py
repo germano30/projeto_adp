@@ -1,30 +1,70 @@
-import os
-from datetime import datetime
-import warnings
-warnings.filterwarnings('ignore')
-import asyncio
+"""
+Supplementary Labor Law Information Extraction Pipeline.
 
-from src.scrapers.scrapper_extra_info import ExtraInfoScraper
+This module implements a specialized pipeline for extracting, processing, and storing
+additional labor law information beyond basic wage data. It focuses on:
+- Employment regulations
+- Worker protections
+- Special cases and exemptions
+- Jurisdiction-specific rules
+"""
+
+import asyncio
+import logging
+import os
+import warnings
+from datetime import datetime
+from typing import Dict, Optional
+
 from src.processors.processor_extra_info import ExtraInfoProcessor
+from src.scrapers.scrapper_extra_info import ExtraInfoScraper
 from src.transformers.transformer_extra_info import ExtraInfoTransformer
+
+# Configure logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+# Suppress non-critical warnings
+warnings.filterwarnings('ignore')
 
 
 class ExtraInfoPipeline:
-    """Pipeline principal para informações extras de leis trabalhistas."""
+    """
+    Pipeline for extracting and processing supplementary labor law information.
+    
+    This class orchestrates the extraction and processing of additional labor law
+    information, utilizing RAG (Retrieval Augmented Generation) for enhanced
+    context understanding and storage.
+    
+    The pipeline handles:
+    1. Data extraction from authoritative sources
+    2. Natural language processing and context analysis
+    3. Storage in both traditional and vector databases
+    4. Integration with existing wage data
+    """
     
     def __init__(
         self, 
         output_dir: str = "./output",
         rag_dir: str = "lightrag_storage",
-        db_config: dict = None
+        db_config: Optional[Dict] = None
     ):
         """
-        Initialize the pipeline.
+        Initialize the supplementary information pipeline.
         
-        Args:
-            output_dir: Directory for output files
-            rag_dir: Directory for LightRAG storage
-            db_config: Database configuration dictionary
+        Parameters
+        ----------
+        output_dir : str, optional
+            Directory for storing intermediate and processed data files,
+            defaults to "./output"
+        rag_dir : str, optional
+            Directory for RAG storage components, defaults to "lightrag_storage"
+        db_config : Dict, optional
+            Database configuration parameters. If not provided, uses environment
+            variables with default fallbacks
         """
         self.output_dir = output_dir
         self.rag_dir = rag_dir
@@ -47,9 +87,7 @@ class ExtraInfoPipeline:
         Returns:
             Dictionary with scraped data
         """
-        print("\n" + "=" * 80)
-        print("FASE 1: EXTRAÇÃO DE DADOS")
-        print("=" * 80)
+        logger.info("Initiating Phase 1: Data Extraction")
         
         scraper = ExtraInfoScraper()
         scraped_data = scraper.scrape_all()
@@ -61,9 +99,7 @@ class ExtraInfoPipeline:
     
     async def run_processing(self, scraped_data: dict) -> dict:
         """Fase 2: Processamento e inserção no LightRAG (async)."""
-        print("\n" + "=" * 80)
-        print("FASE 2: PROCESSAMENTO COM LIGHTRAG")
-        print("=" * 80)
+        logger.info("Initiating Phase 2: LightRAG Processing")
         
         processor = await ExtraInfoProcessor.create()
         stats = await processor.process(scraped_data)

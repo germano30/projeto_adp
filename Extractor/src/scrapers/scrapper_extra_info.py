@@ -1,83 +1,164 @@
-import requests
-import pandas as pd
+"""
+Extended Labor Law Information Scraper.
+
+This module implements a specialized web scraper for extracting comprehensive
+labor law information beyond basic wage data from the U.S. Department of Labor
+website. It focuses on:
+- State-specific regulations
+- Worker protection measures
+- Employment conditions
+- Regulatory compliance requirements
+"""
+
+import logging
 import re
-from bs4 import BeautifulSoup
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple, Union
+
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup, Tag
+
+# Configure logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 
 class ExtraInfoScraper:
-    """Scraper for extracting additional labor law information from DOL website."""
+    """
+    Advanced scraper for comprehensive labor law information extraction.
+    
+    This class specializes in extracting and processing detailed labor law
+    information beyond basic wage data, including:
+    - Regulatory compliance requirements
+    - State-specific labor protections
+    - Industry-specific regulations
+    - Worker rights and responsibilities
+    """
     
     def __init__(self):
+        """
+        Initialize the extended information scraper with base configuration.
+        """
         self.base_url = "https://www.dol.gov/agencies/whd/state"
 
     def get_table(self, url: str) -> List[pd.DataFrame]:
         """
-        Fetches and parses HTML tables from a given URL.
+        Extract and parse HTML tables from specified Department of Labor pages.
         
-        Args:
-            url: The URL containing HTML tables
+        Parameters
+        ----------
+        url : str
+            Full URL of the page containing regulatory data tables
             
-        Returns:
-            List of pandas DataFrames, one for each table found
+        Returns
+        -------
+        List[pd.DataFrame]
+            Collection of parsed data tables, each containing specific
+            regulatory information
+            
+        Notes
+        -----
+        Tables are expected to follow DOL's standard format for
+        regulatory data presentation
         """
         tables = pd.read_html(url)
         return tables
     
-    def get_footnotes(self, url: str, div: str = "content") -> List:
+    def get_footnotes(self, url: str, div: str = "content") -> List[Tag]:
         """
-        Extracts footnote elements from a webpage.
+        Extract and parse regulatory footnotes from Department of Labor pages.
         
-        Args:
-            url: The URL to fetch footnotes from
-            div: The div ID containing the content (default: "content")
+        Footnotes often contain critical exceptions, clarifications, and
+        additional requirements that supplement the main regulatory text.
+        
+        Parameters
+        ----------
+        url : str
+            URL of the page containing regulatory footnotes
+        div : str, optional
+            HTML div ID containing the main content, defaults to "content"
             
-        Returns:
-            List of BeautifulSoup elements representing footnotes
+        Returns
+        -------
+        List[Tag]
+            Collection of parsed footnote elements with their full context
+            
+        Notes
+        -----
+        Footnotes are identified by standard DOL formatting and typically
+        begin with a clearly marked header section
         """
-        response = requests.get(url)
-        soup = BeautifulSoup(response.content, "html.parser")
-        content = soup.find("div", id=div)
-        
-        if not content:
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, "html.parser")
+            content = soup.find("div", id=div)
+            
+            if not content:
+                logger.warning(f"No content div found with id '{div}' at {url}")
+                return []
+            
+            # First try to find footnotes section by header
+            elements = list(content.children)
+            start_index = None
+            
+            for i, el in enumerate(elements):
+                if hasattr(el, "get_text") and "FOOTNOTE" in el.get_text().upper():
+                    start_index = i
+                    return elements[start_index + 1:]
+            
+            # If no header found, look for footnotes after tables
+            tables = content.find_all("table")
+            if tables:
+                footnote_elements = []
+                for table in tables:
+                    if table.find_next_siblings():
+                        for sibling in table.find_next_siblings():
+                            if getattr(sibling, "name", None):
+                                footnote_elements.append(sibling)
+                if footnote_elements:
+                    return footnote_elements
+            
+            logger.info(f"No footnotes found at {url}")
             return []
-        
-        elements = list(content.children)
-        start_index = None
-        
-        for i, el in enumerate(elements):
-            if hasattr(el, "get_text") and "FOOTNOTE" in el.get_text().upper():
-                start_index = i
-                break
-
-        if start_index is not None:
-            return elements[start_index + 1:]
-        
-        tables = content.find_all("table")
-        if tables:
-            footnote_elements = []
-            for table in tables:
-                if table.find_next_siblings():
-                    for sibling in table.find_next_siblings():
-                        if getattr(sibling, "name", None):
-                            footnote_elements.append(sibling)
-            return footnote_elements
-        
-        return []
+                    
+        except requests.RequestException as e:
+            logger.error(f"Failed to retrieve footnotes from {url}: {e}")
+            return []
 
     def scrape_all(self) -> Dict[str, Tuple[List[Dict], List[Dict]]]:
         """
-        Executes all scraping methods and returns a dictionary with results.
+        Execute comprehensive scraping of all available labor law information.
         
-        Returns:
-            Dictionary with keys as data types and values as tuples of (state_docs, footnote_docs)
+        This method coordinates the extraction of multiple types of labor law
+        information, including:
+        - Rest period requirements
+        - Meal break regulations
+        - Overtime rules
+        - Holiday pay requirements
+        - Industry-specific regulations
+        
+        Returns
+        -------
+        Dict[str, Tuple[List[Dict], List[Dict]]]
+            Structured dictionary where:
+            - Keys are regulatory data types
+            - Values are tuples of (state_regulations, associated_footnotes)
+            
+        Notes
+        -----
+        Each data type is processed independently to ensure reliable extraction
+        even if one section fails
         """
-        print("\n Starting extraction of extra labor information...")
+        logger.info("Initiating comprehensive labor law information extraction")
         
         results = {}
         
         try:
-            print(" Extracting paid rest periods...")
+            logger.info("Extracting paid rest period regulations")
             results['rest_periods'] = self.extract_paid_rest_period()
             
             print(" Extracting meal breaks...")

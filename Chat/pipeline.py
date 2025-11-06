@@ -1,53 +1,84 @@
-"""Pipeline principal para processar perguntas sobre salários mínimos"""
+"""
+Core pipeline module for processing minimum wage queries.
 
-import logging
-from typing import Optional, Dict, Tuple, List
+This module implements the main processing pipeline that handles natural language queries
+about minimum wage information. It orchestrates the interaction between different components:
+- Query routing (SQL vs RAG vs Hybrid)
+- Database operations
+- Language model interactions
+- Response generation and formatting
+"""
+
 import asyncio
 import inspect
+import logging
+from typing import Dict, List, Optional, Tuple
 
 from config import BASE_QUERY
-from prompts import (
-    get_sql_generation_prompt, 
-    get_response_generation_prompt,
-    get_lightrag_response_prompt,
-    get_hybrid_response_prompt
-)
-from utils import (
-    extract_json_from_response,
-    validate_sql_conditions,
-    build_sql_query,
-    format_query_results,
-    sanitize_user_input,
-    log_conversation,
-    create_error_response
-)
 from database import get_db_manager
-from llm_client import get_llm_client
-from router import get_query_router, QueryRoute
 from lightrag_client import get_lightrag_client
+from llm_client import get_llm_client
+from prompts import (
+    get_hybrid_response_prompt,
+    get_lightrag_response_prompt,
+    get_response_generation_prompt,
+    get_sql_generation_prompt,
+)
+from router import QueryRoute, get_query_router
+from utils import (
+    build_sql_query,
+    create_error_response,
+    extract_json_from_response,
+    format_query_results,
+    log_conversation,
+    sanitize_user_input,
+    validate_sql_conditions,
+)
+from analysis import analyze_keywords
+import os
 
 logger = logging.getLogger(__name__)
 
+# Hybrid override threshold (can be adjusted via env var HYBRID_CONFIDENCE)
+HYBRID_CONFIDENCE_THRESHOLD = float(os.environ.get('HYBRID_CONFIDENCE', '0.55'))
+
 
 class MinimumWagePipeline:
-    """Pipeline completo para responder perguntas sobre salários mínimos"""
+    """
+    Core pipeline for processing minimum wage related queries.
+    
+    This class orchestrates the entire query processing workflow, from initial
+    query routing to final response generation. It handles both structured data
+    queries through SQL and unstructured data through RAG (Retrieval Augmented Generation).
+    """
     
     def __init__(self, use_mock_lightrag: bool = False):
         """
-        Inicializa o pipeline com os componentes necessários
+        Initialize the pipeline with required components.
         
-        Args:
-            use_mock_lightrag: Se True, usa mock do LightRAG para desenvolvimento
+        Parameters
+        ----------
+        use_mock_lightrag : bool, optional
+            If True, uses a mock LightRAG implementation for development and testing,
+            defaults to False
         """
         self.db_manager = get_db_manager()
         self.llm_client = get_llm_client()
         self.router = get_query_router()
         self.lightrag_client = get_lightrag_client(use_mock=use_mock_lightrag)
-        logger.info("Pipeline inicializado")
-    
+        logger.info("Pipeline initialized with all components")
+
+    def analyze_keywords(self, user_question: str):
+        """Convenience wrapper to use shared keyword analysis utilities.
+
+        This avoids importing analysis logic directly in callers and keeps a
+        single integration point if we later need to adapt or mock behavior.
+        """
+        return analyze_keywords(user_question)
+
     def _call_lightrag_query(self, topic: str, user_prompt: str, state: Optional[str] = None):
         """
-        Chama query_topic do cliente LightRAG, suportando tanto implementations async quanto sync (mock).
+        Execute a LightRAG query with support for both async and sync implementations.
         - Se query_topic for coroutine function -> usa asyncio.run(...)
         - Caso contrário, chama diretamente e tenta adaptar argumentos.
         """
@@ -94,9 +125,59 @@ class MinimumWagePipeline:
         logger.info(f"Processando pergunta: '{user_question}'")
         
         clean_question = sanitize_user_input(user_question)
-        
+
+        # Lightweight keyword/topic analysis to inform routing heuristics
+        try:
+            analysis = self.analyze_keywords(clean_question)
+            logger.debug("Keyword analysis: suggested_topic=%s confidence=%.2f matched=%s",
+                         analysis.suggested_topic, analysis.confidence, analysis.matched_keywords)
+        except Exception:
+            analysis = None
+            logger.debug("Keyword analysis unavailable or failed; continuing without it")
+
         # Passo 1: Roteamento - decidir qual sistema usar
         routing_decision = self.router.route_question(clean_question)
+
+        # Heuristic override logic:
+        # - If analysis suggests a LightRAG topic AND the question also contains wage-related tokens,
+        #   prefer HYBRID (both SQL + LightRAG).
+        # - Otherwise, if router picked SQL but analysis strongly suggests LightRAG, switch to LightRAG.
+        try:
+            question_lower = clean_question.lower()
+            wage_tokens = ['wage', 'minimum', 'minimum wage', 'tipped', 'tip', 'cash', 'rate', 'salary']
+
+            has_wage_token = any(tok in question_lower for tok in wage_tokens)
+
+            # Check if LLM routing (separate) suggests LightRAG/hybrid as well
+            llm_hint = None
+            try:
+                llm_hint = self.router._llm_route_decision(clean_question)
+            except Exception:
+                llm_hint = None
+
+            if has_wage_token and (analysis and analysis.suggested_topic or (llm_hint and llm_hint.get('route') != QueryRoute.SQL)):
+                suggested_topic = (analysis.suggested_topic if analysis and analysis.suggested_topic else (llm_hint.get('topic') if llm_hint else None))
+                confidence = (analysis.confidence if analysis else (llm_hint.get('confidence') if llm_hint else 0.6))
+                logger.info("Overriding routing decision to HYBRID based on wage tokens + LightRAG signal: %s (%.2f)",
+                            suggested_topic, confidence)
+                routing_decision = {
+                    'route': QueryRoute.HYBRID,
+                    'reason': 'Hybrid override (wage + LightRAG signal)',
+                    'topic': suggested_topic,
+                    'confidence': confidence
+                }
+            elif (routing_decision and routing_decision.get('route') == QueryRoute.SQL
+                  and analysis and analysis.suggested_topic and analysis.confidence >= 0.6):
+                logger.info("Overriding routing decision to LightRAG based on keyword analysis: %s (%.2f)",
+                            analysis.suggested_topic, analysis.confidence)
+                routing_decision = {
+                    'route': QueryRoute.LIGHTRAG,
+                    'reason': 'Keyword analysis override',
+                    'topic': analysis.suggested_topic,
+                    'confidence': analysis.confidence
+                }
+        except Exception:
+            logger.debug("Failed to apply routing heuristic override; using original routing decision")
         logger.info(f"Decisão de roteamento: {routing_decision['route'].value} (confiança: {routing_decision['confidence']:.2f})")
         logger.info(f"Razão: {routing_decision.get('reason','-')}")
         
@@ -357,7 +438,7 @@ class MinimumWagePipeline:
         """Gera uma resposta em linguagem natural para resultados SQL"""
         try:
             system_prompt = get_response_generation_prompt(user_question, query_results)
-            print(system_prompt)
+            logger.debug("Response generation system prompt: %s", system_prompt)
             response = self.llm_client.generate_natural_response(
                 user_question,
                 system_prompt

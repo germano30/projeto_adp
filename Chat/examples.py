@@ -1,10 +1,18 @@
-"""Exemplos de uso do sistema de consulta de salários mínimos"""
+"""Demonstration module for minimum wage query system."""
+
+import logging
 
 from pipeline import create_pipeline
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
 
 def run_examples():
-    """Executa exemplos de diferentes tipos de consultas"""
+    """Execute demonstration queries across different query types."""
     
     pipeline = create_pipeline(use_mock_lightrag=True)
     
@@ -16,7 +24,6 @@ def run_examples():
         "What were the minimum wages in Florida from 2020 to 2024?",
     ]
     
-    # Exemplos de queries LightRAG
     lightrag_examples = [
         "Do agricultural workers have different minimum wage rules?",
         "What are the rest break requirements in California?",
@@ -25,59 +32,52 @@ def run_examples():
         "When must employers pay their workers?",
     ]
     
-    # Exemplos de queries híbridas
     hybrid_examples = [
         "What's the minimum wage for agricultural workers in California?",
         "Do entertainment workers in New York have special wage rules?",
         "What are the wage and break requirements for restaurant workers in Texas?",
     ]
     
-    print("="*80)
-    print("EXEMPLOS DE CONSULTAS SQL (Dados de Salário Direto)")
-    print("="*80 + "\n")
+    logger.info("Executing SQL Query Examples")
     
     for i, question in enumerate(sql_examples, 1):
-        print(f"\n[Exemplo {i}] {question}")
-        print("-"*80)
+        logger.info("Example %d: %s", i, question)
         result = pipeline.process_question(question)
         if result['success']:
-            print(f"Rota: {result['route']}")
-            print(f"Resposta: {result['response'][:200]}...")
+            logger.info("Route: %s", result['route'])
+            logger.info("Response: %s...", result['response'][:200])
         else:
-            print(f"Erro: {result['response']}")
-        print()
-    
-    print("\n" + "="*80)
-    print("EXEMPLOS DE CONSULTAS LIGHTRAG (Leis Trabalhistas)")
-    print("="*80 + "\n")
-    
+            logger.error("Error: %s", result['response'])
+
+    logger.info("%s", "\n" + "="*80)
+    logger.info("EXEMPLOS DE CONSULTAS LIGHTRAG (Leis Trabalhistas)")
+    logger.info("%s", "="*80 + "\n")
+
     for i, question in enumerate(lightrag_examples, 1):
-        print(f"\n[Exemplo {i}] {question}")
-        print("-"*80)
+        logger.info("[Exemplo %d] %s", i, question)
+        logger.info("%s", "-"*80)
         result = pipeline.process_question(question)
         if result['success']:
-            print(f"Rota: {result['route']}")
-            print(f"Tópico: {result.get('topic', 'N/A')}")
-            print(f"Resposta: {result['response'][:200]}...")
+            logger.info("Rota: %s", result['route'])
+            logger.info("Tópico: %s", result.get('topic', 'N/A'))
+            logger.info("Resposta: %s...", result['response'][:200])
         else:
-            print(f"Erro: {result['response']}")
-        print()
-    
-    print("\n" + "="*80)
-    print("EXEMPLOS DE CONSULTAS HÍBRIDAS (SQL + LightRAG)")
-    print("="*80 + "\n")
-    
+            logger.error("Erro: %s", result['response'])
+
+    logger.info("%s", "\n" + "="*80)
+    logger.info("EXEMPLOS DE CONSULTAS HÍBRIDAS (SQL + LightRAG)")
+    logger.info("%s", "="*80 + "\n")
+
     for i, question in enumerate(hybrid_examples, 1):
-        print(f"\n[Exemplo {i}] {question}")
-        print("-"*80)
+        logger.info("[Exemplo %d] %s", i, question)
+        logger.info("%s", "-"*80)
         result = pipeline.process_question(question)
         if result['success']:
-            print(f"Rota: {result['route']}")
-            print(f"Tópico: {result.get('topic', 'N/A')}")
-            print(f"Resposta: {result['response'][:200]}...")
+            logger.info("Rota: %s", result['route'])
+            logger.info("Tópico: %s", result.get('topic', 'N/A'))
+            logger.info("Resposta: %s...", result['response'][:200])
         else:
-            print(f"Erro: {result['response']}")
-        print()
+            logger.error("Erro: %s", result['response'])
 
 
 def test_routing():
@@ -86,9 +86,9 @@ def test_routing():
     
     router = get_query_router()
     
-    print("\n" + "="*80)
-    print("TESTE DO SISTEMA DE ROTEAMENTO")
-    print("="*80 + "\n")
+    logger.info("%s", "\n" + "="*80)
+    logger.info("TESTE DO SISTEMA DE ROTEAMENTO")
+    logger.info("%s", "="*80 + "\n")
     
     test_questions = [
         "What is the minimum wage in California?",
@@ -102,22 +102,22 @@ def test_routing():
     ]
     
     for question in test_questions:
-        print(f"\nPergunta: {question}")
+        logger.info("Pergunta: %s", question)
         decision = router.route_question(question)
-        print(f"  → Rota: {decision['route'].value}")
-        print(f"  → Razão: {decision['reason']}")
-        print(f"  → Tópico: {decision.get('topic', 'N/A')}")
-        print(f"  → Confiança: {decision['confidence']:.2%}")
+        logger.info("  → Rota: %s", decision['route'].value)
+        logger.info("  → Razão: %s", decision['reason'])
+        logger.info("  → Tópico: %s", decision.get('topic', 'N/A'))
+        logger.info("  → Confiança: %.2f%%", decision['confidence'] * 100)
 
 
 def demonstrate_mock_vs_real():
     """Demonstra a diferença entre mock e implementação real"""
     
-    print("\n" + "="*80)
-    print("MOCK vs IMPLEMENTAÇÃO REAL")
-    print("="*80 + "\n")
-    
-    print("""
+    logger.info("%s", "\n" + "="*80)
+    logger.info("MOCK vs IMPLEMENTAÇÃO REAL")
+    logger.info("%s", "="*80 + "\n")
+
+    logger.info("""
 O sistema está configurado com dois modos:
 
 1. MODO MOCK (Desenvolvimento):
@@ -177,16 +177,16 @@ if __name__ == "__main__":
         elif command == 'mock':
             demonstrate_mock_vs_real()
         else:
-            print(f"Comando desconhecido: {command}")
-            print("\nComandos disponíveis:")
-            print("  python examples.py examples      - Executa exemplos completos")
-            print("  python examples.py routing       - Testa sistema de roteamento")
-            print("  python examples.py mock          - Explica modo mock vs real")
+            logger.error("Comando desconhecido: %s", command)
+            logger.info("\nComandos disponíveis:")
+            logger.info("  python examples.py examples      - Executa exemplos completos")
+            logger.info("  python examples.py routing       - Testa sistema de roteamento")
+            logger.info("  python examples.py mock          - Explica modo mock vs real")
     else:
-        print("\nEscolha uma opção:")
-        print("1. Executar exemplos completos")
-        print("2. Testar roteamento")
-        print("3. Entender Mock vs Real")
+        logger.info("\nEscolha uma opção:")
+        logger.info("1. Executar exemplos completos")
+        logger.info("2. Testar roteamento")
+        logger.info("3. Entender Mock vs Real")
 
         choice = input("\nOpção (1-3): ").strip()
 
@@ -197,4 +197,4 @@ if __name__ == "__main__":
         elif choice == '3':
             demonstrate_mock_vs_real()
         else:
-            print("Opção inválida")
+            logger.error("Opção inválida")

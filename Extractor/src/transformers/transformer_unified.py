@@ -1,50 +1,126 @@
 """
-Transformador que unifica os datasets de salário padrão e tipped wages
-Cria a estrutura dimensional (Star Schema) com Dim_Footnotes normalizado
+Unified data transformer for minimum wage datasets.
+
+This module implements the transformation logic for creating a dimensional model
+(Star Schema) from various minimum wage data sources. It handles:
+- Standard minimum wage data
+- Tipped wage regulations
+- Footnotes normalization
+- Dimensional hierarchy creation
 """
-import pandas as pd
-import sys
-sys.path.append('..')
-from utils import generate_hash
-from config import WAGE_CATEGORIES, TIPPED_WAGE_TYPE
+
+import logging
 import re
+import sys
 import warnings
+from typing import Dict, Optional
+
+import pandas as pd
+
+sys.path.append('..')
+from config import TIPPED_WAGE_TYPE, WAGE_CATEGORIES
+from utils import generate_hash
+
+# Configure logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+# Suppress pandas warnings
 warnings.filterwarnings('ignore')
+
+
 class DataTransformer:
-    """Classe para transformar e unificar os datasets"""
+    """
+    Unified data transformer for creating dimensional model from wage datasets.
+    
+    This class handles the transformation of raw wage data into a normalized
+    dimensional model, implementing a star schema design with:
+    - Fact table for minimum wages
+    - Dimension tables for states, categories, and footnotes
+    - Bridge table for wage-footnote relationships
+    """
     
     def __init__(self, df_standard: pd.DataFrame, df_tipped: pd.DataFrame, youth_rules: pd.DataFrame):
+        """
+        Initialize the transformer with input datasets.
+
+        Parameters
+        ----------
+        df_standard : pd.DataFrame
+            Standard minimum wage dataset
+        df_tipped : pd.DataFrame
+            Tipped wage regulations dataset
+        youth_rules : pd.DataFrame
+            Youth employment rules dataset
+        """
         self.df_standard = df_standard
         self.df_tipped = df_tipped
+        self.dim_youth_rules = youth_rules
         
-        # Tabelas dimensionais
+        # Initialize dimension and fact tables
         self.dim_states = None
         self.dim_categories = None
         self.dim_footnotes = None
         self.fact_minimum_wage = None
         self.bridge_wage_footnote = None
-        self.dim_youth_rules = youth_rules
 
-
-    def normalize_text(self,text: str) -> str:
-        """Normaliza o texto para evitar duplicatas falsas."""
+    def normalize_text(self, text: str) -> str:
+        """
+        Normalize text content to ensure consistency and prevent false duplicates.
+        
+        Performs the following normalizations:
+        - Removes leading/trailing whitespace
+        - Standardizes internal whitespace
+        - Converts to lowercase
+        - Standardizes punctuation spacing
+        - Removes line breaks
+        
+        Parameters
+        ----------
+        text : str
+            Text to normalize
+            
+        Returns
+        -------
+        str
+            Normalized text
+        """
         if not text:
             return ""
-        text = text.strip()                 # remove espaços no início/fim
-        text = re.sub(r'\s+', ' ', text)   # substitui múltiplos espaços por 1
-        text = text.replace('\n', ' ')     # remove quebras de linha
-        text = text.lower()                 # deixa tudo minúsculo
-        text = re.sub(r'\s*\.\s*', '. ', text)  # padroniza pontos
-        text = re.sub(r'\s*,\s*', ', ', text)   # padroniza vírgulas
-        text = re.sub(r'\s*;\s*', '; ', text)   # padroniza ponto e vírgula
+            
+        text = text.strip()
+        text = re.sub(r'\s+', ' ', text)
+        text = text.replace('\n', ' ')
+        text = text.lower()
+        text = re.sub(r'\s*\.\s*', '. ', text)
+        text = re.sub(r'\s*,\s*', ', ', text)
+        text = re.sub(r'\s*;\s*', '; ', text)
+        
         return text.strip()
 
     
-    def create_dim_footnotes_unified(self, all_footnotes_dict: dict) -> pd.DataFrame:
+    def create_dim_footnotes_unified(self, all_footnotes_dict: Dict[str, str]) -> pd.DataFrame:
         """
-        Cria Dim_Footnotes unificada de todos os datasets
+        Create unified footnotes dimension table from all datasets.
         
-        Args:
+        This method consolidates footnotes from multiple sources into a single
+        dimensional table, ensuring deduplication and consistent formatting.
+        
+        Parameters
+        ----------
+        all_footnotes_dict : Dict[str, str]
+            Dictionary mapping footnote keys to their text content
+        
+        Returns
+        -------
+        pd.DataFrame
+            Normalized footnotes dimension table with columns:
+            - ID: Unique identifier
+            - FootnoteKey: Reference key
+            - FootnoteText: Normalized content
             all_footnotes_dict: {footnote_key: footnote_text}
         
         Returns:
@@ -85,11 +161,24 @@ class DataTransformer:
         return df
     
     def transform_tipped_to_long(self) -> pd.DataFrame:
-        """Transforma dataset tipped para formato long"""        
+        """
+        Transform tipped wage dataset from wide to long format.
+        
+        This method restructures the tipped wage data to create separate records for:
+        - Combined tipped rates (total with tips)
+        - Tip credits (maximum allowed)
+        - Cash wages (minimum required)
+        
+        Each record maintains reference to notes and source information.
+        
+        Returns
+        -------
+        pd.DataFrame
+            Long-format tipped wage dataset with standardized columns
+        """        
         df_long = []
         for _, row in self.df_tipped.iterrows():
-            # Notes e footnotes já vêm separados do scraper
-            notes_clean = row.get('notes')    
+            notes_clean = row.get('notes')  # Notes are pre-separated by scraper
                     
             base_row = {
                 'jurisdiction': row['jurisdiction'],
@@ -198,16 +287,12 @@ class DataTransformer:
         for _, row in self.footnote_refs_by_wage.iterrows():
             wage_id = row['wage_id']
             footnote_refs = row.get('footnote_wage')
-            if wage_id == 3102 or wage_id == 3103:
-                print(row)
             if isinstance(footnote_refs, str):
                 footnote_refs = [footnote_refs]
             elif not isinstance(footnote_refs, list):
                 continue
             if len(footnote_refs)==0:
                 continue
-            if wage_id == 3102 or wage_id == 3103:
-                print(footnote_refs)
             for ref in footnote_refs:
                 # Buscar footnote_id correspondente no Dim_Footnotes
                 category_filter = 1 if row['category_id'] == 1 else 2
@@ -275,10 +360,37 @@ class DataTransformer:
                 return str(x)
 
         self.dim_youth_rules['footnotes'] = self.dim_youth_rules['footnotes'].apply(normalize_footnote) 
-        print(self.dim_youth_rules.info())
     
-    def transform(self, standard_footnotes: dict = None, tipped_footnotes: dict = None):
-        """Executa o pipeline completo de transformação"""
+    def transform(self, standard_footnotes: Optional[Dict[str, str]] = None, 
+                 tipped_footnotes: Optional[Dict[str, str]] = None) -> Dict:
+        """
+        Execute the complete transformation pipeline.
+        
+        This method coordinates the entire ETL process:
+        1. Transform datasets to long format
+        2. Standardize column structures
+        3. Create dimensional tables
+        4. Generate fact table
+        5. Create bridge relationships
+        
+        Parameters
+        ----------
+        standard_footnotes : Dict[str, str], optional
+            Footnotes from standard wage dataset
+        tipped_footnotes : Dict[str, str], optional
+            Footnotes from tipped wage dataset
+            
+        Returns
+        -------
+        Dict
+            Dictionary containing all generated tables:
+            - dim_youth_rules: Youth employment regulations
+            - dim_states: State dimension
+            - dim_categories: Wage category dimension
+            - dim_footnotes: Footnote dimension
+            - fact: Minimum wage fact table
+            - bridge: Wage-footnote bridge table
+        """
         
         # Guardar footnotes para usar depois
         self.standard_footnotes = standard_footnotes or {}
@@ -330,36 +442,52 @@ class DataTransformer:
         }
 
 
-def main():
-    """Função principal para teste"""
-    # Criar dados de exemplo]
+def main() -> Dict:
+    """
+    Execute a test transformation of minimum wage data.
+    
+    This function demonstrates the complete transformation pipeline:
+    1. Extract standard and tipped wage data
+    2. Process both datasets
+    3. Transform into dimensional model
+    
+    Returns
+    -------
+    Dict
+        Dictionary containing all transformed dimensional tables
+    """
+    from src.scrapers.scrapper_minimum_wage import MinimumWageScraper
+    from src.scrapers.scrapper_tipped_wage import TippedWageScraper
+    from src.processors.processor_standard_wage import StandardWageProcessor
+    from src.processors.processor_tipped_wage import TippedWageProcessor
+    
+    logger.info("Beginning standard wage extraction")
     scraper_standard = MinimumWageScraper()
     df_standard_raw = scraper_standard.scrape()
     processor_standard = StandardWageProcessor(df_standard_raw, scraper_standard.footnotes_dict)
     df_standard_processed = processor_standard.process()
     
+    logger.info("Beginning tipped wage extraction")
     scraper_tipped = TippedWageScraper()
     df_tipped_raw = scraper_tipped.scrape(
-            start_year=2003,
-            end_year=2025
-        )
+        start_year=2003,
+        end_year=2025
+    )
     
-
-
-    
-        # 2. Processar tipped wages
+    logger.info("Processing tipped wage data")
     processor_tipped = TippedWageProcessor(df_tipped_raw, scraper_tipped.footnotes_dict)
     df_tipped_processed = processor_tipped.process()
-
-
-  
+    
+    logger.info("Executing dimensional transformation")
     transformer = DataTransformer(df_standard_processed, df_tipped_processed)
     result = transformer.transform(
         standard_footnotes=processor_standard.footnotes_dict,
         tipped_footnotes=processor_tipped.footnotes_dict
     )
-
     
+    logger.info("Transformation completed successfully")
     return result
+
+
 if __name__ == "__main__":
     main()

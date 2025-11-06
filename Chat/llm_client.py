@@ -2,7 +2,8 @@ import logging
 import os
 import google.generativeai as genai
 from typing import Optional
-
+import dotenv
+dotenv.load_dotenv()
 logger = logging.getLogger(__name__)
 
 GEMINI_MODEL_NAME = "gemini-2.5-flash-lite"
