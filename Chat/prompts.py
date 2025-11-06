@@ -296,7 +296,6 @@ def format_results_for_prompt(results):
 
     formatted = []
     for idx, row in enumerate(results, 1):
-        # Desempacotando com youth fields
         (state, year, category_name, category_type, base_wage, tip_credit, 
          min_cash, effective_date, frequency, notes, footnote, 
          youth_rule, youth_cert_type, youth_notes, youth_req_level, 
@@ -323,7 +322,6 @@ Result {idx}:
         if footnote:
             result_str += f"\n- Footnote: {footnote[:200]}..." if len(footnote) > 200 else f"\n- Footnote: {footnote}"
         
-        # Adicionar informações de youth rules se disponíveis
         if youth_rule or youth_cert_type:
             result_str += "\n\nYouth/Minor Rules:"
             if youth_cert_type:

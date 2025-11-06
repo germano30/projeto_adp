@@ -1,4 +1,3 @@
-# examples.py
 """Exemplos de uso do sistema de consulta de salários mínimos"""
 
 from pipeline import create_pipeline
@@ -164,85 +163,6 @@ CREATE INDEX idx_lightrag_embedding ON lightrag_documents USING ivfflat (embeddi
     """)
 
 
-def show_pipeline_architecture():
-    """Mostra a arquitetura do pipeline"""
-    
-    print("\n" + "="*80)
-    print("ARQUITETURA DO PIPELINE")
-    print("="*80 + "\n")
-    
-    print("""
-┌─────────────────────────────────────────────────────────────────┐
-│                      USER QUESTION                              │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    QUERY ROUTER                                 │
-│  - Analisa keywords                                             │
-│  - Usa LLM para decisão inteligente                             │
-│  - Retorna: SQL, LightRAG ou HYBRID                             │
-└────────────┬──────────────────┬────────────────┬────────────────┘
-             │                  │                │
-      ┌──────▼──────┐    ┌──────▼──────┐  ┌─────▼──────┐
-      │  SQL ROUTE  │    │LIGHTRAG ROUTE│  │HYBRID ROUTE│
-      └──────┬──────┘    └──────┬──────┘  └─────┬──────┘
-             │                  │                │
-             │                  │                └──────┬──────────┐
-             ▼                  ▼                       ▼          ▼
-    ┌────────────────┐  ┌────────────────┐    ┌─────────┐  ┌──────────┐
-    │  LLM: Generate │  │LightRAG: Query │    │   SQL   │  │LightRAG  │
-    │  SQL Conditions│  │     Topic      │    │  Query  │  │  Query   │
-    └────────┬───────┘  └────────┬───────┘    └────┬────┘  └────┬─────┘
-             │                   │                  │            │
-             ▼                   │                  └──────┬─────┘
-    ┌────────────────┐           │                         │
-    │   PostgreSQL   │           │                         │
-    │  Execute Query │           │                         ▼
-    └────────┬───────┘           │              ┌───────────────────┐
-             │                   │              │   LLM: Generate   │
-             ▼                   ▼              │ Hybrid Response   │
-    ┌────────────────┐  ┌────────────────┐     └─────────┬─────────┘
-    │  LLM: Generate │  │  LLM: Generate │               │
-    │  SQL Response  │  │LightRAG Response│               │
-    └────────┬───────┘  └────────┬───────┘               │
-             │                   │                        │
-             └───────────────────┴────────────────────────┘
-                                 │
-                                 ▼
-                    ┌─────────────────────────┐
-                    │    FINAL RESPONSE       │
-                    │   (Natural Language)    │
-                    └─────────────────────────┘
-
-COMPONENTES PRINCIPAIS:
-
-1. QueryRouter: Decide qual sistema usar
-   - Análise de keywords
-   - Decisão via LLM
-   - Confiança da decisão
-
-2. LLM Client: Interação com modelo de linguagem
-   - Geração de condições SQL
-   - Geração de respostas naturais
-   - Suporta múltiplos modelos
-
-3. Database Manager: Gerencia PostgreSQL
-   - Conexões seguras
-   - Execução de queries
-   - Tratamento de erros
-
-4. LightRAG Client: Consulta conhecimento adicional
-   - Query por tópico
-   - Busca vetorial (opcional)
-   - Suporta modo mock
-
-5. Pipeline: Orquestra todo o fluxo
-   - Roteamento inteligente
-   - Processamento paralelo (híbrido)
-   - Logging completo
-    """)
-
 
 if __name__ == "__main__":
     import sys
@@ -254,8 +174,6 @@ if __name__ == "__main__":
             run_examples()
         elif command == 'routing':
             test_routing()
-        elif command == 'architecture':
-            show_pipeline_architecture()
         elif command == 'mock':
             demonstrate_mock_vs_real()
         else:
@@ -263,24 +181,20 @@ if __name__ == "__main__":
             print("\nComandos disponíveis:")
             print("  python examples.py examples      - Executa exemplos completos")
             print("  python examples.py routing       - Testa sistema de roteamento")
-            print("  python examples.py architecture  - Mostra arquitetura do sistema")
             print("  python examples.py mock          - Explica modo mock vs real")
     else:
         print("\nEscolha uma opção:")
         print("1. Executar exemplos completos")
         print("2. Testar roteamento")
-        print("3. Ver arquitetura")
-        print("4. Entender Mock vs Real")
-        
-        choice = input("\nOpção (1-4): ").strip()
-        
+        print("3. Entender Mock vs Real")
+
+        choice = input("\nOpção (1-3): ").strip()
+
         if choice == '1':
             run_examples()
         elif choice == '2':
             test_routing()
         elif choice == '3':
-            show_pipeline_architecture()
-        elif choice == '4':
             demonstrate_mock_vs_real()
         else:
             print("Opção inválida")

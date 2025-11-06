@@ -1,4 +1,3 @@
-# router.py
 """Sistema de roteamento para decidir entre SQL direto ou LightRAG"""
 
 import logging
@@ -51,13 +50,11 @@ class QueryRouter:
                 'confidence': 0.9
             }
         
-        # Se detectou keywords, usa LLM para decisão mais sofisticada
         llm_routing = self._llm_route_decision(user_question)
         
         if llm_routing:
             return llm_routing
         
-        # Fallback: se LLM falhar, usa análise de keywords
         logger.warning("LLM routing falhou, usando fallback de keywords")
         if keyword_analysis['suggested_topic']:
             return {
@@ -87,12 +84,10 @@ class QueryRouter:
         question_lower = user_question.lower()
         matched_keywords = []
         
-        # Verifica keywords do LightRAG
         for keyword in LIGHTRAG_KEYWORDS:
             if keyword.lower() in question_lower:
                 matched_keywords.append(keyword)
         
-        # Tenta identificar tópico específico
         suggested_topic = None
         
         # Employment types

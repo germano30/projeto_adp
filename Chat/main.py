@@ -7,7 +7,6 @@ from typing import Optional
 from pipeline import create_pipeline
 from utils import format_query_results
 
-# Configurar logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -41,7 +40,6 @@ def print_result(result: dict, show_details: bool = False):
     print("\n" + "="*80)
     
     if result['success']:
-        # Mostra badge da rota usada
         route_badge = {
             'sql': '🔍 SQL',
             'lightrag': '📚 LightRAG',
@@ -69,7 +67,7 @@ def print_result(result: dict, show_details: bool = False):
             if 'sources' in result and result['sources']:
                 print(f"Fontes: {', '.join(result['sources'][:3])}")
     else:
-        print("✗ ERRO:")
+        print("ERRO:")
         print("="*80)
         print(result['response'])
         if 'error' in result:
@@ -108,7 +106,6 @@ def interactive_mode(pipeline):
                 print(f"\nDetalhes técnicos {status}\n")
                 continue
             
-            # Processa a pergunta
             result = pipeline.process_question(user_input)
             print_result(result, show_details)
             
@@ -165,7 +162,6 @@ def main():
     """Função principal da aplicação"""
     print_banner()
     
-    # Cria o pipeline
     try:
         pipeline = create_pipeline()
         logger.info("Pipeline criado com sucesso")
@@ -174,16 +170,13 @@ def main():
         print(f"\n✗ Erro ao inicializar o sistema: {e}\n")
         sys.exit(1)
     
-    # Parseia argumentos da linha de comando
     if len(sys.argv) > 1:
         command = sys.argv[1].lower()
         
         if command in ['test', '-t', '--test']:
-            # Modo de teste
             test_mode(pipeline)
         
         elif command in ['help', '-h', '--help']:
-            # Ajuda
             print("""
 Uso: python main.py [comando] [opções]
 
@@ -201,7 +194,6 @@ Exemplos:
             """)
         
         elif command in ['-q', '--query']:
-            # Modo de consulta única
             if len(sys.argv) < 3:
                 print("\n✗ Erro: Pergunta não fornecida\n")
                 print("Uso: python main.py -q \"sua pergunta aqui\"")
@@ -216,7 +208,6 @@ Exemplos:
             print("Use 'python main.py help' para ver os comandos disponíveis\n")
     
     else:
-        # Modo interativo (padrão)
         interactive_mode(pipeline)
 
 

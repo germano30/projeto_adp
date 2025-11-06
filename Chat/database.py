@@ -144,7 +144,6 @@ class DatabaseManager:
             return []
 
 
-# Função auxiliar para criar instância única do DatabaseManager
 _db_manager = None
 
 def get_db_manager() -> DatabaseManager:

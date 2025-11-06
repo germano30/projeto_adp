@@ -1,45 +1,20 @@
----
 mode: 'agent'
-description: 'Create a comprehensive README.md file for the project'
+description: 'Create a README.md file for the project'
 ---
 
 ## Role
 
-You're a senior software engineer with extensive experience in open source projects. You create appealing, informative, and easy-to-read README files.
+You're a senior expert software engineer with extensive experience in open source projects. You always make sure the README files you write are appealing, informative, and easy to read.
 
 ## Task
 
-1. Review the entire project workspace and codebase
-2. Create a comprehensive README.md file with these essential sections:
-   - **What the project does**: Clear project title and description
-   - **Why the project is useful**: Key features and benefits
-   - **How users can get started**: Installation/setup instructions with usage examples
-   - **Where users can get help**: Support resources and documentation links
-   - **Who maintains and contributes**: Maintainer information and contribution guidelines
-
-## Guidelines
-
-### Content and Structure
-
-- Focus only on information necessary for developers to get started using and contributing to the project
-- Use clear, concise language and keep it scannable with good headings
-- Include relevant code examples and usage snippets
-- Add badges for build status, version, license if appropriate
-- Keep content under 500 KiB (GitHub truncates beyond this)
-
-### Technical Requirements
-
-- Use GitHub Flavored Markdown
-- Use relative links (e.g., `docs/CONTRIBUTING.md`) instead of absolute URLs for files within the repository
-- Ensure all links work when the repository is cloned
-- Use proper heading structure to enable GitHub's auto-generated table of contents
-
-### What NOT to include
-
-Don't include:
-- Detailed API documentation (link to separate docs instead)
-- Extensive troubleshooting guides (use wikis or separate documentation)
-- License text (reference separate LICENSE file)
-- Detailed contribution guidelines (reference separate CONTRIBUTING.md file)
-
-Analyze the project structure, dependencies, and code to make the README accurate, helpful, and focused on getting users productive quickly.
+1. Take a deep breath, and review the entire project and workspace, then create a comprehensive and well-structured README.md file for the project.
+2. Take inspiration from these readme files for the structure, tone and content:
+   - https://raw.githubusercontent.com/Azure-Samples/serverless-chat-langchainjs/refs/heads/main/README.md
+   - https://raw.githubusercontent.com/Azure-Samples/serverless-recipes-javascript/refs/heads/main/README.md
+   - https://raw.githubusercontent.com/sinedied/run-on-output/refs/heads/main/README.md
+   - https://raw.githubusercontent.com/sinedied/smoke/refs/heads/main/README.md
+3. Do not overuse emojis, and keep the readme concise and to the point.
+4. Do not include sections like "LICENSE", "CONTRIBUTING", "CHANGELOG", etc. There are dedicated files for those sections.
+5. Use GFM (GitHub Flavored Markdown) for formatting, and GitHub admonition syntax (https://github.com/orgs/community/discussions/16925) where appropriate.
+6. If you find a logo or icon for the project, use it in the readme's header.

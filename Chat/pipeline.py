@@ -1,4 +1,3 @@
-# pipeline.py
 """Pipeline principal para processar perguntas sobre salários mínimos"""
 
 import logging
@@ -416,19 +415,16 @@ class MinimumWagePipeline:
             'router': True  # Router não precisa de conexão externa
         }
         
-        # Testa banco de dados
         try:
             results['database'] = self.db_manager.test_connection()
         except Exception as e:
             logger.error(f"Erro ao testar banco de dados: {e}")
         
-        # Testa LLM
         try:
             results['llm'] = self.llm_client.test_connection()
         except Exception as e:
             logger.error(f"Erro ao testar LLM: {e}")
         
-        # Testa LightRAG (suporta async ou sync)
         try:
             fn = getattr(self.lightrag_client, "test_connection", None)
             if fn is None:

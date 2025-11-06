@@ -1,4 +1,3 @@
-# utils.py
 """Funções auxiliares para o sistema de consulta de salários mínimos"""
 
 import json
@@ -6,7 +5,6 @@ import re
 from typing import Optional, Dict, List, Tuple, Any
 import logging
 
-# Configurar logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -21,11 +19,9 @@ def extract_json_from_response(text: str) -> Optional[Dict]:
     Returns:
         Dict com o JSON parseado ou None se falhar
     """
-    # Remove markdown code blocks se existirem
     text = re.sub(r'```json\s*', '', text)
     text = re.sub(r'```\s*', '', text)
     
-    # Tenta encontrar JSON no texto
     json_match = re.search(r'\{.*\}', text, re.DOTALL)
     if json_match:
         try:
@@ -87,7 +83,6 @@ def build_sql_query(base_query: str, conditions: Dict) -> str:
     if sql_where:
         final_query += " " + sql_where.strip()
     
-    # Adiciona ORDER BY para organizar os resultados
     final_query += " ORDER BY dimstate.statename, factminimumwage.year DESC, dimcategory.categorytype"
     
     logger.info(f"Query SQL gerada: {final_query}")

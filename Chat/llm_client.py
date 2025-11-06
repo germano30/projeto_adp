@@ -3,11 +3,8 @@ import os
 import google.generativeai as genai
 from typing import Optional
 
-from config import GOOGLE_API_KEY 
-
 logger = logging.getLogger(__name__)
 
-# O modelo que usaremos (rápido, inteligente e ótimo com JSON)
 GEMINI_MODEL_NAME = "gemini-2.5-flash-lite"
 
 class LLMClient:
@@ -21,28 +18,22 @@ class LLMClient:
             api_key: Sua chave de API do Google AI Studio.
         """
         try:
-            # Tenta pegar a chave do argumento, depois do config.py, depois do ambiente
-            self.api_key = api_key or GOOGLE_API_KEY or os.environ.get("GOOGLE_API_KEY")
+            self.api_key =os.environ.get("GOOGLE_API_KEY")
             
             if not self.api_key:
                 raise ValueError("Nenhuma chave de API do Google foi encontrada.")
                 
             genai.configure(api_key=self.api_key)
             
-            # --- 1. Inicializa o modelo ---
-            # Vamos configurar o JSON Mode para o extrator
             json_extraction_config = {
-                # --- 2. A MÁGICA: FORÇAR SAÍDA JSON ---
                 "response_mime_type": "application/json",
             }
             
-            # Modelo para extração de JSON
             self.extraction_model = genai.GenerativeModel(
                 GEMINI_MODEL_NAME,
                 generation_config=json_extraction_config
             )
             
-            # Modelo para resposta de texto normal
             self.text_model = genai.GenerativeModel(GEMINI_MODEL_NAME)
             
             self.chat_session = self.text_model.start_chat(history=[])
@@ -65,8 +56,6 @@ class LLMClient:
         try:
             logger.info(f"Gerando condições SQL (Gemini API) para: '{user_question}'")
             
-            # --- 3. Combinamos os prompts para o Gemini ---
-            # Gemini funciona melhor com o prompt de sistema + usuário em uma única chamada
             full_prompt = f"{system_prompt}\n\nPERGUNTA DO USUÁRIO:\n{user_question}"
             
             response = self.extraction_model.generate_content(
@@ -74,7 +63,6 @@ class LLMClient:
                 request_options={"timeout": 60} # Timeout de 60s
             )
             
-            # O 'response.text' já será uma string JSON GARANTIDA
             result_json = response.text
             
             logger.info("Condições SQL (Gemini API) geradas com sucesso.")
@@ -98,11 +86,8 @@ class LLMClient:
         try:
             logger.info("Gerando resposta natural (Gemini API)")
             
-            # O system_prompt aqui provavelmente conterá os dados do SQL
-            # e a pergunta original do usuário.
             full_prompt = f"{system_prompt}\n\nCom base nisso, responda à pergunta original do usuário:\n{user_question}"
             
-            # Usamos o modelo de texto normal (sem JSON mode)
             response = self.text_model.generate_content(
                 full_prompt,
                 request_options={"timeout": 60}
@@ -117,8 +102,6 @@ class LLMClient:
             logger.exception(f"Erro ao gerar resposta natural (Gemini API): {e}")
             return None
 
-# (Sua função get_llm_client() continua igual, 
-# mas agora ela inicializa o novo LLMClient)
 
 _llm_client = None
 

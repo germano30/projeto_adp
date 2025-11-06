@@ -1,4 +1,3 @@
-# lightrag_client.py
 """Cliente para interação com LightRAG armazenado em PostgreSQL"""
 import dotenv
 dotenv.load_dotenv()
@@ -12,12 +11,9 @@ import functools
 import numpy as np
 from typing import Optional, List, Dict
 from lightrag import LightRAG
-from lightrag.llm.openai import gpt_4o_mini_complete, openai_embed
 import asyncio
 
 gemini_api_key = os.getenv("GEMINI_API_KEY")
-
-from config import DATABASE_CONFIG
 
 logger = logging.getLogger(__name__)
 logging.getLogger("lightrag").setLevel(logging.WARNING)
