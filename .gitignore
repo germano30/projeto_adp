@@ -1,4 +1,6 @@
 # Python
+.env
+**/.env
 __pycache__/
 *.py[cod]
 *$py.class
@@ -37,4 +39,3 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
-.env
