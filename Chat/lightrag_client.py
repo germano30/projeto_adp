@@ -1,31 +1,81 @@
 # lightrag_client.py
 """Cliente para interação com LightRAG armazenado em PostgreSQL"""
-
+import dotenv
+dotenv.load_dotenv()
+from sentence_transformers import SentenceTransformer
+import os
+from google import genai
+from google.genai import types
 import logging
+from lightrag.utils import EmbeddingFunc
+import functools 
+import numpy as np
 from typing import Optional, List, Dict
 from lightrag import LightRAG
 from lightrag.llm.openai import gpt_4o_mini_complete, openai_embed
 import asyncio
 
+gemini_api_key = os.getenv("GEMINI_API_KEY")
 
 from config import DATABASE_CONFIG
 
 logger = logging.getLogger(__name__)
-
+logging.getLogger("lightrag").setLevel(logging.WARNING)
 
 class LightRAGClient:
     
     def __init__(self, working_dir: str = "./lightrag_storage"):
         self.working_dir = working_dir
         self.rag = LightRAG(
-            working_dir=working_dir,
-            llm_model_func=gpt_4o_mini_complete,
-            embedding_func=openai_embed
+            kv_storage="PGKVStorage",
+            vector_storage="PGVectorStorage",
+            graph_storage="PGGraphStorage",
+            doc_status_storage="PGDocStatusStorage",
+            llm_model_func=self.llm_model_func,
+            embedding_func=EmbeddingFunc(
+                embedding_dim=384,    
+                max_token_size=8192,
+                func=self.embedding_func,
+            ),
+            vector_db_storage_cls_kwargs={"embed_dim": 384}
         )
-        # Inicializa storages
+        self.embedding_model = SentenceTransformer(
+            "BAAI/bge-large-en-v1.5", 
+            device='cpu'
+        )
         asyncio.run(self.rag.initialize_storages())
 
+    async def embedding_func(self, texts: list[str]) -> np.ndarray:
+        loop = asyncio.get_event_loop()
+        
+        encode_func_with_kwargs = functools.partial(
+            self.embedding_model.encode, 
+            convert_to_numpy=True
+        )
+        
+        embeddings = await loop.run_in_executor(
+            None, encode_func_with_kwargs, texts
+        )
+        return embeddings
     
+    async def llm_model_func(
+        self, prompt, system_prompt=None, history_messages=[], keyword_extraction=False, **kwargs
+    ) -> str:
+        client = genai.Client(api_key=gemini_api_key)
+        if history_messages is None:
+            history_messages = []
+        combined_prompt = ""
+        if system_prompt:
+            combined_prompt += f"{system_prompt}\n"
+        for msg in history_messages:
+            combined_prompt += f"{msg['role']}: {msg['content']}\n"
+        combined_prompt += f"user: {prompt}"
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=[combined_prompt],
+            config=types.GenerateContentConfig(max_output_tokens=500, temperature=0.1),
+        )
+        return response.text
     async def query_topic(self, topic: str, state: str = None):
         """
         Faz uma consulta assíncrona ao LightRAG usando aquery(),

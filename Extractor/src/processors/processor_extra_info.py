@@ -11,8 +11,7 @@ import numpy as np
 import asyncio
 from google import genai
 from google.genai import types
-import functools  # Necessário para o fixo do embedding_func
-import torch      # Necessário para o fixo da CPU
+import functools
 
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 

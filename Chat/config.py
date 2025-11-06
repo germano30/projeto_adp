@@ -59,6 +59,23 @@ Table: BridgeFactMinimumWageFootnote (Links wages to footnotes)
 - WageID (int, FK to FactMinimumWage.ID)
 - FootnoteID (int, FK to DimFootnote.ID)
 - Context (text, specific context for this footnote)
+
+Table: DimYouthRules (Youth minimum wage rules)
+- ID (int, primary key)
+- StateName (varchar(100))
+- Year (int)
+- CertificateType (varchar(50) - Employment / Age)
+- RuleDescription (text, description of the rule)
+- IsLabor (int, 1 = Issued by Labor Department, 0 = Not issued by Labor)
+- IsSchool (int, 1 = Issued by School, 0 = Not issued by School)
+- RequirementLevel (float, 1 = Mandated by law, 2 = Available on request, 3 = Issued as practice)
+- AgeMin (int, minimum age for the rule)
+- AgeMax (int, maximum age for the rule)
+- Notes (text, additional notes)
+- Footnote (varchar(10), footnote reference)
+- FootnoteText (text, footnote content)
+
+IMPORTANT: Youth rules are independent of wage categories and apply across all wage types.
 """
 
 BASE_QUERY = """
@@ -74,6 +91,12 @@ SELECT
     dimfrequency.description as frequency,
     factminimumwage.notes,
     dimfootnote.footnotetext,
+    dimyouthrules.ruledescription as youth_rule,
+    dimyouthrules.certificatetype as youth_certificate_type,
+    dimyouthrules.notes as youth_notes,
+    dimyouthrules.requirementlevel as youth_requirement_level,
+    dimyouthrules.islabor as youth_issued_by_labor,
+    dimyouthrules.isschool as youth_issued_by_school,
     factminimumwage.sourceurl
 FROM factminimumwage
 INNER JOIN dimstate ON factminimumwage.stateid = dimstate.id
@@ -81,6 +104,7 @@ INNER JOIN dimcategory ON factminimumwage.categoryid = dimcategory.id
 INNER JOIN dimfrequency ON factminimumwage.frequencyid = dimfrequency.id
 LEFT JOIN bridgefactminimumwagefootnote ON factminimumwage.id = bridgefactminimumwagefootnote.wageid
 LEFT JOIN dimfootnote ON bridgefactminimumwagefootnote.footnoteid = dimfootnote.id
+LEFT JOIN dimyouthrules ON dimstate.statename = dimyouthrules.statename AND factminimumwage.year = dimyouthrules.year
 WHERE 1=1
 """
 
@@ -105,6 +129,13 @@ WAGE_CATEGORIES = {
 }
 
 SQL_GENERATION_EXAMPLES = """
+CRITICAL INSTRUCTIONS FOR YOUTH/MINOR QUERIES:
+- Youth rules are INDEPENDENT of wage categories - they apply to all wage types
+- When user asks about "youth", "minors", "young workers", "child labor" generally: DO NOT filter by certificatetype
+- Only filter certificatetype when user SPECIFICALLY mentions "employment certificate" OR "age certificate"
+- The LEFT JOIN with dimyouthrules automatically includes all relevant youth data
+- CertificateType values are mutually exclusive - NEVER combine them with AND
+
 EXAMPLES:
 
 User: "What is the minimum wage in California?"
@@ -151,6 +182,69 @@ Output:
   "years": [2020, 2021, 2022, 2023],
   "category_type": "standard",
   "sql_where": "AND dimstate.statename = 'New York' AND factminimumwage.year IN (2020, 2021, 2022, 2023) AND dimcategory.categorytype = 'standard'"
+}
+
+User: "What are the youth wage rules in Oregon?"
+Output:
+{
+  "states": ["Oregon"],
+  "years": [2024],
+  "category_type": "standard",
+  "sql_where": "AND dimstate.statename = 'Oregon' AND factminimumwage.year = 2024 AND dimcategory.categorytype = 'standard'"
+}
+
+User: "How do minor work rules differ across states?"
+Output:
+{
+  "states": [],
+  "years": [2024],
+  "category_type": "standard",
+  "sql_where": "AND factminimumwage.year = 2024 AND dimcategory.categorytype = 'standard'"
+}
+
+User: "What are employment certificate requirements in Nevada?"
+Output:
+{
+  "states": ["Nevada"],
+  "years": [2024],
+  "category_type": "standard",
+  "sql_where": "AND dimstate.statename = 'Nevada' AND factminimumwage.year = 2024 AND dimcategory.categorytype = 'standard' AND dimyouthrules.certificatetype LIKE '%Employment%'"
+}
+
+User: "Show me age certificate states"
+Output:
+{
+  "states": [],
+  "years": [2024],
+  "category_type": "standard",
+  "sql_where": "AND factminimumwage.year = 2024 AND dimcategory.categorytype = 'standard' AND dimyouthrules.certificatetype LIKE '%Age%'"
+}
+
+User: "Do I need a work permit for a 16 year old in California?"
+Output:
+{
+  "states": ["California"],
+  "years": [2024],
+  "category_type": "standard",
+  "sql_where": "AND dimstate.statename = 'California' AND factminimumwage.year = 2024 AND dimcategory.categorytype = 'standard'"
+}
+
+User: "What are child labor laws in Texas?"
+Output:
+{
+  "states": ["Texas"],
+  "years": [2024],
+  "category_type": "standard",
+  "sql_where": "AND dimstate.statename = 'Texas' AND factminimumwage.year = 2024 AND dimcategory.categorytype = 'standard'"
+}
+
+User: "Compare youth employment rules between California and New York"
+Output:
+{
+  "states": ["California", "New York"],
+  "years": [2024],
+  "category_type": "standard",
+  "sql_where": "AND dimstate.statename IN ('California', 'New York') AND factminimumwage.year = 2024 AND dimcategory.categorytype = 'standard'"
 }
 """
 
@@ -213,4 +307,10 @@ Output: {"route": "lightrag", "reason": "Query about prevailing wages", "topic":
 
 User: "Show me minimum wages for California, Texas, and Florida from 2020-2024"
 Output: {"route": "sql", "reason": "Historical wage data comparison"}
+
+User: "What are youth work rules in Oregon?"
+Output: {"route": "sql", "reason": "Youth rules are in the database"}
+
+User: "Do minors need work permits in Nevada?"
+Output: {"route": "sql", "reason": "Youth certificate requirements are in the database"}
 """
