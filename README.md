@@ -55,46 +55,47 @@ This project implements a sophisticated solution that enables users to query US 
 - Access to Gemini API (for Gemini models)
 
 ### Database Setup
+For complete PostgreSQL 16 installation and configuration instructions, including pgvector and Apache AGE extensions, see [README_postgres_setup.md](./README_postgres_setup.md).
 
-1. Create and configure the PostgreSQL database:
-
-```sql
-CREATE DATABASE chat;
-CREATE EXTENSION IF NOT EXISTS vector;
-```
-
-2. Configure environment variables:
-
-```bash
-export DB_HOST=localhost
-export DB_PORT=5432
-export DB_NAME=chat
-export DB_USER=your_user
-export DB_PASSWORD=your_password
-```
+**Quick setup:**
+1. Follow sections 2-4 of README_postgres_setup.md to install PostgreSQL 16
+2. Create the chat database following section 6.1:
+   - Replace `<sql_user>` with your username
+   - Replace `<sql_database>` with `chat`
+3. Enable the vector extension (section 5.2)
+4. Configure your environment variables as shown below
 
 ### Installation
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/projeto_adp.git
+git clone https://github.com/germano30/projeto_adp.git
 cd projeto_adp
 ```
 
-2. Install dependencies:
+2. Create .venv
+```bash
+python -m venv <venv_name>
+```
+3. Activate venv
+```bash
+source <venv_name>/bin/activate
+```
+
+4. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Run the data extraction pipeline:
+5. Run the data extraction pipeline:
 
 ```bash
 python Extractor/main.py
 ```
 
-4. Initialize the chat interface:
+6. Initialize the chat interface:
 
 ```bash
 python Chat/main.py

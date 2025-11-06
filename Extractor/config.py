@@ -2,26 +2,18 @@
 Configurações centralizadas do projeto
 """
 import os
+import dotenv
+dotenv.load_dotenv()
 
 DATABASE_CONFIG = {
-    'user': 'agermano',
-    'password': 'devpass',
-    'host': 'localhost',
-    'port': 5432,
-    'dbname': 'chat',
-    'options': '-c search_path=public' 
+    'user': os.getenv("DB_USER"),
+    'password': os.getenv("DB_PASSWORD"),
+    'host': os.getenv("DB_HOST"),
+    'port': os.getenv("DB_PORT"),
+    'dbname': os.getenv("DB_DATABASE")
 }
 
-LIGHTRAG_DB_CONFIG = {
-    'user': 'agermano',
-    'password': 'devpass',
-    'host': 'localhost',
-    'port': 5432,
-    'dbname': 'chat',
-    'options': '-c search_path=lightrag,public' 
-}
 LIGHTRAG_WORKING_DIR = "./lightrag_storage"
-LIGHTRAG_MODEL = "gpt-4o-mini"  # ou seu modelo preferido
 
 # URLs base
 BASE_URL_MINIMUM_WAGE = "https://www.dol.gov/agencies/whd/state/minimum-wage/history"
@@ -46,14 +38,6 @@ TEXT_PATTERNS = {
         '/day': 2,
         '/wk': 3
     }
-}
-
-DATABASE_CONFIG = {
-    'user': 'agermano',
-    'password': 'devpass',
-    'host': 'localhost',
-    'port': 5432,
-    'dbname': 'chat'
 }
 
 SQL_SCRIPTS = [

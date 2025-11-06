@@ -6,9 +6,28 @@ analyze user queries for topic signals. It implements Jaccard and cosine
 similarity metrics and a combined analysis method suitable for routing.
 """
 import logging
-import json
+import re
+import unicodedata
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Set, Tuple
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+import nltk
+try:
+    nltk.download('stopwords')
+    STOPWORDS = set(stopwords.words('english'))
+    STEMMER = PorterStemmer()
+    USE_NLTK = True
+except ImportError:
+    STOPWORDS = {
+        'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
+        'of', 'with', 'by', 'from', 'as', 'is', 'was', 'are', 'were', 'been',
+        'be', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would',
+        'could', 'should', 'may', 'might', 'can', 'this', 'that', 'these',
+        'those', 'i', 'you', 'he', 'she', 'it', 'we', 'they', 'what', 'which',
+        'who', 'when', 'where', 'why', 'how'
+    }
+    USE_NLTK = False
 
 from config import LIGHTRAG_KEYWORDS, LIGHTRAG_TOPICS
 
@@ -21,6 +40,83 @@ class KeywordAnalysis:
     matched_keywords: List[str]
     suggested_topic: Optional[str]
     confidence: float
+
+
+def remove_accents(text: str) -> str:
+    """Remove accents from unicode string."""
+    nfkd = unicodedata.normalize('NFKD', text)
+    return ''.join([c for c in nfkd if not unicodedata.combining(c)])
+
+
+def simple_stem(word: str) -> str:
+    """Basic suffix removal for stemming."""
+    suffixes = ['iness', 'ation', 'ement', 'ment', 'ness', 'tion', 
+                'able', 'ible', 'ing', 'ed', 'er', 'ly', 'al', 's']
+    
+    word = word.lower()
+    for suffix in suffixes:
+        if len(word) > len(suffix) + 2 and word.endswith(suffix):
+            return word[:-len(suffix)]
+    return word
+
+
+def normalize_text(text: str, remove_stopwords: bool = True) -> List[str]:
+    """
+    Normalize text: lowercase, remove accents, punctuation, stopwords, and stem.
+    
+    Args:
+        text: Input text to normalize
+        remove_stopwords: Whether to filter out stopwords
+    
+    Returns:
+        List of normalized tokens
+    """
+    text = remove_accents(text)
+    text = text.lower()
+    text = re.sub(r'[^\w\s-]', ' ', text)
+    
+    tokens = text.split()
+    
+    if remove_stopwords:
+        tokens = [t for t in tokens if len(t) > 2 and t not in STOPWORDS]
+    else:
+        tokens = [t for t in tokens if len(t) > 2]
+    
+    if USE_NLTK:
+        stemmed = [STEMMER.stem(t) for t in tokens]
+    else:
+        stemmed = [simple_stem(t) for t in tokens]
+    
+    return stemmed
+
+
+def generate_ngrams(tokens: List[str], n: int = 2) -> List[str]:
+    """Generate n-grams from token list."""
+    if len(tokens) < n:
+        return []
+    return [' '.join(tokens[i:i+n]) for i in range(len(tokens) - n + 1)]
+
+
+def extract_features(text: str) -> Tuple[Set[str], Dict[str, int]]:
+    """
+    Extract unigrams and bigrams with frequencies.
+    
+    Returns:
+        Tuple of (token_set, frequency_dict) combining unigrams and bigrams
+    """
+    tokens = normalize_text(text, remove_stopwords=True)
+    
+    unigrams = tokens
+    bigrams = generate_ngrams(tokens, n=2)
+    
+    all_features = unigrams + bigrams
+    
+    feature_set = set(all_features)
+    freq_dict: Dict[str, int] = {}
+    for f in all_features:
+        freq_dict[f] = freq_dict.get(f, 0) + 1
+    
+    return feature_set, freq_dict
 
 
 def calculate_jaccard_similarity(set1: Set[str], set2: Set[str]) -> float:
@@ -48,49 +144,48 @@ def analyze_keywords(user_question: str) -> KeywordAnalysis:
     Analyze a user question and return keyword/topic analysis.
 
     The function combines set- and frequency-based similarity metrics to
-    improve robustness over plain substring checks.
+    improve robustness over plain substring checks. Uses normalized text,
+    stopword removal, stemming, and n-grams for better matching.
     """
     try:
-        # Tunable parameters (can be extended to accept from caller)
-        match_threshold = 0.35  # combined similarity threshold to consider a keyword match
+        match_threshold = 0.25
         jaccard_weight = 0.6
         cosine_weight = 0.4
 
-        q_lower = user_question.lower()
-        tokens = [w for w in q_lower.split() if len(w) > 2]
-        token_set = set(tokens)
-        freqs: Dict[str, int] = {}
-        for w in tokens:
-            freqs[w] = freqs.get(w, 0) + 1
+        token_set, freqs = extract_features(user_question)
 
         matched: Set[str] = set()
-        # Match LIGHTRAG keywords using combined similarity (weighted Jaccard + Cosine)
+        
         for kw in LIGHTRAG_KEYWORDS:
-            kw_lower = kw.lower()
-            kw_tokens = set(t for t in kw_lower.split() if len(t) > 2)
-            j = calculate_jaccard_similarity(token_set, kw_tokens)
-            # build small freq vector for keyword
-            kw_freq: Dict[str, int] = {}
-            for w in kw_tokens:
-                kw_freq[w] = kw_freq.get(w, 0) + 1
+            kw_set, kw_freq = extract_features(kw)
+            
+            j = calculate_jaccard_similarity(token_set, kw_set)
             c = calculate_cosine_similarity(freqs, kw_freq)
             combined = j * jaccard_weight + c * cosine_weight
+            
             if combined > match_threshold:
                 matched.add(kw)
 
-        # Topic classification (pattern-driven)
         TOPIC_PATTERNS = {}
-        # build from LIGHTRAG_TOPICS when available (fallback to static patterns)
+        
         try:
             for category, topics in LIGHTRAG_TOPICS.items():
                 for t in topics:
                     TOPIC_PATTERNS[t] = {'keywords': [t], 'threshold': 1}
         except Exception:
-            # fallback basic patterns
             TOPIC_PATTERNS = {
-                'Agricultural Employment': {'keywords': ['agricultural', 'farm', 'agriculture'], 'threshold': 1},
-                'Entertainment': {'keywords': ['entertainment', 'performer', 'actor', 'musician'], 'threshold': 1},
-                'Payday Requirements': {'keywords': ['payday', 'pay frequency', 'payment schedule'], 'threshold': 1},
+                'Agricultural Employment': {
+                    'keywords': ['agricultural', 'farm', 'agriculture'], 
+                    'threshold': 1
+                },
+                'Entertainment': {
+                    'keywords': ['entertainment', 'performer', 'actor', 'musician'], 
+                    'threshold': 1
+                },
+                'Payday Requirements': {
+                    'keywords': ['payday', 'pay frequency', 'payment schedule'], 
+                    'threshold': 1
+                },
             }
 
         best_topic: Optional[str] = None
@@ -99,34 +194,30 @@ def analyze_keywords(user_question: str) -> KeywordAnalysis:
         for topic, pattern in TOPIC_PATTERNS.items():
             topic_score = 0.0
             topic_matches = 0
-            # prepare pattern freq
-            pat_freq: Dict[str, int] = {}
-            for pkw in pattern.get('keywords', []):
-                for w in pkw.lower().split():
-                    if len(w) > 2:
-                        pat_freq[w] = pat_freq.get(w, 0) + 1
 
-                for pkw in pattern.get('keywords', []):
-                    kw_tokens = set(w for w in pkw.lower().split() if len(w) > 2)
-                    j = calculate_jaccard_similarity(token_set, kw_tokens)
-                    kw_freq: Dict[str, int] = {}
-                    for w in kw_tokens:
-                        kw_freq[w] = kw_freq.get(w, 0) + 1
-                    c = calculate_cosine_similarity(freqs, kw_freq)
-                    combined = j * jaccard_weight + c * cosine_weight
-                    if combined > match_threshold:
-                        topic_score += combined
-                        topic_matches += 1
-                        matched.add(pkw)
+            for pkw in pattern.get('keywords', []):
+                pkw_set, pkw_freq = extract_features(pkw)
+                
+                j = calculate_jaccard_similarity(token_set, pkw_set)
+                c = calculate_cosine_similarity(freqs, pkw_freq)
+                combined = j * jaccard_weight + c * cosine_weight
+                
+                if combined > match_threshold:
+                    topic_score += combined
+                    topic_matches += 1
+                    matched.add(pkw)
 
             if topic_matches >= pattern.get('threshold', 1):
-                # Normalize confidence by pattern size and weight
                 conf = min(1.0, topic_score / max(1, len(pattern.get('keywords', []))))
                 if conf > best_conf:
                     best_conf = conf
                     best_topic = topic
 
-        logger.debug("analyze_keywords -> matched=%s topic=%s conf=%.2f", list(matched), best_topic, best_conf)
+        logger.debug(
+            "analyze_keywords -> matched=%s topic=%s conf=%.2f", 
+            list(matched), best_topic, best_conf
+        )
+        
         return KeywordAnalysis(
             has_lightrag_keywords=bool(matched),
             matched_keywords=list(matched),

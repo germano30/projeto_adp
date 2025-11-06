@@ -1,9 +1,13 @@
+import os
+import dotenv
+dotenv.load_dotenv()
+
 DATABASE_CONFIG = {
-    'user': 'agermano',
-    'password': 'devpass',
-    'host': 'localhost',
-    'port': 5432,
-    'dbname': 'chat'
+    'user': os.getenv("DB_USER"),
+    'password': os.getenv("DB_PASSWORD"),
+    'host': os.getenv("DB_HOST"),
+    'port': os.getenv("DB_PORT"),
+    'dbname': os.getenv("DB_DATABASE")
 }
 
 

@@ -4,12 +4,10 @@ beautifulsoup4
 pandas
 openpyxl
 lxml
-
-# Opcional - para análise de dados
 numpy
-matplotlib
-seaborn
-
-# Opcional - para testes
-pytest
-pytest-cov
+lightrag-hku[api]
+nltk
+psycopg2-binary
+dotenv
+google-genai
+sentence-transformers

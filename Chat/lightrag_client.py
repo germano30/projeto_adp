@@ -17,7 +17,7 @@ from sentence_transformers import SentenceTransformer
 
 dotenv.load_dotenv()
 
-gemini_api_key = os.getenv("GEMINI_API_KEY")
+gemini_api_key = os.getenv("GOOGLE_API_KEY")
 
 logger = logging.getLogger(__name__)
 logging.getLogger("lightrag").setLevel(logging.WARNING)
@@ -95,46 +95,6 @@ class LightRAGClient:
             }
 
         return {"answer": str(result), "references": []}
-
-    
-    def search_similar(self, query_text: str, top_k: int = 5) -> Optional[List[Dict]]:
-        """
-        Busca documentos similares usando embeddings/vetores
-        
-        Args:
-            query_text: Texto da consulta
-            top_k: Número de resultados a retornar
-            
-        Returns:
-            Lista de documentos relevantes ou None se falhar
-        """
-        try:
-            logger.info(f"Buscando documentos similares para: '{query_text[:50]}...'")
-            
-            # Exemplo de query com similaridade vetorial (ajuste conforme seu schema)
-            query = """
-            SELECT 
-                document_content,
-                topic,
-                state_name,
-                source_url,
-                similarity_score
-            FROM lightrag_documents
-            WHERE embedding <-> %s::vector < 0.5
-            ORDER BY embedding <-> %s::vector
-            LIMIT %s
-            """
-            
-            # Aqui você precisaria gerar o embedding do query_text
-            # query_embedding = generate_embedding(query_text)
-            
-            # Por enquanto, retorno mock
-            logger.warning("search_similar não implementado completamente - usando mock")
-            return None
-            
-        except Exception as e:
-            logger.error(f"Erro ao buscar documentos similares: {e}")
-            return None
     
     def test_connection(self) -> bool:
         """
