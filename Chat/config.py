@@ -250,19 +250,84 @@ Output:
 
 # Tópicos disponíveis no LightRAG
 LIGHTRAG_TOPICS = {
-    'employment_types': [
-        'Non-farm Employment',
-        'Agricultural Employment',
-        'Entertainment',
-        'Door-to-Door Sales'
-    ],
-    'labor_laws': [
-        'Minimum Paid Rest Periods',
-        'Minimum Meal Periods',
-        'Prevailing Wages',
-        'Payday Requirements'
-    ]
+    "employment_types": {
+        "Non-farm Employment": {
+            "keywords": [
+                "non-farm", "non farm", "industry", "factory", "office",
+                "urban job", "commercial employment", "private sector"
+            ],
+            "threshold": 0.35,
+        },
+        "Agricultural Employment": {
+            "keywords": [
+                "agricultural", "farm", "farmer", "farming", "agriculture",
+                "ranch", "harvest", "seasonal worker", "field labor",
+                "crop", "livestock"
+            ],
+            "threshold": 0.35,
+        },
+        "Entertainment": {
+            "keywords": [
+                "entertainment", "performer", "actor", "musician",
+                "artist", "dancer", "film", "tv",  "theater",
+                "performance", "production crew"
+            ],
+            "threshold": 0.35,
+        },
+        "Door-to-Door Sales": {
+            "keywords": [
+                "door-to-door", "sales", "salesperson", "commission",
+                "solicitor", "direct sales", "traveling salesperson",
+                "doorstep", "subscription sales", 'door'
+            ],
+            "threshold": 0.35,
+        },
+    },
+
+    "labor_laws": {
+        "Minimum Paid Rest Periods": {
+            "keywords": [
+                "rest period", "break", "rest break", "paid rest",
+                "short break", "coffee break", "work interval",
+                "pause", "mandatory rest"
+            ],
+            "threshold": 0.35,
+        },
+        "Minimum Meal Periods": {
+            "keywords": [
+                "meal period", "lunch", "dinner break", "meal break",
+                "food break", "meal time", "eating period"
+            ],
+            "threshold": 0.35,
+        },
+        "Prevailing Wages": {
+            "keywords": [
+                "prevailing wage", "davis bacon", "public contract",
+                "government project", "union rate", "construction wage",
+                "federal project"
+            ],
+            "threshold": 0.35,
+        },
+        "Payday Requirements": {
+            "keywords": [
+                "payday", "pay frequency", "payment schedule",
+                "pay period", "pay day", "wage payment", "salary frequency",
+                "pay timing", "payment timing", "when employees are paid"
+            ],
+            "threshold": 0.35,
+        },
+    },
+
+    "general_indicators": {
+        "keywords": [
+            "law", "regulation", "requirement", "rule", "legal",
+            "compliance", "overtime", "hours worked", "workweek",
+            "work hours", "minimum wage", "labor code", "employment rule"
+        ],
+        "threshold": 0.3,
+    },
 }
+
 
 # Keywords que indicam necessidade de consultar LightRAG
 LIGHTRAG_KEYWORDS = [
@@ -273,7 +338,7 @@ LIGHTRAG_KEYWORDS = [
     
     # Labor laws
     'rest period', 'break', 'meal period', 'lunch', 'dinner break',
-    'prevailing wage', 'davis bacon', 'public contract',
+    'prevailing wage', 'davis bacon', 'public contract', 'rest', 'rest break',
     'payday', 'pay frequency', 'payment schedule', 'pay period',
     
     # General indicators

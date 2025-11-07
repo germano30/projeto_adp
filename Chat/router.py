@@ -94,8 +94,8 @@ class QueryRouter:
 
             # Default fallback
             return {
-                'route': QueryRoute.SQL,
-                'reason': 'Default fallback to SQL query',
+                'route': QueryRoute.HYBRID,
+                'reason': 'Default fallback to Hybrid query',
                 'topic': None,
                 'confidence': 0.5
             }

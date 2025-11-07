@@ -15,7 +15,7 @@ import sys
 import time
 from datetime import datetime
 from typing import Optional, Dict, List, Tuple, Any
-
+import asyncio
 from pipeline import create_pipeline
 from utils import format_query_results
 
@@ -360,7 +360,7 @@ def test_mode(pipeline) -> bool:
     return all_ok
 
 
-def main() -> Optional[int]:
+async def main() -> Optional[int]:
     """
     Main application entry point.
     
@@ -386,7 +386,7 @@ def main() -> Optional[int]:
     
     try:
         logger.info("Initializing pipeline components...")
-        pipeline = create_pipeline()
+        pipeline = await create_pipeline()
         logger.info("Pipeline created successfully in %.2f seconds", 
                    time.perf_counter() - start_time)
     except Exception as e:
@@ -466,12 +466,12 @@ Examples:
 
 if __name__ == "__main__":
     try:
-        exit_code = main()
+        exit_code = asyncio.run(main())
         sys.exit(exit_code if exit_code is not None else 0)
     except KeyboardInterrupt:
         logger.info("Application terminated by user")
         sys.exit(0)
     except Exception as e:
         logger.critical("Application failed with unhandled error: %s", str(e))
-        logger.debug("Detailed error information:", exc_info=True)
+        logger.debug(f"Detailed error information: {e}", exc_info=True)
         sys.exit(1)

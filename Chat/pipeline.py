@@ -52,7 +52,7 @@ class MinimumWagePipeline:
     queries through SQL and unstructured data through RAG (Retrieval Augmented Generation).
     """
     
-    def __init__(self, use_mock_lightrag: bool = False):
+    def __init__(self, db_manager, llm_client, router, lightrag_client):
         """
         Initialize the pipeline with required components.
         
@@ -62,11 +62,12 @@ class MinimumWagePipeline:
             If True, uses a mock LightRAG implementation for development and testing,
             defaults to False
         """
-        self.db_manager = get_db_manager()
-        self.llm_client = get_llm_client()
-        self.router = get_query_router()
-        self.lightrag_client = get_lightrag_client(use_mock=use_mock_lightrag)
+        self.db_manager = db_manager
+        self.llm_client = llm_client
+        self.router = router
+        self.lightrag_client = lightrag_client
         logger.info("Pipeline initialized with all components")
+
 
     def analyze_keywords(self, user_question: str):
         """Convenience wrapper to use shared keyword analysis utilities.
@@ -78,9 +79,9 @@ class MinimumWagePipeline:
 
     def _call_lightrag_query(self, topic: str, user_prompt: str, state: Optional[str] = None):
         """
-        Execute a LightRAG query with support for both async and sync implementations.
-        - Se query_topic for coroutine function -> usa asyncio.run(...)
-        - Caso contrário, chama diretamente e tenta adaptar argumentos.
+        Executa query_topic de forma segura, seja ela síncrona ou assíncrona.
+        - Detecta se já existe um event loop ativo e usa await ou asyncio.run() conforme o caso.
+        - Suporta fallback para métodos síncronos.
         """
         fn = getattr(self.lightrag_client, "query_topic", None)
         if fn is None:
@@ -89,9 +90,18 @@ class MinimumWagePipeline:
 
         if inspect.iscoroutinefunction(fn):
             try:
-                return asyncio.run(fn(topic, state))
+                try:
+                    loop = asyncio.get_running_loop()
+                except RuntimeError:
+                    loop = None
+
+                if loop and loop.is_running():
+                    return asyncio.create_task(fn(topic, state))
+                else:
+                    return asyncio.run(fn(topic, state))
+
             except Exception as e:
-                logger.error(f"Erro ao executar query_topic (async): {e}")
+                logger.error(f"Erro ao executar query_topic (async): {e}", exc_info=True)
                 return None
 
         try:
@@ -100,11 +110,12 @@ class MinimumWagePipeline:
             try:
                 return fn(topic, user_prompt)
             except Exception as e:
-                logger.error(f"Erro ao executar query_topic (sync fallback): {e}")
+                logger.error(f"Erro ao executar query_topic (sync fallback): {e}", exc_info=True)
                 return None
         except Exception as e:
-            logger.error(f"Erro inesperado ao chamar query_topic: {e}")
+            logger.error(f"Erro inesperado ao chamar query_topic: {e}", exc_info=True)
             return None
+
 
     def process_question(self, user_question: str) -> Dict:
         """
@@ -522,14 +533,12 @@ class MinimumWagePipeline:
         return results
 
 
-def create_pipeline(use_mock_lightrag: bool = False) -> MinimumWagePipeline:
-    """
-    Factory function para criar uma instância do pipeline
-    
-    Args:
-        use_mock_lightrag: Se True, usa implementação mock do LightRAG
-        
-    Returns:
-        Instância configurada do MinimumWagePipeline
-    """
-    return MinimumWagePipeline(use_mock_lightrag=use_mock_lightrag)
+async def create_pipeline(use_mock_lightrag: bool = False) -> MinimumWagePipeline:
+    """Factory assíncrona para inicializar todos os componentes corretamente"""
+    db_manager = get_db_manager()
+    llm_client = get_llm_client()
+    router = get_query_router()
+    lightrag_client = await get_lightrag_client(use_mock_lightrag)
+
+    logger.info("Pipeline created successfully with async initialization")
+    return MinimumWagePipeline(db_manager, llm_client, router, lightrag_client)
