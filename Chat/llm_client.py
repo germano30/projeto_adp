@@ -87,8 +87,7 @@ class LLMClient:
         try:
             logger.info("Gerando resposta natural (Gemini API)")
             
-            full_prompt = f"{system_prompt}\n\nCom base nisso, responda à pergunta original do usuário:\n{user_question} \n\n ANSWER ALWAYS IN ENGLISH"
-            
+            full_prompt = f"{system_prompt}\n\nBased on the context above, answer the user's original question:\n{user_question}"            
             response = self.text_model.generate_content(
                 full_prompt,
                 request_options={"timeout": 60}

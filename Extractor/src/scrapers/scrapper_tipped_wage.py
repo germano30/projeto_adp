@@ -21,7 +21,7 @@ from bs4 import BeautifulSoup, Tag
 
 sys.path.append('..')
 from config import (BASE_URL_TIPPED_WAGE, REQUEST_TIMEOUT,
-                   TIPPED_WAGE_END_YEAR, TIPPED_WAGE_START_YEAR)
+                TIPPED_WAGE_END_YEAR, TIPPED_WAGE_START_YEAR)
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -160,9 +160,10 @@ class TippedWageScraper:
 
 
 
-    def extract_table_for_year(self, year: int) -> pd.DataFrame:
+    def extract_table_for_year(self, year: int, url:str =None) -> pd.DataFrame:
         """Extrai tabela de um ano específico"""
-        url = f'{self.base_url}/{year}'
+        if url is None:
+            url = f'{self.base_url}/{year}'
         
         try:
             response = requests.get(url, timeout=REQUEST_TIMEOUT)
@@ -260,7 +261,14 @@ class TippedWageScraper:
                 logger.info("Year %d: %d records", year, len(df_year))
             else:
                 logger.debug("Year %d: no data", year)
-
+        year = 2025
+        actual_df = self.extract_table_for_year(year=year, url="https://www.dol.gov/agencies/whd/state/minimum-wage/tipped")
+        if not actual_df.empty:
+            dfs.append(actual_df)
+            logger.info("Year %d: %d records", year, len(actual_df))
+        else:
+            logger.debug("Year %d: no data", year)
+            
         if not dfs:
             logger.warning("No tipped wage data was extracted for %d..%d", start_year, end_year)
             return pd.DataFrame()
@@ -277,7 +285,7 @@ class TippedWageScraper:
 def main():
     """Função principal para teste"""
     scraper = TippedWageScraper()
-    df = scraper.scrape(start_year=2003, end_year=2003)  # Teste com poucos anos
+    df = scraper.scrape(start_year=2003, end_year=2024) 
     print("\n📋 Preview dos dados:")
     return df
 

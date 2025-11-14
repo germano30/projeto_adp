@@ -104,7 +104,7 @@ class StandardWageProcessor:
 
     def process(self) -> pd.DataFrame:
         """Executa o pipeline completo de processamento"""
-                # 1. Melt
+        # 1. Melt
         df = self.melt_dataframe()
         # 2. Limpar valores
         df = self.clean_wage_values(df)
@@ -127,7 +127,7 @@ class StandardWageProcessor:
         # 8. Definir frequency padrão
         df['frequency'] = df['frequency'].fillna(1)
         
-        # 9. Adicionar ID
+        df = df.drop_duplicates(subset=["state", "year", "minimal_wage"], keep="first")
         
         # 10. Reorganizar colunas
         df = df[['id', 'state', 'year', 'minimal_wage', 'frequency', 'notes','footnote_wage']]

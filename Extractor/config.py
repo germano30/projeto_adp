@@ -18,7 +18,7 @@ LIGHTRAG_WORKING_DIR = "./lightrag_storage"
 # URLs base
 BASE_URL_MINIMUM_WAGE = "https://www.dol.gov/agencies/whd/state/minimum-wage/history"
 BASE_URL_TIPPED_WAGE = "https://www.dol.gov/agencies/whd/state/minimum-wage/tipped"
-
+STATE_MIN_WAGE_URL = "https://www.dol.gov/agencies/whd/minimum-wage/state"
 # Configurações de scraping
 TIPPED_WAGE_START_YEAR = 2003
 TIPPED_WAGE_END_YEAR = 2024

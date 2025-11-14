@@ -141,7 +141,7 @@ class MinimumWagePipeline:
         try:
             analysis = self.analyze_keywords(clean_question)
             logger.debug("Keyword analysis: suggested_topic=%s confidence=%.2f matched=%s",
-                         analysis.suggested_topic, analysis.confidence, analysis.matched_keywords)
+                        analysis.suggested_topic, analysis.confidence, analysis.matched_keywords)
         except Exception:
             analysis = None
             logger.debug("Keyword analysis unavailable or failed; continuing without it")

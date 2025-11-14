@@ -248,7 +248,7 @@ class MinimumWagePipeline:
         -------
         Dict[str, pd.DataFrame]
             Collection of dimensional and fact tables including:
-            - Fact tables: FactMinimumWage, FactTippedWage
+            - Fact table: FactMinimumWage
             - Dimension tables: DimState, DimFrequency, DimCategory
             - Bridge tables: BridgeWageFootnotes
             - Reference tables: DimFootnotes, DimYouthRules
@@ -300,7 +300,7 @@ class MinimumWagePipeline:
         tables : Dict[str, pd.DataFrame]
             Collection of tables to be loaded into the database.
             Expected tables include:
-            - Fact tables (FactMinimumWage, FactTippedWage)
+            - Fact table (FactMinimumWage)
             - Dimension tables (DimState, DimCategory, etc.)
             - Bridge and reference tables
 

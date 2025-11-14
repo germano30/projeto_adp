@@ -17,7 +17,7 @@ import requests
 from bs4 import BeautifulSoup
 
 sys.path.append('..')
-from config import BASE_URL_MINIMUM_WAGE, REQUEST_TIMEOUT
+from config import BASE_URL_MINIMUM_WAGE, REQUEST_TIMEOUT, STATE_MIN_WAGE_URL
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -71,7 +71,52 @@ class MinimumWageScraper:
         except requests.RequestException as e:
             logger.error("Failed to retrieve page: %s", e)
             return False
-    
+
+    def extract_state_min_wage_page(self) -> pd.DataFrame:
+        """
+        Extract basic minimum wage per state from the State Minimum Wage page.
+
+        Returns
+        -------
+        DataFrame
+            DataFrame with columns ['state', 'basic_minimum_wage']
+        """
+        try:
+            response = requests.get(STATE_MIN_WAGE_URL, timeout=REQUEST_TIMEOUT)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text, 'html.parser')
+        except Exception as e:
+            logger.error("Failed to retrieve State Minimum Wage page: %s", e)
+            return pd.DataFrame()
+
+        states, wages = [], []
+
+        for header in soup.find_all('h2'):
+            state_name = header.get_text(strip=True)
+
+            next_p = header.find_next_sibling('p')
+            for p in [next_p, next_p.find_next_sibling('p') if next_p else None]:
+                if p and 'Basic Minimum Rate' in p.get_text():
+                    text = p.get_text()
+                    wage_str = text.split(':', 1)[1].strip().split()[0]
+                    wage_clean = wage_str.replace('$', '').replace(',', '')
+
+                    try:
+                        wage = float(wage_clean)
+                    except Exception:
+                        wage = wage_str
+
+                    states.append(state_name)
+                    wages.append(wage)
+                    break
+
+        df_states = pd.DataFrame({'state': states, 'basic_minimum_wage': wages})
+        df_federal = pd.DataFrame({'state': ['Federal (FLSA)'], 'basic_minimum_wage': [7.25]})
+        df_states = pd.concat([df_states, df_federal], ignore_index=True)
+
+        logger.info("Extracted %d state minimum wage records", len(df_states))
+        return df_states
+
     def extract_footnotes(self) -> Dict[str, str]:
         """
         Extract and parse footnotes from the webpage.
@@ -200,6 +245,16 @@ class MinimumWageScraper:
             logger.error("Failed concatenating tables: %s", e)
             return pd.DataFrame()
 
+        df_states = self.extract_state_min_wage_page()
+        df_states['basic_minimum_wage'] = df_states['basic_minimum_wage'].astype(str)
+        if not df_states.empty:
+            current_year = 2025 
+
+            df_states = df_states.rename(columns={'basic_minimum_wage': current_year})
+
+            df = df.merge(df_states, on='state', how='left')
+
+        logger.info("Scraping completed: %d records", len(df))
         return df
 
 
